@@ -1,4 +1,3 @@
-// I CHANGED SOMETINOG more
 /****************************************************************
  CONSTANTS
  ****************************************************************/
@@ -37,7 +36,10 @@ document.addEventListener('keydown', function(event) {
             player1.move(YAW_LEFT);
             break;
         case " ":
-            torpedos.push(player1.shootTorpedo());
+            let result = player1.shootTorpedo();
+            if(result != null){
+                torpedos.push(result);
+            }
             break;
 
         case "ArrowUp":
@@ -129,6 +131,9 @@ function gameLoop(timeStamp){
 
     // run through the collision collector and handle the collisions
     collisionHandler.handleCollisions();
+
+
+    // ************* WEAPONS COLLISION CHECK *********************
 
 
 

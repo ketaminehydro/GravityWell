@@ -29,15 +29,24 @@ class GameObject{
         this.x = x;
         this.y = y;
 
-        // velocity in pixels/seconds
+        // velocity in pixels/second
         this.vx = 0;
         this.vy = 0;
+
+        // maximum velocity in pixels/second
+        this.maxSpeed = 100;        
 
         // orientation in degrees. O° is North. Clockwise is positive.
         this.orientation = orientation;
 
         // angular speed in degrees/seconds. Clockwise is positive.
         this.angularSpeed = 0;
+
+        // maximum angular speed in degrees / second
+        this.maxAngularSpeed = 360*2;
+
+        // coefficient of resititution (how "bouncy" the object is)
+        this.cor = 0.8;
 
         // settings
         this.boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
@@ -93,6 +102,14 @@ class GameObject{
         return Math.sqrt(this.vx * this.vx + this.vy * this.vy);
     }
 
+    getMaximumSpeed(){
+        return this.maxSpeed;
+    }
+
+    setMaximumSpeed(speed){
+        this.maxSpeed = speed;
+    }
+
     getOrientation(){
         return this.orientation * 180 / Math.PI;
     }
@@ -116,6 +133,22 @@ class GameObject{
         this.angularSpeed = angularSpeed;
     }
 
+    getMaximumAngularSpeed(){
+        return this.getMaximumAngularSpeed;
+    }
+
+    setMaximumAngularSpeed(speed){
+        this.setMaximumAngularSpeed = speed;
+    }
+
+    getCOR(){
+        return this.cor;
+    }
+
+    setCOR(cor){
+        this.cor = cor;
+    }
+
     setBoundaryHandlingSetting(setting){
         this.boundaryHandlingSetting = setting;
     }
@@ -133,16 +166,26 @@ class GameObject{
     }
 
     update(milliSecondsPassed){
+        
+        // limit the speed
+        let newMagnitude = this.getMagnitude(this.vx, this.vy);
+        if( newMagnitude >= this.maxSpeed){
+            this.vx = this.vx / newMagnitude * this.maxSpeed;
+            this.vy = this.vy / newMagnitude * this.maxSpeed;
+        }   
 
         // update position
         this.x += this.vx * milliSecondsPassed / 1000;
         this.y += this.vy * milliSecondsPassed / 1000;
-        // limit speed
+
+        // limit angular speed
+        if(this.angularSpeed >= this.maxAngularSpeed){
+            this.angularSpeed = this.maxAngularSpeed;
+        }
 
         // update orientation
         let orientationIncrease = (this.angularSpeed * milliSecondsPassed / 1000)*Math.PI/180;
         this.orientation = (this.orientation + orientationIncrease)% 6.28;
-        // todo: limit speed
 
         // update hitbox
         this.hitBox.setPosition(this.x, this.y, this.orientation);

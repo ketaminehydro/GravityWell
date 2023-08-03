@@ -7,49 +7,42 @@ class Player extends GameObject {
 
         // img
         this.setSpriteImage("img/rocket_idle.png");
-        this.playerShipImageForwardThrust = new Image;
-        this.playerShipImageForwardThrust.src ="img/rocket_forwardthrust.png";
 
         // hitbox
         this.hitBox.setSize(40);
         this.hitBox.setPositionOffset(0, -15);
 
-        // image transitions and timers
+        // animation images
+        this.playerShipImageForwardThrust = new Image;
+        this.playerShipImageForwardThrust.src ="img/rocket_forwardthrust.png";
+
+        // animation transitions and timers
         this.animationDuration = 500;                          // in milliseconds
         this.forwardThrustTimer = this.animationDuration;       // in milliseconds
+        this.isForwardThrust = false;
+
+        // weapon
+        this.weaponCoolDown = 500;                          // in milliseconds
+        this.weaponCoolDownTimer = this.weaponCoolDown;     // in milliseconds
+        this.isWeaponCoolDown = false;
 
         // specs
         this.yawSpeed = 10;     // in degrees / sec
         this.thrust = 5;        // in pixel / sec
-        this.maxSpeed = 100;     // in pixels / sec
-
-        // states
-        this.isForwardThrust = false;
 
         // debug
         this.isShowDebugInfo = true;
         this.isShowDebugStats = true;
     }
 
-    move(direction){
+    move(input){
         let magnitude, newvx, newvy, newMagnitude;
 
-        switch (direction){
+        switch (input){
             case THRUST_FORWARD:
                 // calculate new velocity
-                newvx = this.vx + this.thrust * Math.sin(this.orientation);
-                newvy = this.vy + this.thrust * Math.cos(this.orientation) * (-1);
-
-                // limit the speed
-                newMagnitude = Math.sqrt(newvx * newvx + newvy * newvy);
-                if( newMagnitude >= this.maxSpeed){
-                    this.vx = newvx / newMagnitude * this.maxSpeed;
-                    this.vy = newvy / newMagnitude * this.maxSpeed;
-                }
-                else{
-                    this.vx = newvx;
-                    this.vy = newvy;
-                }
+                this.vx += this.thrust * Math.sin(this.orientation);
+                this.vy += this.thrust * Math.cos(this.orientation) * (-1);
 
                 // set state
                 this.isForwardThrust = true;
@@ -58,13 +51,12 @@ class Player extends GameObject {
 
             case YAW_LEFT:
                 this.orientation -= this.yawSpeed  * Math.PI / 180; // into radians
-                // debug
-                this.angularSpeed = 0; //debug
+                this.angularSpeed = 0; 
                 break;
 
             case YAW_RIGHT:
                 this.orientation += this.yawSpeed  * Math.PI / 180; // into radians
-                this.angularSpeed = 0; //debug
+                this.angularSpeed = 0; 
                 break;
 
             case THRUST_BACKWARDS:
@@ -84,9 +76,14 @@ class Player extends GameObject {
     }
 
     shootTorpedo(){
-        let torpedo = new Torpedo(this.x, this.y, this.orientation);
-
-        return torpedo;
+        if(this.isWeaponCoolDown){
+            return null;
+        }
+        else {
+            let torpedo = new Torpedo(this.x, this.y, this.orientation);
+            this.isWeaponCoolDown = true;
+            return torpedo;
+       }
     }
 
     update(milliSecondsPassed){
@@ -100,6 +97,15 @@ class Player extends GameObject {
                 this.setSpriteImage("img/rocket_idle.png");
                 this.forwardThrustTimer = this.animationDuration;
             }
+        }
+
+        // weapon cooldown timer
+        if(this.isWeaponCoolDown){
+            this.weaponCoolDownTimer -= milliSecondsPassed;
+            if(this.weaponCoolDownTimer <= 0){
+                this.isWeaponCoolDown = false;
+                this.weaponCoolDownTimer = this.weaponCoolDown;
+            }    
         }
     }
 

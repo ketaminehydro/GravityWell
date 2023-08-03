@@ -25,7 +25,7 @@ class Asteroid extends GameObject{
         switch(size){
             case ASTEROID_SIZE.SMALL:
                 this.setSize(50,50);   // todo: relative to canvas sizes
-                this.hitBox.setSize(25);
+                this.hitBox.setSize(20);
                 this.mass = 1;
                 break;
             case ASTEROID_SIZE.MEDIUM:

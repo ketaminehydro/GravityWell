@@ -53,8 +53,11 @@ class CollisionHandler{
             y: obj2.vy - obj1.vy
         };
 
+
         // calculate the impulse (= collision normal * relative velocity)
-        const speed =  relativeVelocity.x * collisionNormal.x + relativeVelocity.y * collisionNormal.y;
+        let speed =  relativeVelocity.x * collisionNormal.x + relativeVelocity.y * collisionNormal.y;
+        // apply cor
+        speed += Math.min(obj1.getCOR(), obj2.getCOR());
         const impulse = {
             x: collisionNormal.x * speed,
             y: collisionNormal.y * speed
