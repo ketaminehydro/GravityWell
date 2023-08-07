@@ -116,18 +116,4 @@ class Player extends GameObject {
         }
         super.draw();
     }
-
-    // override: speed is limited for the player. this.maxSpeed = DEBUG_INFO_SIZE
-    displayDebugVelocity(){
-        ctx.save();
-        ctx.beginPath();
-        ctx.translate(this.x, this.y);
-        ctx.moveTo(0,0);
-        let x = this.vx  * DEBUG_INFO_SIZE  / this.maxSpeed;
-        let y = this.vy  * DEBUG_INFO_SIZE  / this.maxSpeed;
-        ctx.lineTo(x,y);
-        ctx.strokeStyle = "#ff0000";
-        ctx.stroke();
-        ctx.restore();
-    }
 }

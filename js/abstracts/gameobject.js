@@ -15,7 +15,7 @@ class GameObject{
     constructor(x, y, orientation){
 
         // size
-        this.width = 100;      // todo: % relative to canvas size
+        this.width = 100;      // TODO: % relative to canvas size
         this.height = 100;
 
         // image
@@ -25,7 +25,7 @@ class GameObject{
         // mass
         this.mass = 1;
 
-        // position in pixel        todo: this should be % relative to canvas
+        // position in pixel        TODO: this should be % relative to canvas
         this.x = x;
         this.y = y;
 
@@ -117,7 +117,7 @@ class GameObject{
     setOrientation(orientation){
         this.orientation = orientation;
 
-        // move hitbox
+        // position the hitbox
         this.hitBox.setPosition(this.x, this.y, this.orientation);
     }
 
@@ -161,14 +161,10 @@ class GameObject{
         return this.isDeleted;
     }
 
-    getMagnitude(x, y){
-        return Math.sqrt(x*x+y*y);
-    }
-
     update(milliSecondsPassed){
         
         // limit the speed
-        let newMagnitude = this.getMagnitude(this.vx, this.vy);
+        let newMagnitude = VectorMath.calculateMagnitude(this.vx, this.vy);
         if( newMagnitude >= this.maxSpeed){
             this.vx = this.vx / newMagnitude * this.maxSpeed;
             this.vy = this.vy / newMagnitude * this.maxSpeed;
@@ -187,11 +183,11 @@ class GameObject{
         let orientationIncrease = (this.angularSpeed * milliSecondsPassed / 1000)*Math.PI/180;
         this.orientation = (this.orientation + orientationIncrease)% 6.28;
 
-        // update hitbox
+        // update hitbox position
         this.hitBox.setPosition(this.x, this.y, this.orientation);
 
         // handle boundaries
-        // todo: should depend on hitbox
+        // TODO: should depend on hitbox
         switch (this.boundaryHandlingSetting){
             case ON_BOUNDARY_HIT.STOP:
                 if(this.x < 0 || this.x >= canvas.width){
@@ -208,11 +204,11 @@ class GameObject{
                 break;
 
             case ON_BOUNDARY_HIT.BOUNCE:
-                if (this.x < 0 || this.x > canvas.width){
+                if (this.hitBox.x < 0 || this.hitBox.x > canvas.width){
                     this.vx *= -1;
                 }
 
-                if (this.y < 0 || this.y > canvas.height){
+                if (this.hitBox.y < 0 || this.hitBox.y > canvas.height){
                     this.vy *= -1;
                 }
                 break;
@@ -299,27 +295,60 @@ class GameObject{
 
     displayDebugOrientation(){
         ctx.save();
+
+        // draw orientation line
         ctx.beginPath();
         ctx.translate(this.x, this.y);
         ctx.moveTo(0,0);
         let x = DEBUG_INFO_SIZE * Math.sin(this.orientation);
         let y = -DEBUG_INFO_SIZE * Math.cos(this.orientation);
         ctx.lineTo(x,y);
+        ctx.lineWidth = 2;
         ctx.strokeStyle = "#ffffff";
         ctx.stroke();
+
         ctx.restore();
     }
 
-    displayDebugVelocity(){
+    displayDebugVelocity(){        
+        // do not show anything, if no speed
+        if(VectorMath.calculateMagnitude(this.vx, this.vy) === 0){
+            return;
+        }
+
         ctx.save();
-        ctx.beginPath();
+        let angle = VectorMath.calculateAngleBetween(1,0,this.vx,this.vy);
         ctx.translate(this.x, this.y);
         ctx.moveTo(0,0);
-        let x = this.vx / this.getMagnitude(this.vx, this.vy) * DEBUG_INFO_SIZE;
-        let y = this.vy / this.getMagnitude(this.vx, this.vy) * DEBUG_INFO_SIZE;
-        ctx.lineTo(x,y);
-        ctx.strokeStyle = "#ffaa00";
+        ctx.rotate(angle);
+ 
+        // Velocity background line
+        ctx.strokeStyle = '#009900';
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(DEBUG_INFO_SIZE, 0);
         ctx.stroke();
+      
+        // Arrow 
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 2;
+
+        // Arrow body
+        let length = VectorMath.calculateMagnitude(this.vx, this.vy) * DEBUG_INFO_SIZE / this.maxSpeed;
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(length-10, 0);
+        ctx.stroke();
+      
+        // Arrow head
+        ctx.beginPath();
+        ctx.moveTo(length, 0);
+        ctx.lineTo(length - 10, -5);
+        ctx.lineTo(length - 10, 5);
+        ctx.closePath();
+        ctx.stroke();
+
         ctx.restore();
     }
 

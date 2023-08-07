@@ -96,21 +96,21 @@ function gameLoop(timeStamp){
     });
 
     let garbageTorpedos = [];
-    // update torpedos and gather the to be deleted torpedos
+    // update torpedos and gather the to-be-deleted torpedos
     for(let i=0; i<torpedos.length; i++){
         torpedos[i].update(milliSecondsPassed);
         if(torpedos[i].getIsDeleted()){
             garbageTorpedos.push(i);
         }
     }
-    // prune the torpedos and delete the purged ones
+    // prune the torpedo array and delete the purged ones
     for (let i=0; i<garbageTorpedos.length; i++){
         delete torpedos[i];
         torpedos.splice(i,1);
     }
 
     player1.update(milliSecondsPassed);
-    player2.update(milliSecondsPassed);
+    //player2.update(milliSecondsPassed);
     display.update(milliSecondsPassed);
 
 
@@ -126,8 +126,8 @@ function gameLoop(timeStamp){
     });
     player1.hitBox.setIsHit(false);
     collisionHandler.push(player1);
-    player2.hitBox.setIsHit(false);
-    collisionHandler.push(player2);
+    //player2.hitBox.setIsHit(false);
+    //collisionHandler.push(player2);
 
     // run through the collision collector and handle the collisions
     collisionHandler.handleCollisions();
@@ -150,7 +150,7 @@ function gameLoop(timeStamp){
         element.draw();
     });
     player1.draw();
-    player2.draw();
+    //player2.draw();
     display.draw();
 
 
@@ -169,19 +169,25 @@ function gameLoop(timeStamp){
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// create the objects
+// hud
 let display = new Display();
+
+// stars
 let background = new Starfield();
 background.fillStarfield();
+
+// players
 let player1 = new Player(canvas.width/2-400, canvas.height/2, 0);
-let player2 = new Player(canvas.width/2+500, canvas.height/2, 0);
-const asteroids = [...Array(14).fill().map(() => new Asteroid(canvas.width/2, canvas.height/2, 0))];
+//let player2 = new Player(canvas.width/2+500, canvas.height/2, 0);
+
+// asteroids
+const asteroids = [...Array(10).fill().map(() => new Asteroid(canvas.width/2, canvas.height/2, 0))];
+
+// weapons
 const torpedos = [];
 
-// create a collision handler
+// collision handler
 const collisionHandler = new CollisionHandler();
 
 // start the gameloop
 requestAnimationFrame(gameLoop);
-
-

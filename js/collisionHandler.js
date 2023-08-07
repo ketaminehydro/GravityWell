@@ -63,7 +63,7 @@ class CollisionHandler{
             y: collisionNormal.y * speed
         }
 
-        // only update velocities if the objects move away from each other
+        // only update velocities if the objects will move away from each other
         if(speed < 0) {
 
             let totalMass = obj1.mass + obj2.mass;

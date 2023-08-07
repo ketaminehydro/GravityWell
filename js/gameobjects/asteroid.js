@@ -44,8 +44,8 @@ class Asteroid extends GameObject{
     randomSpawn(){
         this.x = Math.floor(Math.random()*canvas.width);
         this.y = Math.floor(Math.random()*canvas.height);
-        this.vx = Math.floor(Math.random()*100);    // todo: relative to canvas size?
-        this.vy = Math.floor(Math.random()*100);    // todo: relative to canvas size?
+        this.vx = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
+        this.vy = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
         this.orientation = Math.floor(Math.random()*360);
         this.angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
         this.setAsteroidSize(Math.floor(Math.random()*(3-1+1))+1);
