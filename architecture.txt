@@ -1,3 +1,0 @@
-GameObject: represents a 3D object
-HitBox: added to GameObject 
-
