@@ -119,15 +119,23 @@ function gameLoop(timeStamp){
     // reset the collision handler
     collisionHandler.clear();
 
-    // fill the collision handler
+    // fill the collision handler: asteroids
     asteroids.forEach(element =>{
         element.hitBox.setIsHit(false);
         collisionHandler.push(element);
     });
+
+    // fill the collision handler: players
     player1.hitBox.setIsHit(false);
     collisionHandler.push(player1);
     //player2.hitBox.setIsHit(false);
     //collisionHandler.push(player2);
+
+    // fill the collision handler: asteroids
+    torpedos.forEach(element =>{
+        element.hitBox.setIsHit(false);
+        collisionHandler.push(element);
+    });
 
     // run through the collision collector and handle the collisions
     collisionHandler.handleCollisions();
@@ -143,14 +151,18 @@ function gameLoop(timeStamp){
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
     background.draw();
+
     asteroids.forEach(element => {
         element.draw();
     });
+
     torpedos.forEach(element => {
         element.draw();
     });
+
     player1.draw();
     //player2.draw();
+
     display.draw();
 
 

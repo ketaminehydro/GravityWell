@@ -3,39 +3,14 @@
  ****************************************************************/
 class HitBox{
 
-    static isHitBoxIntersect(obj1, obj2){
-        let x1 = obj1.hitBox.getPosition().x;
-        let y1 = obj1.hitBox.getPosition().y;
-        let r1 = obj1.hitBox.getSize();
-        let x2 = obj2.hitBox.getPosition().x;
-        let y2 = obj2.hitBox.getPosition().y;
-        let r2 = obj2.hitBox.getSize();
-
-        return HitBox.isCirclesIntersect(x1,y1,r1,x2,y2,r2);
-    }
-
-    static isCirclesIntersect(x1, y1, r1, x2, y2, r2){
-
-        // Calculate the distance between the two circles
-        let distance = Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
-
-        // distance smaller than hitbox 1 + hitbox 2?
-        let result = distance <= (r1 + r2);
-
-        return result;
-    }
-
-    /*******************************************************************************/
-
-    // standard hitbox is a circle
-    constructor(masterX, masterY, masterOrientation, size){
-        // position (only true, because offset = 0)
+    constructor(masterX, masterY, masterOrientation, xOffset, yOffset, size){
+        // position
         this.x = masterX;
         this.y = masterY;
 
         // offset
-        this.xOffset = 0;
-        this.yOffset = 0;
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
 
         // stats
         this.size = size;        // in pixels. todo: % relative to canvas size

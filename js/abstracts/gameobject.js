@@ -5,7 +5,7 @@ const ON_BOUNDARY_HIT = Object.freeze({
    STOP: 4
 });
 
-const CANVAS_MARGIN = 200;
+const CANVAS_MARGIN = 100;
 const DEBUG_INFO_SIZE = 100;
 
 /****************************************************************
@@ -13,17 +13,6 @@ const DEBUG_INFO_SIZE = 100;
  ****************************************************************/
 class GameObject{
     constructor(x, y, orientation){
-
-        // size
-        this.width = 100;      // TODO: % relative to canvas size
-        this.height = 100;
-
-        // image
-        this.sprite = new Image;
-        this.sprite.src = "img/placeholder.png";
-
-        // mass
-        this.mass = 1;
 
         // position in pixel        TODO: this should be % relative to canvas
         this.x = x;
@@ -33,44 +22,55 @@ class GameObject{
         this.vx = 0;
         this.vy = 0;
 
-        // maximum velocity in pixels/second
-        this.maxSpeed = 100;        
-
-        // orientation in degrees. O° is North. Clockwise is positive.
-        this.orientation = orientation;
-
         // angular speed in degrees/seconds. Clockwise is positive.
         this.angularSpeed = 0;
 
         // maximum angular speed in degrees / second
-        this.maxAngularSpeed = 360*2;
+        this._maxAngularSpeed = 360*2;
+
+        // maximum velocity in pixels/second
+        this._maxSpeed = 100;        
+
+        // size in pixels
+        this._width = 100;      // TODO: % relative to canvas size
+        this._height = 100;
+
+        // image
+        this._sprite = new Image;
+        this._sprite.src = "img/placeholder.png";
+
+        // mass in kg
+        this._mass = 1;
+
+        // orientation in degrees. O° is North. Clockwise is positive.
+        this._orientation = orientation;
 
         // coefficient of resititution (how "bouncy" the object is)
-        this.cor = 0.8;
+        this._cor = 0.8;
 
         // settings
-        this.boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
-        this.isDeleted = false;
-        this.isShowDebugInfo = false;
-        this.isShowDebugStats = false;
+        this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
+        this._isDeleted = false;
+        this._isShowDebugInfo = false;
+        this._isShowDebugStats = false;
 
         // hitbox
-        this.hitBox = new HitBox(this.x, this.y, this.orientation, 100);
+        this.hitBox = new HitBox(this.x, this.y, this._orientation, 0, 0, 100);
     }
 
     getSize(){
-        let width = this.width;
-        let height = this.height;
+        let width = this._width;
+        let height = this._height;
         return { width, height};
     }
 
     setSize(width, height){
-        this.width = width;
-        this.height = height;
+        this._width = width;
+        this._height = height;
     }
 
     setSpriteImage(src){
-        this.sprite.src = src;
+        this._sprite.src = src;
     }
 
     getPosition(){
@@ -84,7 +84,7 @@ class GameObject{
         this.y = y;
 
         // move hitbox
-        this.hitBox.setPosition(this.x, this.y, this.orientation);
+        this.hitBox.setPosition(this.x, this.y, this._orientation);
     }
 
     getVelocity(){
@@ -103,34 +103,30 @@ class GameObject{
     }
 
     getMaximumSpeed(){
-        return this.maxSpeed;
+        return this._maxSpeed;
     }
 
     setMaximumSpeed(speed){
-        this.maxSpeed = speed;
+        this._maxSpeed = speed;
     }
 
     getOrientation(){
-        return this.orientation * 180 / Math.PI;
+        return this._orientation * 180 / Math.PI;
     }
 
     setOrientation(orientation){
-        this.orientation = orientation;
+        this._orientation = orientation;
 
         // position the hitbox
-        this.hitBox.setPosition(this.x, this.y, this.orientation);
+        this.hitBox.setPosition(this.x, this.y, this._orientation);
     }
 
     getOrientationInRadians(){
-        return this.orientation;
+        return this._orientation;
     }
 
     getAngularSpeed(){
         return this.angularSpeed;
-    }
-
-    setAngularSpeed(angularSpeed){
-        this.angularSpeed = angularSpeed;
     }
 
     getMaximumAngularSpeed(){
@@ -142,32 +138,40 @@ class GameObject{
     }
 
     getCOR(){
-        return this.cor;
+        return this._cor;
     }
 
     setCOR(cor){
-        this.cor = cor;
+        this._cor = cor;
+    }
+
+    getMass(){
+        return this._mass;
+    }
+
+    setMass(mass){
+        this._mass = mass;
     }
 
     setBoundaryHandlingSetting(setting){
-        this.boundaryHandlingSetting = setting;
+        this._boundaryHandlingSetting = setting;
     }
 
     setDisplayDebugStats(bool){
-        this.isShowDebugStats = bool;
+        this._isShowDebugStats = bool;
     }
 
     getIsDeleted(){
-        return this.isDeleted;
+        return this._isDeleted;
     }
 
     update(milliSecondsPassed){
         
         // limit the speed
         let newMagnitude = VectorMath.calculateMagnitude(this.vx, this.vy);
-        if( newMagnitude >= this.maxSpeed){
-            this.vx = this.vx / newMagnitude * this.maxSpeed;
-            this.vy = this.vy / newMagnitude * this.maxSpeed;
+        if( newMagnitude >= this._maxSpeed){
+            this.vx = this.vx / newMagnitude * this._maxSpeed;
+            this.vy = this.vy / newMagnitude * this._maxSpeed;
         }   
 
         // update position
@@ -175,20 +179,20 @@ class GameObject{
         this.y += this.vy * milliSecondsPassed / 1000;
 
         // limit angular speed
-        if(this.angularSpeed >= this.maxAngularSpeed){
-            this.angularSpeed = this.maxAngularSpeed;
+        if(Math.abs(this.angularSpeed) >= this._maxAngularSpeed){
+            this.angularSpeed = this._maxAngularSpeed * Math.sign(this.angularSpeed);
         }
 
         // update orientation
         let orientationIncrease = (this.angularSpeed * milliSecondsPassed / 1000)*Math.PI/180;
-        this.orientation = (this.orientation + orientationIncrease)% 6.28;
+        this._orientation = (this._orientation + orientationIncrease)% 6.28;
 
         // update hitbox position
-        this.hitBox.setPosition(this.x, this.y, this.orientation);
+        this.hitBox.setPosition(this.x, this.y, this._orientation);
 
         // handle boundaries
-        // TODO: should depend on hitbox
-        switch (this.boundaryHandlingSetting){
+        // TODO: should depend on hitbox boundaries
+        switch (this._boundaryHandlingSetting){
             case ON_BOUNDARY_HIT.STOP:
                 if(this.x < 0 || this.x >= canvas.width){
                     this.x = canvas.width;
@@ -204,11 +208,11 @@ class GameObject{
                 break;
 
             case ON_BOUNDARY_HIT.BOUNCE:
-                if (this.hitBox.x < 0 || this.hitBox.x > canvas.width){
+                if (this.x < 0 || this.x > canvas.width){
                     this.vx *= -1;
                 }
 
-                if (this.hitBox.y < 0 || this.hitBox.y > canvas.height){
+                if (this.y < 0 || this.y > canvas.height){
                     this.vy *= -1;
                 }
                 break;
@@ -234,11 +238,11 @@ class GameObject{
 
             case ON_BOUNDARY_HIT.DELETE:
                 if(this.x < -CANVAS_MARGIN || this.x >= canvas.width + CANVAS_MARGIN){
-                    this.isDeleted = true;
+                    this._isDeleted = true;
                 }
 
                 if (this.y < -CANVAS_MARGIN || this.y >= canvas.height + CANVAS_MARGIN){
-                    this.isDeleted = true;
+                    this._isDeleted = true;
                 }
         }
     }
@@ -247,17 +251,17 @@ class GameObject{
         // draw object
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.rotate(this.orientation);
-        ctx.drawImage(this.sprite, -(this.width/2), -(this.height/2), this.width, this.height);
+        ctx.rotate(this._orientation);
+        ctx.drawImage(this._sprite, -(this._width/2), -(this._height/2), this._width, this._height);
         ctx.restore();
 
         // display debug info
-        if(this.isShowDebugInfo) {
+        if(this._isShowDebugInfo) {
             this.displayDebugInfo();
         }
 
         // display debug stats
-        if(this.isShowDebugStats) {
+        if(this._isShowDebugStats) {
             this.displayDebugDot();
             this.displayDebugOrientation();
             this.displayDebugVelocity();
@@ -268,11 +272,11 @@ class GameObject{
 
     /***********************************************************************/
     toggleShowDebugInfo(){
-        this.isShowDebugInfo = !(this.isShowDebugInfo);
+        this._isShowDebugInfo = !(this._isShowDebugInfo);
     }
 
     toggleShowDebugStats(){
-        this.isShowDebugStats = !(this.isShowDebugStats);
+        this._isShowDebugStats = !(this._isShowDebugStats);
     }
 
     displayDebugInfo(){
@@ -284,12 +288,12 @@ class GameObject{
         ctx.fillText("y: "+this.y.toFixed(1), 80, 50);
         ctx.fillText("vx: "+this.vx.toFixed(1), 10, 70);
         ctx.fillText("vy: "+this.vy.toFixed(1), 80, 70);
-        ctx.fillText("Speed: "+this.getSpeed().toFixed(1), 10, 90);
+        ctx.fillText("Speed: "+this.getSpeed().toFixed(1)+" px/s", 10, 90);
         ctx.fillText("Orientation: "+this.getOrientation().toFixed(1)+"°", 10, 110);
         ctx.fillText("("+this.getOrientationInRadians().toFixed(1)+" radians)", 150, 110);
         ctx.fillText("sin("+this.getOrientation().toFixed(1)+"°) = "+Math.sin(this.getOrientationInRadians()).toFixed(1)
                      +"  cos("+this.getOrientation().toFixed(1)+"°) = "+Math.cos(this.getOrientationInRadians()).toFixed(1),10,130);
-        ctx.fillText("Angular speed: "+this.getAngularSpeed().toFixed(1), 10, 150);
+        ctx.fillText("Angular speed: "+this.getAngularSpeed().toFixed(1)+" °/s", 10, 150);
         ctx.restore();
     }
 
@@ -300,8 +304,8 @@ class GameObject{
         ctx.beginPath();
         ctx.translate(this.x, this.y);
         ctx.moveTo(0,0);
-        let x = DEBUG_INFO_SIZE * Math.sin(this.orientation);
-        let y = -DEBUG_INFO_SIZE * Math.cos(this.orientation);
+        let x = DEBUG_INFO_SIZE * Math.sin(this._orientation);
+        let y = -DEBUG_INFO_SIZE * Math.cos(this._orientation);
         ctx.lineTo(x,y);
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#ffffff";
@@ -322,7 +326,7 @@ class GameObject{
         ctx.moveTo(0,0);
         ctx.rotate(angle);
  
-        // Velocity background line
+        // velocity background line
         ctx.strokeStyle = '#009900';
         ctx.lineWidth = 1;
         ctx.beginPath();
@@ -335,7 +339,7 @@ class GameObject{
         ctx.lineWidth = 2;
 
         // Arrow body
-        let length = VectorMath.calculateMagnitude(this.vx, this.vy) * DEBUG_INFO_SIZE / this.maxSpeed;
+        let length = VectorMath.calculateMagnitude(this.vx, this.vy) * DEBUG_INFO_SIZE / this._maxSpeed;
         ctx.beginPath();
         ctx.moveTo(0, 0);
         ctx.lineTo(length-10, 0);

@@ -31,18 +31,18 @@ class Player extends GameObject {
         this.thrust = 5;        // in pixel / sec
 
         // debug
-        this.isShowDebugInfo = true;
-        this.isShowDebugStats = true;
+        this._isShowDebugInfo = true;
+        this._isShowDebugStats = true;
     }
 
     move(input){
-        let magnitude, newvx, newvy, newMagnitude;
+        let magnitude, newMagnitude;
 
         switch (input){
             case THRUST_FORWARD:
                 // calculate new velocity
-                this.vx += this.thrust * Math.sin(this.orientation);
-                this.vy += this.thrust * Math.cos(this.orientation) * (-1);
+                this.vx += this.thrust * Math.sin(this._orientation);
+                this.vy += this.thrust * Math.cos(this._orientation) * (-1);
 
                 // set state
                 this.isForwardThrust = true;
@@ -50,18 +50,18 @@ class Player extends GameObject {
                 break;
 
             case YAW_LEFT:
-                this.orientation -= this.yawSpeed  * Math.PI / 180; // into radians
+                this._orientation -= this.yawSpeed  * Math.PI / 180; // into radians
                 this.angularSpeed = 0; 
                 break;
 
             case YAW_RIGHT:
-                this.orientation += this.yawSpeed  * Math.PI / 180; // into radians
+                this._orientation += this.yawSpeed  * Math.PI / 180; // into radians
                 this.angularSpeed = 0; 
                 break;
 
-            case THRUST_BACKWARDS:
+            case THRUST_BACKWARDS:           
                 // reduce the speed
-                magnitude = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                magnitude = VectorMath.calculateMagnitude(this.vx, this.vy);
                 newMagnitude = magnitude - this.thrust/2;
                 if( newMagnitude <= 0){
                     this.vx = 0;
@@ -80,7 +80,13 @@ class Player extends GameObject {
             return null;
         }
         else {
-            let torpedo = new Torpedo(this.x, this.y, this.orientation);
+            // torpedo needs to spawn outside of player's hitbox 
+            let tox = Math.sin(this._orientation) * (this.hitBox.getSize()+30);  // torpedosize = 20:
+            let toy = Math.cos(this._orientation) * (this.hitBox.getSize()+30);
+            let tx = this.x + tox;
+            let ty = this.y - toy;
+
+            let torpedo = new Torpedo(tx, ty, this._orientation);
             this.isWeaponCoolDown = true;
             return torpedo;
        }
