@@ -79,7 +79,7 @@ document.addEventListener('keydown', function(event) {
 /****************************************************************
  FUNCTIONS
  ****************************************************************/
- function gameLoop(timeStamp){
+function gameLoop(timeStamp){
 
     // calculate the number of seconds passed since the last frame
     // limit this so that in case of lag we are doing 100ms steps
@@ -90,18 +90,11 @@ document.addEventListener('keydown', function(event) {
     previousTimeStamp = timeStamp;
 
     // ************* UPDATE *************************************
-    // update individual gameobjects
-    //      -> spawn new ones, add to the arrays
-    //      -> mark as deleted
-    // prune the arrays of the deleted objects
-
-
 
     asteroids.forEach(element => {
         element.update(milliSecondsPassed);
     });
 
-    // Torpedos
     let garbageTorpedos = [];
     // update torpedos and gather the to-be-deleted torpedos
     for(let i=0; i<torpedos.length; i++){
@@ -116,26 +109,28 @@ document.addEventListener('keydown', function(event) {
         torpedos.splice(i,1);
     }
 
-    // TODO: better garbage collection
-
     player1.update(milliSecondsPassed);
     //player2.update(milliSecondsPassed);
-
     display.update(milliSecondsPassed);
 
 
     // ************* COLLISION CHECK *****************************
-    // reset all debug hitbox display flags
-    // fill the collision handler
-    // collision checker: 
-    //      -> flag collided gameobjects
-    //      -> get collision-pairs back 
-    // collision-pair handler
-    // 
 
+    // TODO:
+    // new collision handler: 
+    // check array 1 vs same array (= old checker)
+    // OR check array 1 vs array 2
+    // result = list of collision pairs
+    // set hasCollision flag (for debugger)
+    // resolve collision pairs
 
+    // 1. collision check: entities vs entities
+    // 2. collision check: player vs entities
+    // 3. collision check: torpedoes vs entities
+    // 4. collision check: torpedoes vs players
+    
 
-    // reset all debug hitbox display flags
+    // clear all debug hitbox display flags
     asteroids.forEach(element =>{
         element.hitBox.setIsHit(false);
     });
@@ -173,6 +168,34 @@ document.addEventListener('keydown', function(event) {
     collisionHandlerTorpedoesAsteroids.handleCollisions();
     
 
+    /******* OLD HANDLER */
+    /*
+
+    // reset the collision handler
+    collisionHandler.clear();
+
+    // fill the collision handler: asteroids
+    asteroids.forEach(element =>{
+        element.hitBox.setIsHit(false);
+        collisionHandler.push(element);
+    });
+
+    // fill the collision handler: players
+    player1.hitBox.setIsHit(false);
+    collisionHandler.push(player1);
+    //player2.hitBox.setIsHit(false);
+    //collisionHandler.push(player2);
+
+    // fill the collision handler: asteroids
+    torpedos.forEach(element =>{
+        element.hitBox.setIsHit(false);
+        collisionHandler.push(element);
+    });
+
+    // run through the collision collector and handle the collisions
+    collisionHandler.handleCollisions();
+
+    */
 
 
     // ************* DRAW ****************************************
@@ -229,10 +252,10 @@ const asteroids = [...Array(15).fill().map(() => new Asteroid(canvas.width/2, ca
 const torpedos = [];
 
 // collision handler
-const collisionHandlerAsteroidsAsteroids = new CollisionHandler();
-const collisionHandlerPlayersAsteroids = new CollisionHandler();
-const collisionHandlerTorpedoesAsteroids = new CollisionHandler();
-const collisionHandlerTorpedoesPlayers= new CollisionHandler();
+const collisionHandlerAsteroidsAsteroids = new CollisionHandler2();
+const collisionHandlerPlayersAsteroids = new CollisionHandler2();
+const collisionHandlerTorpedoesAsteroids = new CollisionHandler2();
+const collisionHandlerTorpedoesPlayers= new CollisionHandler2();
 
 // start the gameloop
 requestAnimationFrame(gameLoop);

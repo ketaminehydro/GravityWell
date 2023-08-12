@@ -25,8 +25,11 @@ class GameObject{
         // angular speed in degrees/seconds. Clockwise is positive.
         this.angularSpeed = 0;
 
+        // hitpoints
+        this.hitPoints = 100;
+
         // maximum angular speed in degrees / second
-        this._maxAngularSpeed = 360*2;
+        this._maxAngularSpeed = 360*1;
 
         // maximum velocity in pixels/second
         this._maxSpeed = 100;        
@@ -45,7 +48,7 @@ class GameObject{
         // orientation in degrees. O° is North. Clockwise is positive.
         this._orientation = orientation;
 
-        // coefficient of resititution (how "bouncy" the object is)
+        // coefficient of resititution (aka. how "bouncy" the object is)
         this._cor = 0.8;
 
         // settings

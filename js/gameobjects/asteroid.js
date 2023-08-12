@@ -50,4 +50,14 @@ class Asteroid extends GameObject{
         this._angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
         this.setAsteroidSize(Math.floor(Math.random()*(3-1+1))+1);
     }
+
+    // override
+    update(milliSecondsPassed){
+        super.update(milliSecondsPassed);
+        
+        if(this.hitPoints <= 0){
+            console.log("destroyed!");
+            this._isDeleted = true;
+        }
+    }
 }

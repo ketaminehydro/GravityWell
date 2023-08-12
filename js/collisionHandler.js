@@ -3,24 +3,47 @@
  ****************************************************************/
 class CollisionHandler{
     constructor(){
-        this.list = [];
+        this._entitiesType1 = [];
+        this._entitiesType2 = [];
+        this._collisionPairs = [];
     }
 
-    push(element){
-        this.list.push(element);
+    pushEntityType1(element){
+        this._entitiesType1.push(element);
     }
 
-    clear(){
-        this.list.splice(0,this.list.length);
+    pushEntityType2(element){
+        this._entitiesType2.push(element);
     }
 
+    reset(){
+        // deletes the arrays
+        this._entitiesType1.splice(0, this._entitiesType1.length);
+        this._entitiesType2.splice(0, this._entitiesType2.length);
+        this._collisionPairs.splice(0, this._collisionPairs.length);
+    }
+
+    // TODO: delete maybe? this never gets called
     resetCollisionFlags(){
-        this.list.forEach(element =>{
+        // reset array type 1
+        this._entitiesType1.forEach(element =>{
+            element.hitBox.setIsHit(false);
+        });
+
+        // reset array type 2
+        this._entitiesType2.forEach(element =>{
             element.hitBox.setIsHit(false);
         });
     }
 
+    /****************************************************
+       HitBox collision detection algorithms
+    *****************************************************/
     static isHitBoxIntersect(obj1, obj2){
+
+        // TODO: switch statement for different collision types 
+        // currently only circle-vs-circle is available()
+
         let x1 = obj1.hitBox.getPosition().x;
         let y1 = obj1.hitBox.getPosition().y;
         let r1 = obj1.hitBox.getSize();
@@ -42,24 +65,70 @@ class CollisionHandler{
         return result;
     }
 
-    handleCollisions() {
-        for (let i = 0; i < this.list.length; i++) {
-            for (let j = i + 1; j < this.list.length; j++) {
+    /****************************************************
+       Collision handling
+    *****************************************************/
+    handleCollisions(){
+        // mark collisions
+        // determine if collision between same entities or set of two different entities
+        if(this._entitiesType2.length === 0){
+            this.markCollisionsType1Only();  //
+        } 
+        else {
+            this.markCollisions();
+        }
 
-                if (CollisionHandler.isHitBoxIntersect(this.list[i], this.list[j])) {
+        // resolve collisions
+        this._collisionPairs.forEach(element =>{
+            this.resolvePhysics(element.obj1, element.obj2);
+            this.resolveGameLogic(element.obj1, element.obj2);
+        });
 
-                    // resolve the collisions
-                    this.resolveCollision(this.list[i], this.list[j]);
+    }
+    
+    markCollisions(){
+        for (let i = 0; i < this._entitiesType1.length; i++) {
+            for (let j = 0; j < this._entitiesType2.length; j++) {
 
-                    // flag collisions
-                    this.list[i].hitBox.setIsHit(true);
-                    this.list[j].hitBox.setIsHit(true);
+                if (CollisionHandler.isHitBoxIntersect(this._entitiesType1[i], this._entitiesType2[j])) {
+
+                    // flag collisions (TODO: add an if: this is only used to in the debug hitbox display
+                    this._entitiesType1[i].hitBox.setIsHit(true);     // TODO: inefficient: this will get set too many times.
+                    this._entitiesType2[j].hitBox.setIsHit(true);
+
+                    // add collision pair
+                    this._collisionPairs.push({
+                        obj1: this._entitiesType1[i],
+                        obj2: this._entitiesType2[j]
+                    });
                 }
             }
         }
+        return this._collisionPairs;
+    }
+    
+    markCollisionsType1Only() {
+        for (let i = 0; i < this._entitiesType1.length; i++) {
+            for (let j = i + 1; j < this._entitiesType1.length; j++) {
+
+                if (CollisionHandler.isHitBoxIntersect(this._entitiesType1[i], this._entitiesType1[j])) {
+
+                    // flag collisions (TODO: add an if: this is only used to in the debug hitbox display)
+                    this._entitiesType1[i].hitBox.setIsHit(true);
+                    this._entitiesType1[j].hitBox.setIsHit(true);
+
+                    // add collision pair
+                    this._collisionPairs.push({
+                        obj1: this._entitiesType1[i],
+                        obj2: this._entitiesType1[j]
+                    })
+                }
+            }
+        }
+        return this._collisionPairs;
     }
 
-    resolveCollision(obj1, obj2){
+    resolvePhysics(obj1, obj2){
 
         // calculate the collision normal
         const collisionNormal= {
@@ -99,6 +168,9 @@ class CollisionHandler{
         const perpendicularDistance2 = (obj2.hitBox.getSize() + obj1.hitBox.getSize()) * Math.sin(collisionAngle);
         obj1.angularSpeed += impulse.y * (perpendicularDistance1/(100*obj1.getMass()));
         obj2.angularSpeed -= impulse.y * (perpendicularDistance2/(100*obj2.getMass()));
+    }
 
+    resolveGameLogic(obj1, obj2){
+        // this difficult
     }
 }
