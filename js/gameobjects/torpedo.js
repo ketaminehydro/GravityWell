@@ -8,7 +8,7 @@ class Torpedo extends GameObject {
         // stats
         this.speed = 300;
         this._maxSpeed = 300;
-        this.setSize(20,20);
+        this.setSize(10,10);
         this.hitBox.setSize(10);
         this._mass = 1;
         this.setBoundaryHandlingSetting(ON_BOUNDARY_HIT.DELETE);

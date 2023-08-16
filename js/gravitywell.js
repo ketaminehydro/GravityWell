@@ -1,14 +1,4 @@
 /****************************************************************
- CONSTANTS
- ****************************************************************/
-const YAW_LEFT = 0;
-const YAW_RIGHT = 1;
-const THRUST_FORWARD = 2;
-const THRUST_BACKWARDS = 3;
-
-
-
-/****************************************************************
  GLOBAL VARIABLES
  ****************************************************************/
 const canvas = document.getElementById("canvas");
@@ -24,51 +14,47 @@ document.addEventListener('keydown', function(event) {
     switch (event.key){
         // controls
         case "w":
-            player1.move(THRUST_FORWARD);
+            players.getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
             break;
         case "s":
-            player1.move(THRUST_BACKWARDS);
+            players.getElement(0).move(PLAYER_ACTION.REDUCE_SPEED);
             break;
         case "d":
-            player1.move(YAW_RIGHT);
+            players.getElement(0).move(PLAYER_ACTION.YAW_RIGHT);
             break;
         case "a":
-            player1.move(YAW_LEFT);
+            players.getElement(0).move(PLAYER_ACTION.YAW_LEFT);
             break;
         case " ":
-            let result = player1.shootTorpedo();
-            if(result != null){
-                torpedos.push(result);
+            let newTorpedo = players.getElement(0).shootTorpedo();
+            if(newTorpedo != null){
+                torpedoes.push(newTorpedo);
             }
             break;
 
         case "ArrowUp":
-            player2.move(THRUST_FORWARD);
+            players.getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
             break;
         case "ArrowDown":
-            player2.move(THRUST_BACKWARDS);
+            players.getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
             break;
         case "ArrowRight":
-            player2.move(YAW_RIGHT);
+            players.getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
             break;
         case "ArrowLeft":
-            player2.move(YAW_LEFT);
+            players.getElement(1).move(PLAYER_ACTION.YAW_LEFT);
             break;
 
         // debug
         case "h":
-            player1.toggleShowDebugInfo();
-            player1.toggleShowDebugStats();
+            players.toggleShowDebugInfo();
+            players.toggleShowDebugStats();
             break;
         case "j":
-            asteroids.forEach(element => {
-                element.toggleShowDebugStats();
-            });
+            asteroids.toggleShowDebugStats();
             break;
         case "k":
-            asteroids.forEach(element => {
-                element.toggleShowDebugInfo();
-            });
+            asteroids.toggleShowDebugInfo();
             break;
     }
 });
@@ -81,99 +67,59 @@ document.addEventListener('keydown', function(event) {
  ****************************************************************/
  function gameLoop(timeStamp){
 
+    // ************* ELAPSED TIME *******************************
     // calculate the number of seconds passed since the last frame
     // limit this so that in case of lag we are doing 100ms steps
     // even though the time between updates might be longer
     let secondsPassed;
     milliSecondsPassed = (timeStamp - previousTimeStamp);
-    millSecondsPassed = Math.min(milliSecondsPassed, 100);
+    milliSecondsPassed = Math.min(milliSecondsPassed, 100);
     previousTimeStamp = timeStamp;
+
 
     // ************* UPDATE *************************************
     // update individual gameobjects
     //      -> spawn new ones, add to the arrays
-    //      -> mark as deleted
+    //      -> mark to-be-deleted
     // prune the arrays of the deleted objects
 
+    asteroids.update(milliSecondsPassed);
+    torpedoes.update(milliSecondsPassed);
+    torpedoes.removeDeleted();
 
-
-    asteroids.forEach(element => {
-        element.update(milliSecondsPassed);
-    });
-
-    // Torpedos
-    let garbageTorpedos = [];
-    // update torpedos and gather the to-be-deleted torpedos
-    for(let i=0; i<torpedos.length; i++){
-        torpedos[i].update(milliSecondsPassed);
-        if(torpedos[i].getIsDeleted()){
-            garbageTorpedos.push(i);
-        }
-    }
-    // remove the to-be-deleted torpedoes from the torpedo array
-    for (let i=0; i<garbageTorpedos.length; i++){
-        delete torpedos[i];
-        torpedos.splice(i,1);
-    }
-
-    // TODO: better garbage collection
-
-    player1.update(milliSecondsPassed);
-    //player2.update(milliSecondsPassed);
-
+    players.update(milliSecondsPassed);
     display.update(milliSecondsPassed);
 
 
     // ************* COLLISION CHECK *****************************
     // reset all debug hitbox display flags
-    // fill the collision handler
-    // collision checker: 
-    //      -> flag collided gameobjects
-    //      -> get collision-pairs back 
-    // collision-pair handler
-    // 
-
+    // for each collision type: 
+    //      fill the collision checker
+    //      collision check: 
+    //          -> flag collided gameobjects (hitbox display flag)
+    //          -> return collision-pairs 
+    // for each collision type: 
+    //      collision-pairs 
+    //          -> resolve physics
+    //          -> resolve gamelogic (different for each pair)
 
 
     // reset all debug hitbox display flags
-    asteroids.forEach(element =>{
-        element.hitBox.setIsHit(false);
-    });
-    torpedos.forEach(element =>{
-        element.hitBox.setIsHit(false);
-    });
-    player1.hitBox.setIsHit(false);
-
+    asteroids.clearIsHit();
+    torpedoes.clearIsHit();    
+    players.clearIsHit();
     
-    // Asteroids vs Asteroids
-    collisionHandlerAsteroidsAsteroids.reset();
-    asteroids.forEach(element =>{
-        collisionHandlerAsteroidsAsteroids.pushEntityType1(element);
+    // check for collisions
+    collisionChecker.reset();
+    collisionChecker.fill(asteroids);
+    collisionChecker.fill(torpedoes);
+    collisionChecker.fill(players);
+    collisionChecker.markCollisions();
+
+    // resolve collisions
+    collisionChecker._collisionPairs.forEach(element =>{
+        collisionResolver.resolvePhysics(element.obj1, element.obj2);
     });
-    collisionHandlerAsteroidsAsteroids.handleCollisions();
-
-
-    // Players vs Asteroids
-    collisionHandlerPlayersAsteroids.reset();    
-    collisionHandlerPlayersAsteroids.pushEntityType1(player1);
-    asteroids.forEach(element =>{
-        collisionHandlerPlayersAsteroids.pushEntityType2(element);
-    });
-    collisionHandlerPlayersAsteroids.handleCollisions();
-  
-
-    // Torpedoes vs Asteroids
-    collisionHandlerTorpedoesAsteroids.reset();
-    torpedos.forEach(element =>{
-        collisionHandlerTorpedoesAsteroids.pushEntityType1(element);
-    });
-    asteroids.forEach(element =>{
-        collisionHandlerTorpedoesAsteroids.pushEntityType2(element);
-    });
-    collisionHandlerTorpedoesAsteroids.handleCollisions();
-    
-
-
 
     // ************* DRAW ****************************************
 
@@ -181,20 +127,10 @@ document.addEventListener('keydown', function(event) {
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
     background.draw();
-
-    asteroids.forEach(element => {
-        element.draw();
-    });
-
-    torpedos.forEach(element => {
-        element.draw();
-    });
-
-    player1.draw();
-    //player2.draw();
-
+    asteroids.draw();
+    torpedoes.draw();
+    players.draw();
     display.draw();
-
 
     // request next frame
     requestAnimationFrame(gameLoop);
@@ -219,20 +155,26 @@ let background = new Starfield();
 background.fillStarfield();
 
 // players
-let player1 = new Player(canvas.width/2-400, canvas.height/2, 0);
-//let player2 = new Player(canvas.width/2+500, canvas.height/2, 0);
+let players = new GameObjectArray();
+for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
+    let player = new Player(canvas.width/2, canvas.height/2, 0);
+    players.push(player);
+}
 
 // asteroids
-const asteroids = [...Array(15).fill().map(() => new Asteroid(canvas.width/2, canvas.height/2, 0))];
+let asteroids = new GameObjectArray();
+for(let i=1; i<=NUMBER_OF_ASTEROIDS; i++){
+    let asteroid = new Asteroid(canvas.width/2, canvas.height/2, 0);
+    asteroids.push(asteroid);
+}
 
 // torpedoes
-const torpedos = [];
+let torpedoes = new GameObjectArray();
+
 
 // collision handler
-const collisionHandlerAsteroidsAsteroids = new CollisionHandler();
-const collisionHandlerPlayersAsteroids = new CollisionHandler();
-const collisionHandlerTorpedoesAsteroids = new CollisionHandler();
-const collisionHandlerTorpedoesPlayers= new CollisionHandler();
+const collisionChecker = new CollisionChecker();
+const collisionResolver = new CollisionResolver();
 
 // start the gameloop
 requestAnimationFrame(gameLoop);

@@ -39,7 +39,7 @@ class Player extends GameObject {
         let magnitude, newMagnitude;
 
         switch (input){
-            case THRUST_FORWARD:
+            case PLAYER_ACTION.THRUST_FORWARD:
                 // calculate new velocity
                 this.vx += this.thrust * Math.sin(this._orientation);
                 this.vy += this.thrust * Math.cos(this._orientation) * (-1);
@@ -49,17 +49,17 @@ class Player extends GameObject {
 
                 break;
 
-            case YAW_LEFT:
+            case PLAYER_ACTION.YAW_LEFT:
                 this._orientation -= this.yawSpeed  * Math.PI / 180; // into radians
                 this.angularSpeed = 0; 
                 break;
 
-            case YAW_RIGHT:
+            case PLAYER_ACTION.YAW_RIGHT:
                 this._orientation += this.yawSpeed  * Math.PI / 180; // into radians
                 this.angularSpeed = 0; 
                 break;
 
-            case THRUST_BACKWARDS:           
+            case PLAYER_ACTION.REDUCE_SPEED:           
                 // reduce the speed
                 magnitude = VectorMath.calculateMagnitude(this.vx, this.vy);
                 newMagnitude = magnitude - this.thrust/2;

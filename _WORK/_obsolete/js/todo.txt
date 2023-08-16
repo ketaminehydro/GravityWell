@@ -1,0 +1,18 @@
+cleanup sizes
+cleanup collisions
+torpedo
+torpedo collision (asteroid / player)
+asteroid deletion
+particles
+4 players
+- add player button
+- respawn delay
+title screen
+game over - overlay
+highscores overlay
+instructions overlay
+touch buttons
+settings screen, remapable keyboard
+lifes
+scores
+

@@ -1,13 +1,3 @@
-const ON_BOUNDARY_HIT = Object.freeze({
-   DELETE: 1,
-   BOUNCE: 2,
-   TELEPORT: 3,
-   STOP: 4
-});
-
-const CANVAS_MARGIN = 100;
-const DEBUG_INFO_SIZE = 100;
-
 /****************************************************************
  CLASS: GameObject
  ****************************************************************/

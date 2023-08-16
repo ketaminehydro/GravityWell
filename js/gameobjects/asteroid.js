@@ -1,9 +1,3 @@
-const ASTEROID_SIZE = Object.freeze({
-    SMALL: 1,
-    MEDIUM: 2,
-    LARGE: 3
-});
-
 /****************************************************************
  CLASS: Asteroid
  ****************************************************************/
@@ -47,8 +41,10 @@ class Asteroid extends GameObject{
         this.vx = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
         this.vy = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
         this._orientation = Math.floor(Math.random()*360);
-        this._angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
+        this.angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
         this.setAsteroidSize(Math.floor(Math.random()*(3-1+1))+1);
+        this.hitBox.x = this.x;
+        this.hitBox.y = this.y;
     }
 
     // override
