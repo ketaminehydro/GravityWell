@@ -24,6 +24,9 @@ class GameObject{
         // maximum velocity in pixels/second
         this._maxSpeed = 100;        
 
+        // type
+        this._gameObjectType = undefined;
+        
         // size in pixels
         this._width = 100;      // TODO: % relative to canvas size
         this._height = 100;
@@ -156,6 +159,10 @@ class GameObject{
 
     getIsDeleted(){
         return this._isDeleted;
+    }
+
+    getGameObjectType(){
+        return this._gameObjectType;
     }
 
     update(milliSecondsPassed){

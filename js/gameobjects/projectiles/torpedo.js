@@ -20,6 +20,9 @@ class Torpedo extends GameObject {
         this.vx = Math.sin(orientation) * this.speed;
         this.vy = -Math.cos(orientation) * this.speed;
 
+        // type
+        this._gameObjectType = GAMEOBJECT_TYPE.PROJECTILE;
+
         // debug
         this._isShowDebugStats = false;
     }

@@ -30,6 +30,9 @@ class Player extends GameObject {
         this.yawSpeed = 10;     // in degrees / sec
         this.thrust = 5;        // in pixel / sec
 
+        // type
+        this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
+
         // debug
         this._isShowDebugInfo = true;
         this._isShowDebugStats = true;

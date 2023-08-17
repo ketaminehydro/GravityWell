@@ -9,6 +9,7 @@ class Asteroid extends GameObject{
         this.setBoundaryHandlingSetting(ON_BOUNDARY_HIT.TELEPORT);
         this.setSpriteImage("img/astronaut.png");
         this.randomSpawn();
+        this._gameObjectType = GAMEOBJECT_TYPE.ASTEROID;
 
         // debug
         this._isShowDebugInfo = false;

@@ -109,17 +109,19 @@ document.addEventListener('keydown', function(event) {
     torpedoes.clearIsHit();    
     players.clearIsHit();
     
-    // check for collisions
+    // initialize collision checker
     collisionChecker.reset();
     collisionChecker.fill(asteroids);
     collisionChecker.fill(torpedoes);
     collisionChecker.fill(players);
-    collisionChecker.markCollisions();
+
+    // check for collisions
+    let collisionPairs;
+    collisionPairs = collisionChecker.markCollisions();
 
     // resolve collisions
-    collisionChecker._collisionPairs.forEach(element =>{
-        collisionResolver.resolvePhysics(element.obj1, element.obj2);
-    });
+    collisionResolver.resolve(collisionPairs);
+
 
     // ************* DRAW ****************************************
 
@@ -135,8 +137,6 @@ document.addEventListener('keydown', function(event) {
     // request next frame
     requestAnimationFrame(gameLoop);
 }
-
-
 
 
 

@@ -24,6 +24,8 @@ class CollisionChecker{
     }
 
     markCollisions() {
+        let debugCounter = 0;
+
         for (let i = 0; i < this._entities.length; i++) {
             for (let j = i + 1; j < this._entities.length; j++) {
 
@@ -33,9 +35,6 @@ class CollisionChecker{
                     this._entities[i].hitBox.setIsHit(true);
                     this._entities[j].hitBox.setIsHit(true);
 
-                    // determine collision type
-                    this.#determineCollisionType(this._entities[i], this._entities[j]);
-
                     // add collision pair
                     this._collisionPairs.push({
                         obj1: this._entities[i],
@@ -43,13 +42,16 @@ class CollisionChecker{
                         type: 0
                     })
                 }
+
+                debugCounter++;
             }
         }
-        return this._collisionPairs;
-    }
+        
+        // debug
+        //console.log("Number of collision checks this gameloop cycle: "+debugCounter);
+        // TODO: stat goes to debugger display
 
-    #determineCollisionType(obj1, obj2){
-        // something
+        return this._collisionPairs;
     }
 
     /****************************************************
