@@ -151,7 +151,9 @@ class CollisionResolver{
             obj2.vy -= impulse.y * (obj2.getMass() / totalMass);
         }
 
-        // update angular speed
+        // update angular speed 
+        // in a (frictionless) circle vs circle collision there is no transmission of angular momentum
+        // hence we invent it. The factor "1000" has been randomly chosen.
         const collisionAngle = Math.atan2(collisionNormal.y, collisionNormal.x);
         const perpendicularDistance1 = (obj1.hitBox.getSize() + obj2.hitBox.getSize()) * Math.sin(collisionAngle);
         const perpendicularDistance2 = (obj2.hitBox.getSize() + obj1.hitBox.getSize()) * Math.sin(collisionAngle);

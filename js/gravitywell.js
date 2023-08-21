@@ -12,6 +12,8 @@ let previousTimeStamp = 0;
  ****************************************************************/
 document.addEventListener('keydown', function(event) {
     switch (event.key){
+        // TODO: TryCatch for non-existing players
+        
         // controls
         case "w":
             players.getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
@@ -71,7 +73,7 @@ document.addEventListener('keydown', function(event) {
     // calculate the number of seconds passed since the last frame
     // limit this so that in case of lag we are doing 100ms steps
     // even though the time between updates might be longer
-    let secondsPassed;
+    let milliSecondsPassed;
     milliSecondsPassed = (timeStamp - previousTimeStamp);
     milliSecondsPassed = Math.min(milliSecondsPassed, 100);
     previousTimeStamp = timeStamp;
@@ -147,7 +149,7 @@ document.addEventListener('keydown', function(event) {
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// hud
+// Graphical User Interface
 let display = new Display();
 
 // background stars

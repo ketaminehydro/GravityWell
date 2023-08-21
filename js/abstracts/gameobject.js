@@ -294,6 +294,7 @@ class GameObject{
         ctx.fillText("sin("+this.getOrientation().toFixed(1)+"°) = "+Math.sin(this.getOrientationInRadians()).toFixed(1)
                      +"  cos("+this.getOrientation().toFixed(1)+"°) = "+Math.cos(this.getOrientationInRadians()).toFixed(1),10,130);
         ctx.fillText("Angular speed: "+this.getAngularSpeed().toFixed(1)+" °/s", 10, 150);
+        ctx.fillText("Hitpoints: "+this.hitPoints, 10, 170);
         ctx.restore();
     }
 
