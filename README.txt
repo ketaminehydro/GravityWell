@@ -9,10 +9,11 @@ https://www.notion.so/ketaminehydro/GravityWell-35267e0c3c6943a0b24dc5c7a7f6511b
    ARCHITECTURE NOTES
 ***************************/
 Script 
-   Event listeners
-      --> players
+   canvas
 
    game  
+      inputHandler
+         Event listeners
       display
       level
          players  
@@ -45,3 +46,5 @@ Script
       gameloop
          update level ()
          update display ()
+         draw level ()
+         draw display ()

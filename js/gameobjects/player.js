@@ -27,7 +27,7 @@ class Player extends GameObject {
         this.isWeaponCoolDown = false;
 
         // specs
-        this.yawSpeed = 10;     // in degrees / sec
+        this.yawSpeed = 5;     // in degrees / sec
         this.thrust = 5;        // in pixel / sec
 
         // type
@@ -77,8 +77,7 @@ class Player extends GameObject {
                 break;
         }
     }
-
-    shootTorpedo(){
+    fire(objectFactory){
         if(this.isWeaponCoolDown){
             return null;
         }
@@ -89,9 +88,9 @@ class Player extends GameObject {
             let tx = this.x + tox;
             let ty = this.y - toy;
 
-            let torpedo = new Torpedo(tx, ty, this._orientation);
+            objectFactory.generateTorpedo(tx, ty, this._orientation);
+            
             this.isWeaponCoolDown = true;
-            return torpedo;
        }
     }
 

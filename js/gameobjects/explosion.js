@@ -15,7 +15,16 @@ class Explosion extends GameObject {
         // type
         this._gameObjectType = GAMEOBJECT_TYPE.EXPLOSION;
 
+
+
         // debug
-        this._isShowDebugStats = false;
+        this._isShowDebugStats = true;
+    }
+
+    update(milliSecondsPassed){
+        // diminish lifetime
+        // 20% of lifetime: blow up explosion (+ hitbox)
+        // 80% of liftime:  rest
+        // 100% = die
     }
 }

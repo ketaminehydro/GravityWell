@@ -1,8 +1,8 @@
 /****************************************************************
    Game related
  ****************************************************************/
-const NUMBER_OF_PLAYERS = 1;
-const NUMBER_OF_ASTEROIDS = 15;
+const NUMBER_OF_PLAYERS = 1;  // TODO: to Game
+const NUMBER_OF_ASTEROIDS = 15; // TODO: to Level
 
 
 /****************************************************************

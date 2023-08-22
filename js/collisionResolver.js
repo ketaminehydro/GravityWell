@@ -2,8 +2,16 @@
  CLASS: CollisionResolver
  ****************************************************************/
 class CollisionResolver{
+    
+    #objectFactory;
+    
+    constructor(){
+        this.#objectFactory = null;
+    }
 
-    resolve(collisionPairs){
+    resolve(collisionPairs, objectFactory){
+        this.#objectFactory = objectFactory;
+
         collisionPairs.forEach(element => {
             this.#resolveCollision(element.obj1, element.obj2);
         });
