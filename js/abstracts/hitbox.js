@@ -13,7 +13,7 @@ class HitBox{
         this.yOffset = yOffset;
 
         // stats
-        this.size = size;        // in pixels. todo: % relative to canvas size
+        this.size = size;        // radius in pixels. TODO: % relative to canvas size
 
         // states
         this.isHit = false;

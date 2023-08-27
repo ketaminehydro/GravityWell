@@ -56,15 +56,17 @@ class InputHandler{
             // this action a toggle switch, i.e. a one-time execution
             this._keyPressed['h'] = false;
 
-            context.getPlayers().getElement(0).toggleShowDebugInfo();
-            context.getPlayers().toggleShowDebugStats();            
+            context.getPlayers().toggleShowDebugInfo();
+            context.getPlayers().toggleShowDebugGfx();            
         }
 
         if (this._keyPressed['j']) {
             // this action a toggle switch, i.e. a one-time execution
             this._keyPressed['j'] = false;
 
-            context.getAsteroids().toggleShowDebugStats();
+            context.getAsteroids().toggleShowDebugGfx();
+            context.getProjectiles().toggleShowDebugGfx();      // FIXME: this only works on EXISTING objects
+            context.getExplosions().toggleShowDebugGfx();
         }
 
         if (this._keyPressed['k']) {
@@ -72,6 +74,8 @@ class InputHandler{
             this._keyPressed['k'] = false;
 
             context.getAsteroids().toggleShowDebugInfo();
+            context.getProjectiles().toggleShowDebugInfo();
+            context.getExplosions().toggleShowDebugInfo();
         }    
     }
 }

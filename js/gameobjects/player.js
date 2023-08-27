@@ -32,10 +32,6 @@ class Player extends GameObject {
 
         // type
         this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
-
-        // debug
-        this._isShowDebugInfo = true;
-        this._isShowDebugStats = true;
     }
 
     move(input){

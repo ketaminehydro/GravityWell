@@ -98,3 +98,10 @@ const COLLISION_TYPE = Object.freeze({
   POWERUP: 6
 });
 
+
+ /******************************************
+   Particle effect related                           
+ *****************************************/
+   const PARTICLE_EFFECT = Object.freeze({
+    CIRCULAR_EXPLOSION: 1
+});

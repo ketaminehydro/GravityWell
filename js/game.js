@@ -39,7 +39,7 @@
 
         // update 
         this._currentLevel.update(milliSecondsPassed);
-        this._display.update(milliSecondsPassed);
+        this._display.update(milliSecondsPassed, this._currentLevel);
 
         // clear the canvas
         ctx.clearRect(0,0, canvas.width, canvas.height);

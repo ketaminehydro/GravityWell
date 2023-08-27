@@ -45,9 +45,9 @@ class GameObjectArray{
     }
 
     /*****************DEBUG **********************/
-    toggleShowDebugStats(){
+    toggleShowDebugGfx(){
         this._array.forEach(element => {
-            element.toggleShowDebugStats();
+            element.toggleShowDebugGfx();
         });
     }
 

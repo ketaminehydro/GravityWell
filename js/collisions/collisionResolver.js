@@ -13,24 +13,26 @@ class CollisionResolver{
         this.#objectFactory = objectFactory;
 
         collisionPairs.forEach(element => {
-            this.#resolveCollision(element.obj1, element.obj2);
+            this.#resolveCollision(element.obj1, element.obj2, element.coords);
         });
     }
 
-    #resolveCollision(obj1, obj2){
+    #resolveCollision(obj1, obj2, coords){
         // determine collision type
         let collisionType = obj1.getGameObjectType() + obj2.getGameObjectType();
         
         // resolve the collision
         switch(collisionType){
             case COLLISION_BETWEEN.ASTEROID_AND_ASTEROID:
+                this.#objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
                 this.#resolvePhysics(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_PROJECTILE:
                 this.#resolvePhysics(obj1, obj2);
-                this.#resolveSimple(obj1, obj2);
+                this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_PLAYER:
+                this.#objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
                 break;
@@ -41,7 +43,7 @@ class CollisionResolver{
                 this.#resolveGravity(obj1, obj2);            
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_EXPLOSION:
-                this.#resolveExplosion(obj1, obj2);
+                this.#resolveExplosion(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_SATELLITE: 
                 this.#resolvePhysics(obj1, obj2);
@@ -51,27 +53,29 @@ class CollisionResolver{
                 this.#resolvePhysics(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_PROECTILE:
-                this.#resolveProjectile(obj1, obj2);
+                this.#resolvePhysics(obj1, obj2);
+                this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_PLAYER:
                 this.#resolvePhysics(obj1, obj2);
-                this.#resolveProjectile(obj1, obj2);
-                 break;
+                this.#resolveProjectile(obj1, obj2, coords);
+                break;
             case COLLISION_BETWEEN.PROJECTILE_AND_POWERUP: 
-                this.#resolveProjectile(obj1, obj2);
+                this.#resolvePhysics(obj1, obj2);
+                this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_GRAVITYWELL: 
                 this.#resolveGravity(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_EXPLOSION: 
-                this.#resolveProjectile(obj1, obj2);
-                break;
+                this.#resolveProjectile(obj1, obj2, coords);
+            break;
             case COLLISION_BETWEEN.PROJECTILE_AND_SATELLITE: 
                 this.#resolvePhysics(obj1, obj2);
-                this.#resolveProjectile(obj1, obj2);
+                this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_FIXED: 
-                this.#resolveProjectile(obj1, obj2);         
+                this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.PLAYER_AND_PLAYER:
                 this.#resolvePhysics(obj1, obj2);
@@ -84,9 +88,9 @@ class CollisionResolver{
                 this.#resolveGravity(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.PLAYER_AND_EXPLOSION: 
-                this.#resolveExplosion(obj1, obj2);
+                this.#resolveExplosion(obj1, obj2, coords);
                 break;
-            case COLLISION_BETWEEN.PLAYER_AND_SATELLITE: 
+            /*case COLLISION_BETWEEN.PLAYER_AND_SATELLITE: 
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
                 break;
@@ -120,7 +124,8 @@ class CollisionResolver{
                 break; 
             case COLLISION_BETWEEN.SATELITTE_AND_FIXED: 
                 this.#resolvePhysics(obj1, obj2);
-                break;                
+                break;
+            */                
         }
     }
 
@@ -169,11 +174,18 @@ class CollisionResolver{
         obj2.angularSpeed -= impulse.y * (perpendicularDistance2/(1000*obj2.getMass()));
     }
 
-    #resolveProjectile(obj1, obj2){
-        // TODO:
-        // generate explosion
-        // delete projectile
-    
+    #resolveProjectile(obj1, obj2, coords){
+
+        // delete projectile(s)
+        if(obj1.getGameObjectType() === GAMEOBJECT_TYPE.PROJECTILE){
+            obj1.setIsDeleted();
+        }
+        if(obj2.getGameObjectType() === GAMEOBJECT_TYPE.PROJECTILE){
+            obj2.setIsDeleted();
+        }
+
+        // generate explosion at point of collision
+        this.#objectFactory.generateExplosion(coords.x, coords.y, 0);    
     }
 
     #resolveSimple(obj1, obj2){
@@ -186,10 +198,55 @@ class CollisionResolver{
         // apply gravity to non gravitywell object
     }
 
-    #resolveExplosion(obj1, obj2){
+    #resolveExplosion(obj1, obj2, coords){
+
+        // figure out which one is the explosion object
+        let explosion;
+        let target;
+
+        if(obj1.getGameObjectType() === GAMEOBJECT_TYPE.EXPLOSION){
+            explosion = obj1;
+            target = obj2;
+        }
+        else {
+            explosion = obj2;
+            target = obj1;
+        }
+
+        // if already collided with this explosion: skip
+        if(explosion.hasCollidedWith(target)){
+            return;
+        }
+
+        // mark object as collided with explosion in explosion object
+        explosion.markCollidedWith(target);
+
+        // apply explosion force to collided object
         // TODO:
-        // apply explosion forces
+
+            // calculate vector to explosion (coords - explosion);
+            const collisionNormal= {
+                x: coords.x - explosion.x,
+                y: coords.y - explosion.y
+            };            
+            let magnitude = VectorMath.calculateMagnitude(collisionNormal.x, collisionNormal.y);
+            
+            // force = magnitude of that vector * force of explosion 
+            const force = {
+                x: collisionNormal.x / magnitude * 5000 / magnitude,
+                y: collisionNormal.y / magnitude * 5000 / magnitude
+            } 
+
+            // apply force to obj.vx
+            target.vx += force.x;
+            target.vy += force.y;
+
+            // force = magnitude of that vector * force of explosion 
+            // apply force to obj.vx
+
         // apply damage according to distance to explosion center
+
+
 
     }
 

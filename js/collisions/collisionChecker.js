@@ -5,6 +5,9 @@ class CollisionChecker{
     constructor(){
         this._entities = [];
         this._collisionPairs = [];
+
+        // debug information
+        this._debugCollisionChecksCounter;
     }
 
     push(element){
@@ -24,7 +27,8 @@ class CollisionChecker{
     }
 
     markCollisions() {
-        let debugCounter = 0;
+        // debug information
+        this._debugCollisionChecksCounter = 0;
 
         for (let i = 0; i < this._entities.length; i++) {
             for (let j = i + 1; j < this._entities.length; j++) {
@@ -35,27 +39,30 @@ class CollisionChecker{
                     this._entities[i].hitBox.setIsHit(true);
                     this._entities[j].hitBox.setIsHit(true);
 
+                    // get collision coordinates
+                    let coords = CollisionChecker.calculateCollisionCoordinates(this._entities[i], this._entities[j]);
+
                     // add collision pair
                     this._collisionPairs.push({
                         obj1: this._entities[i],
                         obj2: this._entities[j],
-                        type: 0
+                        coords: coords
                     })
                 }
 
-                debugCounter++;
+                this._debugCollisionChecksCounter++;
             }
         }
-        
-        // debug
-        //console.log("Number of collision checks this gameloop cycle: "+debugCounter);
-        // TODO: stat goes to debugger display
-
         return this._collisionPairs;
     }
 
+    // debug information
+    getNumberOfCollisionChecks(){
+        return this._debugCollisionChecksCounter;
+    }
+
     /****************************************************
-       HitBox collision detection algorithms
+       HitBox collision detection algorithms (for circular hitboxes)
     *****************************************************/
     static isHitBoxIntersect(obj1, obj2){
 
@@ -82,4 +89,34 @@ class CollisionChecker{
 
         return result;
     }   
+
+    static calculateCollisionCoordinates(obj1, obj2) {
+        // define variables for readability
+        let x1 = obj1.hitBox.x;
+        let y1 = obj1.hitBox.y;
+        let r1 = obj1.hitBox.size;
+        let x2 = obj2.hitBox.x;
+        let y2 = obj2.hitBox.y;
+        let r2 = obj2.hitBox.size;
+        let x;
+        let y;
+        
+        // Calculate the distance between the centers of the circles
+        const distance = Math.sqrt((x2 - x1)**2 + (y2 - y1)**2);
+        
+        // Calculate the angle between the line connecting the centers and the x-axis
+        const angle = Math.atan2(y2 - y1, x2 - x1);
+    
+        // determine the smaller hitbox
+        if (r1 <= r2){
+            x = x1 + r1 * Math.cos(angle);
+            y = y1 + r1 * Math.sin(angle);
+        }
+        else{
+            x = x2 - r2 * Math.cos(angle);
+            y = y2 - r2 * Math.sin(angle);
+        }
+
+        return { x: x, y: y };
+    }
 }

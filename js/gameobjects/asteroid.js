@@ -10,10 +10,6 @@ class Asteroid extends GameObject{
         this.setSpriteImage("img/astronaut.png");
         this.randomSpawn();
         this._gameObjectType = GAMEOBJECT_TYPE.ASTEROID;
-
-        // debug
-        this._isShowDebugInfo = false;
-        this._isShowDebugStats = true;
     }
 
     setAsteroidSize(size){

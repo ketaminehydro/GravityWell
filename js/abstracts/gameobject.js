@@ -47,11 +47,24 @@ class GameObject{
         // settings
         this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
         this._isDeleted = false;
-        this._isShowDebugInfo = false;
-        this._isShowDebugStats = false;
 
         // hitbox
         this.hitBox = new HitBox(this.x, this.y, this._orientation, 0, 0, 100);
+
+        // debug
+        this._isShowDebugGfx = false;
+        this._isShowDebugInfo = false;
+        this._showDebugInfoSettings = {
+            position:       false,
+            velocity:       false,
+            speed:          false,
+            orientation:    false,
+            angularSpeed:   false,
+            hitPoints:      true
+        }
+
+
+
     }
 
     getSize(){
@@ -153,12 +166,12 @@ class GameObject{
         this._boundaryHandlingSetting = setting;
     }
 
-    setDisplayDebugStats(bool){
-        this._isShowDebugStats = bool;
-    }
-
     getIsDeleted(){
         return this._isDeleted;
+    }
+
+    setIsDeleted(){
+        this._isDeleted = true;
     }
 
     getGameObjectType(){
@@ -220,18 +233,18 @@ class GameObject{
             case ON_BOUNDARY_HIT.TELEPORT:
                 if (this.x < -CANVAS_MARGIN) {
                     this.x = canvas.width + CANVAS_MARGIN;
-                    this.y = canvas.height-this.y + CANVAS_MARGIN;
+                    this.y = canvas.height-this.y; // + CANVAS_MARGIN; FIXME: is it fixed now?
                 }
                 else if (this.x > canvas.width + CANVAS_MARGIN) {
                     this.x = - CANVAS_MARGIN;
-                    this.y = canvas.height-this.y + CANVAS_MARGIN;
+                    this.y = canvas.height-this.y; // + CANVAS_MARGIN; FIXME: is it fixed now?
                 }
                 if (this.y < -CANVAS_MARGIN) {
-                    this.x = canvas.width - this.x + CANVAS_MARGIN;
+                    this.x = canvas.width - this.x; // + CANVAS_MARGIN; FIXME: is it fixed now?
                     this.y = canvas.height + CANVAS_MARGIN;
                 }
                 else if (this.y > canvas.height + CANVAS_MARGIN) {
-                    this.x = canvas.width - this.x + CANVAS_MARGIN;
+                    this.x = canvas.width - this.x; // + CANVAS_MARGIN; FIXME: is it fixed now?
                     this.y = - CANVAS_MARGIN;
                 }
                 break;
@@ -260,8 +273,8 @@ class GameObject{
             this.displayDebugInfo();
         }
 
-        // display debug stats
-        if(this._isShowDebugStats) {
+        // display debug graphics
+        if(this._isShowDebugGfx) {
             this.displayDebugDot();
             this.displayDebugOrientation();
             this.displayDebugVelocity();
@@ -270,32 +283,53 @@ class GameObject{
     }
 
 
-    /***********************************************************************/
+    /************************* DEBUG **********************************************/
     toggleShowDebugInfo(){
         this._isShowDebugInfo = !(this._isShowDebugInfo);
     }
 
-    toggleShowDebugStats(){
-        this._isShowDebugStats = !(this._isShowDebugStats);
+    toggleShowDebugGfx(){
+        this._isShowDebugGfx = !(this._isShowDebugGfx);
     }
 
     displayDebugInfo(){
+        let y = 30;     // in px
+
         ctx.save();                                     // because we are changing the coordinate origins
         ctx.translate(this.x, this.y);
         ctx.fillStyle = "white";
         ctx.font = "1em Monospace";
-        ctx.fillText("x: "+this.x.toFixed(1), 10, 50);
-        ctx.fillText("y: "+this.y.toFixed(1), 80, 50);
-        ctx.fillText("vx: "+this.vx.toFixed(1), 10, 70);
-        ctx.fillText("vy: "+this.vy.toFixed(1), 80, 70);
-        ctx.fillText("Speed: "+this.getSpeed().toFixed(1)+" px/s", 10, 90);
-        ctx.fillText("Orientation: "+this.getOrientation().toFixed(1)+"°", 10, 110);
-        ctx.fillText("("+this.getOrientationInRadians().toFixed(1)+" radians)", 150, 110);
-        ctx.fillText("sin("+this.getOrientation().toFixed(1)+"°) = "+Math.sin(this.getOrientationInRadians()).toFixed(1)
-                     +"  cos("+this.getOrientation().toFixed(1)+"°) = "+Math.cos(this.getOrientationInRadians()).toFixed(1),10,130);
-        ctx.fillText("Angular speed: "+this.getAngularSpeed().toFixed(1)+" °/s", 10, 150);
-        ctx.fillText("Hitpoints: "+this.hitPoints, 10, 170);
-        ctx.restore();
+        if(this._showDebugInfoSettings.position){
+            y += 20;
+            ctx.fillText("x: "+this.x.toFixed(1), 10, y);
+            ctx.fillText("y: "+this.y.toFixed(1), 80, y);
+        }
+        if(this._showDebugInfoSettings.velocity){
+            y += 20;
+            ctx.fillText("vx: "+this.vx.toFixed(1), 10, y);
+            ctx.fillText("vy: "+this.vy.toFixed(1), 80, y);
+        }
+        if(this._showDebugInfoSettings.speed){
+            y += 20;
+            ctx.fillText("Speed: "+this.getSpeed().toFixed(1)+" px/s", 10, y);
+        }
+        if(this._showDebugInfoSettings.orientation){
+            y += 20;
+            ctx.fillText("Orientation: "+this.getOrientation().toFixed(1)+"°", 10, y); //110
+            ctx.fillText("("+this.getOrientationInRadians().toFixed(1)+" radians)", 150, y); //110
+            y += 20;
+            ctx.fillText("sin("+this.getOrientation().toFixed(1)+"°) = "+Math.sin(this.getOrientationInRadians()).toFixed(1)
+                        +"  cos("+this.getOrientation().toFixed(1)+"°) = "+Math.cos(this.getOrientationInRadians()).toFixed(1),10,y); //130
+        }
+        if(this._showDebugInfoSettings.angularSpeed){
+            y += 20;
+            ctx.fillText("Angular speed: "+this.getAngularSpeed().toFixed(1)+" °/s", 10, y);  // 150
+        }
+        if(this._showDebugInfoSettings.hitPoints){
+            y += 20;
+            ctx.fillText("Hitpoints: "+this.hitPoints, 10, y);  // 170
+        }
+            ctx.restore();
     }
 
     displayDebugOrientation(){

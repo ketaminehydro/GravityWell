@@ -8,10 +8,17 @@
         this._asteroids = new GameObjectArray();
         this._projectiles = new GameObjectArray();
         this._explosions = new GameObjectArray();
+        this._particleEffects = new ParticleEffectArray();
 
         this._collisionChecker = new CollisionChecker();
         this._collisionResolver = new CollisionResolver();
 
+        // debug information
+        this._debugCollisionChecksCounter;
+        this._debugCollisionPairsCounter;
+
+
+        // initialise the level
         this.#initializeLevel();
     }
 
@@ -32,8 +39,12 @@
         }
 
         // debug: explosion
-        let explosion = new Explosion(canvas.width/2+60, canvas.height/2+60, 0);
-        this._explosions.push(explosion);
+        //let explosion = new Explosion(canvas.width/2+100, canvas.height/2+100, 0);
+        //this._explosions.push(explosion);
+        
+        // debug: particle
+        this.generateParticleEffect(canvas.width/2+100, canvas.height/2+100, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
+
     }
 
 
@@ -47,13 +58,35 @@
         return this._asteroids;
     }
 
+    getProjectiles(){
+        // returns the projectiles object for player input handling
+        return this._projectiles;
+    }
+
+    getExplosions(){
+        // returns the explosions object for player input handling
+        return this._explosions;
+    }
+
     generateTorpedo(x, y, orientation){
         let torpedo = new Torpedo(x, y, orientation);
         this._projectiles.push(torpedo);
+        
+        // return to allow further modification by requestor
+        return torpedo;
     }
 
-    generateExplosion(x, y, size, force){
+    generateExplosion(x, y, orientation){
+        let explosion = new Explosion(x, y, orientation);
+        this._explosions.push(explosion);   
 
+        // return to allow further modification by requestor
+        return explosion;
+    }
+
+    generateParticleEffect(x, y, effectType){
+        let particleEffect = new ParticleEffect(x, y, effectType);
+        this._particleEffects.push(particleEffect);
     }
 
 
@@ -69,12 +102,14 @@
         this._projectiles.update(milliSecondsPassed);
         this._explosions.update(milliSecondsPassed);
         this._players.update(milliSecondsPassed);
+        this._particleEffects.update(milliSecondsPassed);
 
         // remove deleted objects
         this._asteroids.removeDeleted();
         this._projectiles.removeDeleted();
         this._explosions.removeDeleted();
         this._players.removeDeleted();
+        this._particleEffects.removeDeleted();
 
 
         // ************* COLLISION CHECK *****************************
@@ -109,6 +144,10 @@
 
         // resolve collisions
         this._collisionResolver.resolve(collisionPairs, this);
+
+        // debug information
+        this._debugCollisionChecksCounter = this._collisionChecker.getNumberOfCollisionChecks();
+        this._debugCollisionPairsCounter = collisionPairs.length;
     }
 
     draw(){
@@ -117,5 +156,25 @@
         this._projectiles.draw();
         this._explosions.draw();
         this._players.draw();
+        this._particleEffects.draw();
+    }
+
+    
+    // ******************** debug stats ********************************
+    getNumberOfGameObjects(){
+        let counter = 0;
+        counter = this._asteroids.getLength()
+                    + this._projectiles.getLength() 
+                    + this._players.getLength()
+                    + this._explosions.getLength();
+        return counter; 
+    }
+
+    getNumberOfCollisionChecks(){
+        return this._debugCollisionChecksCounter;
+    }
+
+    getNumberOfCollisions(){
+        return this._debugCollisionPairsCounter;
     }
 }
