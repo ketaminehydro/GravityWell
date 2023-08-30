@@ -2,8 +2,8 @@
  CLASS: Player
  ****************************************************************/
 class Player extends GameObject {
-    constructor(x, y, orientation) {
-        super(x, y, orientation);
+    constructor(x, y, orientation, objectFactory) {
+        super(x, y, orientation, objectFactory);
 
         // img
         this.setSpriteImage("img/rocket_idle.png");

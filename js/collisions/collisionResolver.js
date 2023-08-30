@@ -176,16 +176,20 @@ class CollisionResolver{
 
     #resolveProjectile(obj1, obj2, coords){
 
-        // delete projectile(s)
+        let explosionForce = 0;
+
+        // get force and delete projectile(s)
         if(obj1.getGameObjectType() === GAMEOBJECT_TYPE.PROJECTILE){
+            explosionForce =  obj1.yield;
             obj1.setIsDeleted();
         }
         if(obj2.getGameObjectType() === GAMEOBJECT_TYPE.PROJECTILE){
+            explosionForce = Math.max(explosionForce, obj2.yield);
             obj2.setIsDeleted();
         }
 
         // generate explosion at point of collision
-        this.#objectFactory.generateExplosion(coords.x, coords.y, 0);    
+        this.#objectFactory.generateExplosion(coords.x, coords.y, 0, explosionForce);  
     }
 
     #resolveSimple(obj1, obj2){
@@ -222,32 +226,36 @@ class CollisionResolver{
         explosion.markCollidedWith(target);
 
         // apply explosion force to collided object
-        // TODO:
 
-            // calculate vector to explosion (coords - explosion);
+            // calculate vector explosioncenter-to-collisionpoint;
             const collisionNormal= {
                 x: coords.x - explosion.x,
                 y: coords.y - explosion.y
             };            
-            let magnitude = VectorMath.calculateMagnitude(collisionNormal.x, collisionNormal.y);
+            let collisionMagnitude = VectorMath.calculateMagnitude(collisionNormal.x, collisionNormal.y);
             
-            // force = magnitude of that vector * force of explosion 
+            // calculate the distance to the explosion, relative to the maximum explosion size 
+            let explosionSize = explosion.getMaxExplosionSize();
+            let factor = 1 - (collisionMagnitude / explosionSize);
+            
+            // debug FIXME: remove when balanced
+            //console.log(explosion.x+", "+explosion.y+" : Explosion");
+            //console.log(target.x+", "+target.y+" : Target ("+target.getGameObjectType()+")");
+            //console.log("collisionMagnitude: "+collisionMagnitude.toFixed(1)+"\n Explosion size: "+explosionSize+"\n ratio: "+factor.toFixed(1));
+
+            // force = magnitude of vector to explosion * force of explosion 
             const force = {
-                x: collisionNormal.x / magnitude * 5000 / magnitude,
-                y: collisionNormal.y / magnitude * 5000 / magnitude
+                x: (collisionNormal.x / collisionMagnitude) * explosion.getForce() * factor,
+                y: (collisionNormal.y / collisionMagnitude) * explosion.getForce() * factor
             } 
 
             // apply force to obj.vx
             target.vx += force.x;
             target.vy += force.y;
 
-            // force = magnitude of that vector * force of explosion 
-            // apply force to obj.vx
-
         // apply damage according to distance to explosion center
-
-
-
+        // TODO: should depend on Torpedo, and therefore related to yield (in Newton) and HP
+            target.hitPoints -= explosion.getForce()/500 * factor;
     }
 
     #resolvePowerUp(obj1, obj2){

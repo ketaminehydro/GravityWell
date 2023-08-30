@@ -2,7 +2,7 @@
  CLASS: GameObject
  ****************************************************************/
 class GameObject{
-    constructor(x, y, orientation){
+    constructor(x, y, orientation, objectFactory){
 
         // position in pixel        TODO: this should be % relative to canvas
         this.x = x;
@@ -44,21 +44,24 @@ class GameObject{
         // coefficient of resititution (aka. how "bouncy" the object is)
         this._cor = 0.8;
 
-        // settings
         this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
         this._isDeleted = false;
+        this._gracePeriod = 2000;   // invulnerability in ms after spawn
 
         // hitbox
         this.hitBox = new HitBox(this.x, this.y, this._orientation, 0, 0, 100);
 
+        // objectFactory
+        this._objectFactory = objectFactory;
+
         // debug
-        this._isShowDebugGfx = false;
-        this._isShowDebugInfo = false;
+        this._isShowDebugGfx = true;
+        this._isShowDebugInfo = true;
         this._showDebugInfoSettings = {
             position:       false,
             velocity:       false,
             speed:          false,
-            orientation:    false,
+            orientation:    true,
             angularSpeed:   false,
             hitPoints:      true
         }
@@ -327,7 +330,7 @@ class GameObject{
         }
         if(this._showDebugInfoSettings.hitPoints){
             y += 20;
-            ctx.fillText("Hitpoints: "+this.hitPoints, 10, y);  // 170
+            ctx.fillText("Hitpoints: "+this.hitPoints.toFixed(0), 10, y);  // 170
         }
             ctx.restore();
     }

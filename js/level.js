@@ -34,17 +34,9 @@
 
         // asteroids
         for(let i=1; i<=NUMBER_OF_ASTEROIDS; i++){
-            let asteroid = new Asteroid(canvas.width/2, canvas.height/2, 0);
-            this._asteroids.push(asteroid);
+            let asteroid = this.generateAsteroid(0,0,0);
+            asteroid.randomSpawn();
         }
-
-        // debug: explosion
-        //let explosion = new Explosion(canvas.width/2+100, canvas.height/2+100, 0);
-        //this._explosions.push(explosion);
-        
-        // debug: particle
-        this.generateParticleEffect(canvas.width/2+100, canvas.height/2+100, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
-
     }
 
 
@@ -68,16 +60,25 @@
         return this._explosions;
     }
 
+    /**************** OBJECT FACTORY *****************************************/
+    
+    generateAsteroid(x, y, orientation){
+        let asteroid = new Asteroid(x, y, orientation, this);            
+        this._asteroids.push(asteroid);    
+
+        // return to allow further modification by requestor
+        return asteroid;
+    }
     generateTorpedo(x, y, orientation){
-        let torpedo = new Torpedo(x, y, orientation);
+        let torpedo = new Torpedo(x, y, orientation, this);
         this._projectiles.push(torpedo);
         
         // return to allow further modification by requestor
         return torpedo;
     }
 
-    generateExplosion(x, y, orientation){
-        let explosion = new Explosion(x, y, orientation);
+    generateExplosion(x, y, orientation, force){
+        let explosion = new Explosion(x, y, orientation, this, force);
         this._explosions.push(explosion);   
 
         // return to allow further modification by requestor
@@ -88,6 +89,8 @@
         let particleEffect = new ParticleEffect(x, y, effectType);
         this._particleEffects.push(particleEffect);
     }
+
+    /**************** UPDATE & DRAW *****************************************/
 
 
     update(milliSecondsPassed){

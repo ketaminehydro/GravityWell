@@ -26,7 +26,7 @@ class ParticleEffect{
     #generateEffect(x, y, effectType){
         switch(effectType){
             case PARTICLE_EFFECT.CIRCULAR_EXPLOSION:
-                this.#generateExplosion(x, y);
+                this.#generateCircularExplosion(x, y);
                 break;
         }
     }
@@ -36,7 +36,7 @@ class ParticleEffect{
         // every effect Type has its own update method
         switch(this._effectType){
             case PARTICLE_EFFECT.CIRCULAR_EXPLOSION:
-                this.#updateExplosion(milliSecondsPassed);
+                this.#updateCircularExplosion(milliSecondsPassed);
                 break;
         }
 
@@ -54,23 +54,24 @@ class ParticleEffect{
 
     /********************** EFFECTS *******************************/
 
-    #generateExplosion(x, y){
+    // PARTICLE_EFFECT.CIRCULAR_EXPLOSION
+    #generateCircularExplosion(x, y){
         let angle = 0;
 
-        for(let i=1; i<= 100; i++){
+        for(let i=1; i<= 20; i++){
             
-            angle+= Math.PI*2/10;
+            angle += Math.PI*2/20;
             let speed = Math.random()*300;
-            let vx = Math.sin(i) * speed;
-            let vy = -Math.cos(i) * speed;
-            let size = Math.random() * 3;
+            let vx = Math.sin(angle) * speed;
+            let vy = -Math.cos(angle) * speed;
+            let size = Math.random() * 2;
             let lifetime = Math.floor(Math.random()*(400-50+1))+50;
-            let particle = new Particle(x, y, vx, vy, "#D6DBEA", size, lifetime);
+            let particle = new Particle(x, y, vx, vy, "#ADBCE9", size, lifetime);
             this._particles.push(particle);
         }
     }
 
-    #updateExplosion(milliSecondsPassed){
+    #updateCircularExplosion(milliSecondsPassed){
 
         for(let i=0; i<this._particles.length; i++){
 

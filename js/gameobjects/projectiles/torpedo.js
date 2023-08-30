@@ -2,12 +2,13 @@
  CLASS: Torpedo
  ****************************************************************/
 class Torpedo extends GameObject {
-    constructor(x, y, orientation) {
-        super(x, y, orientation);
+    constructor(x, y, orientation, objectFactory) {
+        super(x, y, orientation, objectFactory);
 
         // stats
-        this.speed = 300;
-        this._maxSpeed = 300;
+        this.speed = 300;       // in px/s
+        this._maxSpeed = 300;   
+        this.yield = 5000;      // in Newton
         this.setSize(10,10);
         this.hitBox.setSize(10);
         this._mass = 1;

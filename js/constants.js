@@ -2,7 +2,7 @@
    Game related
  ****************************************************************/
 const NUMBER_OF_PLAYERS = 1;  // TODO: to Game
-const NUMBER_OF_ASTEROIDS = 15; // TODO: to Level
+const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level
 
 
 /****************************************************************

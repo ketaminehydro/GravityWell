@@ -2,12 +2,12 @@
  CLASS: Explosion
  ****************************************************************/
 class Explosion extends GameObject {
-    constructor(x, y, orientation) {
-        super(x, y, orientation);
+    constructor(x, y, orientation, objectFactory, force) {
+        super(x, y, orientation, objectFactory);
 
         // stats
         this._maxExplosionSize = 100;
-        this._force = 50;       // in Newton
+        this._force = force;       // in Newton
         this.setSize(10,10);
         this.hitBox.setSize(10);
 
@@ -30,6 +30,14 @@ class Explosion extends GameObject {
         this._isShowDebugGfx = false;
     }
 
+    getForce(){
+        return this._force;
+    }
+
+    getMaxExplosionSize(){
+        return this._maxExplosionSize;
+    }
+
     markCollidedWith(obj){
         this._collidedWith.push(obj);
     }
@@ -49,6 +57,7 @@ class Explosion extends GameObject {
         return hasCollided;
     }
 
+    // override
     update(milliSecondsPassed){
         // diminish lifetime
         this._lifetime += milliSecondsPassed;
