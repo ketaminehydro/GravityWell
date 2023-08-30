@@ -28,7 +28,7 @@
 
         // players
         for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
-            let player = new Player(canvas.width/2, canvas.height/2, 0);
+            let player = new Player(canvas.width/2+i*100, canvas.height/2, 0);
             this._players.push(player);
         }
 
@@ -113,6 +113,12 @@
         this._explosions.removeDeleted();
         this._players.removeDeleted();
         this._particleEffects.removeDeleted();
+
+        // check level conditions
+        // right now there is only one, so no need to create a dedicated method
+        if(this._asteroids.getLength() <= 0){
+            console.log("You won!!!!");
+        }
 
 
         // ************* COLLISION CHECK *****************************

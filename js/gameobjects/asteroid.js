@@ -87,7 +87,6 @@ class Asteroid extends GameObject{
 
                     // create asteroid            
                     let asteroid = this._objectFactory.generateAsteroid(x, y, orientation);
-                    console.log(i+": ("+x.toFixed(0)+", "+y.toFixed(0)+") "+orientation.toFixed(0)+"°");
                     asteroid.setAsteroidSize(newSize);
                     asteroid.vx = vx;
                     asteroid.vy = vy;

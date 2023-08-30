@@ -13,7 +13,7 @@ function setCanvasSize(){
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     // FIXME: this doesn't work with the stars background which has 
-    // to be recreated
+    // to be recreated. And objects outside perimeter get "stuck"
 }
 
 window.addEventListener("resize",setCanvasSize);

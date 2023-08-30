@@ -80,6 +80,7 @@ class CollisionResolver{
             case COLLISION_BETWEEN.PLAYER_AND_PLAYER:
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
+                this.#objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
                 break;
             case COLLISION_BETWEEN.PLAYER_AND_POWERUP:
                 this.#resolvePowerUp(obj1, obj2);

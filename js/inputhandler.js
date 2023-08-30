@@ -51,6 +51,29 @@ class InputHandler{
             context.getPlayers().getElement(0).fire(context);
         }
 
+
+        // player 2
+        if (this._keyPressed['ArrowUp']) {
+            context.getPlayers().getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
+        }
+
+        if (this._keyPressed['ArrowLeft']) {
+            context.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_LEFT);
+        }
+
+        if (this._keyPressed['ArrowDown']) {
+            context.getPlayers().getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
+        }
+
+        if (this._keyPressed['ArrowRight']) {
+            context.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
+        }
+
+        if (this._keyPressed['-']) {
+            context.getPlayers().getElement(1).fire(context);
+        }
+
+
         // debug
         if (this._keyPressed['h']) {
             // this action a toggle switch, i.e. a one-time execution

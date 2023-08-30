@@ -55,13 +55,13 @@ class GameObject{
         this._objectFactory = objectFactory;
 
         // debug
-        this._isShowDebugGfx = true;
-        this._isShowDebugInfo = true;
+        this._isShowDebugGfx = false;
+        this._isShowDebugInfo = false;
         this._showDebugInfoSettings = {
             position:       false,
             velocity:       false,
             speed:          false,
-            orientation:    true,
+            orientation:    false,
             angularSpeed:   false,
             hitPoints:      true
         }

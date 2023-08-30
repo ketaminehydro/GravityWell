@@ -90,9 +90,14 @@ class Explosion extends GameObject {
 
         // draw circles (inner to outer);
         ctx.beginPath();
+        ctx.arc(0, 0, this._width/16, 0, Math.PI * 2);
+        ctx.strokeStyle = "#000000";
+        ctx.stroke();
+
+        ctx.beginPath();
         ctx.arc(0, 0, this._width/8, 0, Math.PI * 2);
-        ctx.fillStyle = "#000000";
-        ctx.fill();
+        ctx.strokeStyle = "#000000";
+        ctx.stroke();
 
         ctx.beginPath();
         ctx.arc(0, 0, this._width/4, 0, Math.PI * 2);
