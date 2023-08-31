@@ -13,7 +13,7 @@
         this._collisionChecker = new CollisionChecker();
         this._collisionResolver = new CollisionResolver();
 
-        // debug information
+        // information for the debugger
         this._debugCollisionChecksCounter;
         this._debugCollisionPairsCounter;
 
@@ -21,24 +21,6 @@
         // initialise the level
         this.#initializeLevel();
     }
-
-    #initializeLevel(){
-        // stars
-        this._background.fillStarfield();
-
-        // players
-        for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
-            let player = new Player(canvas.width/2+i*100, canvas.height/2, 0);
-            this._players.push(player);
-        }
-
-        // asteroids
-        for(let i=1; i<=NUMBER_OF_ASTEROIDS; i++){
-            let asteroid = this.generateAsteroid(0,0,0);
-            asteroid.randomSpawn();
-        }
-    }
-
 
     getPlayers(){
         // returns the players object for player input handling
@@ -59,6 +41,26 @@
         // returns the explosions object for player input handling
         return this._explosions;
     }
+
+    /************************ LEVEL CONDITIONS ******************************************/
+    #initializeLevel(){
+        // stars
+        this._background.fillStarfield();
+
+        // players
+        for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
+            let player = new Player(canvas.width/2+i*100, canvas.height/2, 0);
+            this._players.push(player);
+        }
+
+        // asteroids
+        for(let i=1; i<=NUMBER_OF_ASTEROIDS; i++){
+            let asteroid = this.generateAsteroid(0,0,0);
+            asteroid.randomSpawn();
+        }
+    }
+
+
 
     /**************** OBJECT FACTORY *****************************************/
     
@@ -114,7 +116,7 @@
         this._players.removeDeleted();
         this._particleEffects.removeDeleted();
 
-        // check level conditions
+        // check level-is-over conditions
         // right now there is only one, so no need to create a dedicated method
         if(this._asteroids.getLength() <= 0){
             console.log("You won!!!!");
@@ -154,7 +156,7 @@
         // resolve collisions
         this._collisionResolver.resolve(collisionPairs, this);
 
-        // debug information
+        // update counters for debugger
         this._debugCollisionChecksCounter = this._collisionChecker.getNumberOfCollisionChecks();
         this._debugCollisionPairsCounter = collisionPairs.length;
     }
@@ -169,7 +171,7 @@
     }
 
     
-    // ******************** debug stats ********************************
+    // ******************** DEBUGGER INFORMATION ********************************
     getNumberOfGameObjects(){
         let counter = 0;
         counter = this._asteroids.getLength()

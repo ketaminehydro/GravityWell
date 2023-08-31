@@ -2,7 +2,7 @@
    Game related
  ****************************************************************/
 const NUMBER_OF_PLAYERS = 2;  // TODO: to Game
-const NUMBER_OF_ASTEROIDS = 3; // TODO: to Level
+const NUMBER_OF_ASTEROIDS = 5; // TODO: to Level
 
 
 /****************************************************************
@@ -103,5 +103,6 @@ const COLLISION_TYPE = Object.freeze({
    Particle effect related                           
  *****************************************/
    const PARTICLE_EFFECT = Object.freeze({
-    CIRCULAR_EXPLOSION: 1
+    CIRCULAR_EXPLOSION: 1,
+    CIRCULAR_EXPLOSION_BIG: 2
 });

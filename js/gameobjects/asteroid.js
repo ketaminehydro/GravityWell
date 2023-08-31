@@ -96,7 +96,7 @@ class Asteroid extends GameObject{
             }
 
             // generate particle effect
-            this._objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
+            this._objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG);
 
             // delete the asteroid
             this._isDeleted = true;

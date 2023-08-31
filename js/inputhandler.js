@@ -20,10 +20,6 @@ class InputHandler{
 
     
     #handleKeyUp(event) { 
-        if (event.key === 'u') {
-            console.log("up U");
-        }
-
         // Set the corresponding key to false when released
         this._keyPressed[event.key] = false;
     }
@@ -69,12 +65,12 @@ class InputHandler{
             context.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
         }
 
-        if (this._keyPressed['-']) {
+        if (this._keyPressed['Shift']) {
             context.getPlayers().getElement(1).fire(context);
         }
 
 
-        // debug
+        // debugger
         if (this._keyPressed['h']) {
             // this action a toggle switch, i.e. a one-time execution
             this._keyPressed['h'] = false;

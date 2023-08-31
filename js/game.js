@@ -34,7 +34,7 @@
         milliSecondsPassed = Math.min(milliSecondsPassed, 100);
         this.#previousTimeStamp = timeStamp;  
         
-        // handle player input
+        // handle player input // TODO: currently in level mode
         this.#inputHandler.handleInputDuringPlay(this._currentLevel);
 
         // update 
