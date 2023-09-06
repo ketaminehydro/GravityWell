@@ -19,21 +19,21 @@ class Asteroid extends GameObject{
                 this.setSize(50,50);   // todo: relative to canvas sizes
                 this.hitBox.setSize(20);
                 this._mass = 1;
-                this.hitPoints = 10;
+                this._hitPoints = 10;
                 break;
             case ASTEROID_SIZE.MEDIUM:
                 this._asteroidSize = ASTEROID_SIZE.MEDIUM;
                 this.setSize(100,100);
                 this.hitBox.setSize(50);
                 this._mass = 5;
-                this.hitPoints = 10;
+                this._hitPoints = 10;
                 break;
             case ASTEROID_SIZE.LARGE:
                 this._asteroidSize = ASTEROID_SIZE.LARGE;
                 this.setSize(150,150);
                 this.hitBox.setSize(75);
                 this._mass = 10;
-                this.hitPoints = 10;
+                this._hitPoints = 10;
                 break;
         }
     }
@@ -60,7 +60,7 @@ class Asteroid extends GameObject{
     update(milliSecondsPassed){
         super.update(milliSecondsPassed);
         
-        if(this.hitPoints <= 0){
+        if(this._hitPoints <= 0){
 
             // if this is not a small Asteroid, split into 3
             if(this._asteroidSize !== ASTEROID_SIZE.SMALL){

@@ -3,9 +3,11 @@
  ****************************************************************/
 class Starfield{
     constructor(){
-        // generate an array that contains 10% of the canvas size pixels
+        // generate an array that contains the stars
         this.stars = [];
 
+        // draw on the background canvas
+        this._ctx = backgroundCtx;
     }
 
     // fill the array with pixels in three different colors
@@ -17,6 +19,10 @@ class Starfield{
         }
     }
 
+    // Obsolete method. // FIXME: if not used in the final version of the game, delete this method
+    // go through each pixel of the canvas. Randomly decide whether the pixel is a star or not 
+    // and at the same time decide upon its color.
+    // a second random number decides the size of the star.  
     fillMethod1(x, y){
         let color = Math.floor(Math.random()*(50000-0+1))+0;
         let size = Math.floor(Math.random()*(3-0+1))+0;
@@ -44,6 +50,10 @@ class Starfield{
         }
     }
 
+    // better method: 
+    // go through each pixel of the canvas. Randomly decide whether the pixel is a star or not.
+    // select a random color for the star: distribution of the 5 possible colors is not equal
+    // select a random size for the star: distribution of the 3 possible sizes is not equal
     fillMethod2(x, y){
         let star = Math.random();
         if(star < 0.0002){
@@ -87,14 +97,12 @@ class Starfield{
 
     draw(){
         for(let i=0; i < this.stars.length; i++){
-            ctx.fillStyle = this.stars[i].color;
-            // Rectangles
-            //ctx.fillRect(this.stars[i].x, this.stars[i].y, this.stars[i].size,  this.stars[i].size);
+            this._ctx.fillStyle = this.stars[i].color;
 
-            // Circles
-            ctx.beginPath();
-            ctx.arc(this.stars[i].x, this.stars[i].y, this.stars[i].size, 0, 2 * Math.PI, true);
-            ctx.fill();
+            // Stars are circles
+            this._ctx.beginPath();
+            this._ctx.arc(this.stars[i].x, this.stars[i].y, this.stars[i].size, 0, 2 * Math.PI, true);
+            this._ctx.fill();
         }
     }
 }

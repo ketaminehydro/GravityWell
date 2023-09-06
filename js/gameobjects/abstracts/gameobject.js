@@ -16,7 +16,7 @@ class GameObject{
         this.angularSpeed = 0;
 
         // hitpoints
-        this.hitPoints = 100;
+        this._hitPoints = 100;
 
         // maximum angular speed in degrees / second
         this._maxAngularSpeed = 360*1;
@@ -68,6 +68,14 @@ class GameObject{
 
 
 
+    }
+
+    getHitPoints(){
+        return this._hitPoints;
+    }
+
+    takeDamage(damage){
+        this._hitPoints -= damage;
     }
 
     getSize(){
@@ -330,7 +338,7 @@ class GameObject{
         }
         if(this._showDebugInfoSettings.hitPoints){
             y += 20;
-            ctx.fillText("Hitpoints: "+this.hitPoints.toFixed(0), 10, y);  // 170
+            ctx.fillText("Hitpoints: "+this._hitPoints.toFixed(0), 10, y);  // 170
         }
             ctx.restore();
     }

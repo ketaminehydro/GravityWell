@@ -1,11 +1,29 @@
 body {
     margin: 0;
-    display: flex;
     height: 100vh;
+    background-color: #000000;   
 }
 
-canvas{
-    width: 100%;
-    background-color: #000033;
+#stage {
+    width: 1920px;
+    height: 1080px;
+    position: relative;
     overflow: hidden;
+}
+
+canvas {
+    position: absolute;
+}
+
+#uicanvas {
+    z-index: 3; 
+}
+
+#gamecanvas {
+    z-index: 3;    
+}
+
+#backgroundcanvas {
+    z-index: 2; 
+    background-color: #000033;   
 }

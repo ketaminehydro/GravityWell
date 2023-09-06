@@ -167,11 +167,11 @@ class CollisionResolver{
 
         // update angular speed 
         // in a (frictionless) circle vs circle collision there is no transmission of angular momentum
-        // hence we invent it. The factor "1000" has been randomly chosen.
+        // hence we must imagine it. The factor "1000" has been randomly chosen.
         const collisionAngle = Math.atan2(collisionNormal.y, collisionNormal.x);
         const perpendicularDistance1 = (obj1.hitBox.getSize() + obj2.hitBox.getSize()) * Math.sin(collisionAngle);
         const perpendicularDistance2 = (obj2.hitBox.getSize() + obj1.hitBox.getSize()) * Math.sin(collisionAngle);
-        obj1.angularSpeed += impulse.y * (perpendicularDistance1/(1000*obj1.getMass()));
+        obj1.angularSpeed -= impulse.y * (perpendicularDistance1/(1000*obj1.getMass()));
         obj2.angularSpeed -= impulse.y * (perpendicularDistance2/(1000*obj2.getMass()));
     }
 
@@ -256,7 +256,7 @@ class CollisionResolver{
 
         // apply damage according to distance to explosion center
         // TODO: should depend on Torpedo, and therefore related to yield (in Newton) and HP
-            target.hitPoints -= explosion.getForce()/500 * factor;
+            target._hitPoints -= explosion.getForce()/500 * factor;
     }
 
     #resolvePowerUp(obj1, obj2){

@@ -7,11 +7,20 @@
 
 </head>
 <body>
-    <canvas id="canvas"></canvas>
+    <div id="stage">     
+        <canvas id="gamecanvas"></canvas>
+        <canvas id="uicanvas"></canvas>    
+        <canvas id="backgroundcanvas"></canvas>       
+    </div>
+    
+    <!-- SCRIPTS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
     <script src="js/constants.js"></script>
     <script src="js/lib/vectormath.js"></script>
-    <script src="js/starfield.js"></script>
-    <script src="js/display.js"></script>
+    <script src="js/backgrounds/starfield.js"></script>
+    <script src="js/display/introscreen.js"></script>
+    <script src="js/display/ingameui.js"></script>
+    <script src="js/display/stagecompleted.js"></script>
     <script src="js/gameobjects/abstracts/hitbox.js"></script>
     <script src="js/gameobjects/abstracts/gameobjectarray.js"></script>
     <script src="js/gameobjects/abstracts/gameobject.js"></script>

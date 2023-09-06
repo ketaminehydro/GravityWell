@@ -3,7 +3,7 @@
  ****************************************************************/
  class Level{
     constructor(){
-        this._background = new Starfield();
+        // game objects
         this._players = new GameObjectArray();
         this._asteroids = new GameObjectArray();
         this._projectiles = new GameObjectArray();
@@ -12,6 +12,10 @@
 
         this._collisionChecker = new CollisionChecker();
         this._collisionResolver = new CollisionResolver();
+
+        // States
+        this._levelState = LEVEL_STATE.START;
+        this._stageCompleted = new StageCompleted();
 
         // information for the debugger
         this._debugCollisionChecksCounter;
@@ -44,12 +48,13 @@
 
     /************************ LEVEL CONDITIONS ******************************************/
     #initializeLevel(){
-        // stars
-        this._background.fillStarfield();
+
+        // TODO: gets level number as parameter -> loads JSON File with information about gameobjects / players
 
         // players
         for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
-            let player = new Player(canvas.width/2+i*100, canvas.height/2, 0);
+            let player = new Player(canvas.width/2 -(NUMBER_OF_PLAYERS-1)/2*100 + (i-1)*100, canvas.height/2+100, 0);
+            // TODO: change player color or better: within player select player number
             this._players.push(player);
         }
 
@@ -96,7 +101,7 @@
 
 
     update(milliSecondsPassed){
-        // ************* UPDATE *************************************
+        // ************* 1. UPDATE GAMEOBJECTS *************************************
         // update individual gameobjects
         //      -> spawn new ones, add to the arrays
         //      -> mark to-be-deleted
@@ -114,26 +119,18 @@
         this._projectiles.removeDeleted();
         this._explosions.removeDeleted();
         this._players.removeDeleted();
-        this._particleEffects.removeDeleted();
-
-        // check level-is-over conditions
-        // right now there is only one, so no need to create a dedicated method
-        if(this._asteroids.getLength() <= 0){
-            console.log("You won!!!!");
-        }
+        this._particleEffects.removeDeleted();      
 
 
-        // ************* COLLISION CHECK *****************************
+        // ************* 2. COLLISION CHECK & RESOLVE *********************
         // reset all debug hitbox display flags
         // for each collision type: 
         //      fill the collision checker
         //      collision check: 
         //          -> flag collided gameobjects (hitbox display flag)
         //          -> return collision-pairs 
-        // for each collision type: 
-        //      collision-pairs 
-        //          -> resolve physics
-        //          -> resolve gamelogic (different for each pair)
+        // for each collision pair: 
+        //      resolve the collision 
 
 
         // reset all debug hitbox display flags
@@ -159,17 +156,56 @@
         // update counters for debugger
         this._debugCollisionChecksCounter = this._collisionChecker.getNumberOfCollisionChecks();
         this._debugCollisionPairsCounter = collisionPairs.length;
+
+
+       // ************* 3. CHECK LEVEL STATE  *****************************
+       
+       // check stage ending conditions
+
+        // right now there is only one winning condition: all asteroids are destroyed        
+        if(this._asteroids.getLength() <= 0){
+            this._levelState = LEVEL_STATE.STAGE_COMPLETED;
+        }
+        
+        // Game over
+        // TODO: if sum of all player hitpoints = 0 then level state = game over
+
+
+        // ************* 4. EXECUTE LEVEL STATE ELEMENTS *******************
+        
+        // TODO: Level start
+        // message + immunity during level start
+        // timer
+        // set level state to play
+
+        // TODO: Stage completed
+        // message
+        // timer
+        // return LEVEL_STATE.STAGE_COMPLETED
+
+        // TODO: Game over
+        // message 
+        // timer
+        // return LEVEL_STATE.GAME_OVER
     }
 
     draw(){
-        this._background.draw();
+        // clear the canvas
+        ctx.clearRect(0,0, canvas.width, canvas.height);
+
+        // draw gameobjects
         this._asteroids.draw();
         this._projectiles.draw();
         this._explosions.draw();
         this._players.draw();
         this._particleEffects.draw();
-    }
 
+        // debug
+        if(this._levelState === LEVEL_STATE.STAGE_COMPLETED){
+            uiCtx.clearRect(0,0, canvas.width, canvas.height);    
+            this._stageCompleted.draw();
+        }
+    }
     
     // ******************** DEBUGGER INFORMATION ********************************
     getNumberOfGameObjects(){

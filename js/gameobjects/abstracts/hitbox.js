@@ -80,6 +80,7 @@ class HitBox{
             ctx.beginPath();
             ctx.arc(0, 0, this.size, 0, Math.PI * 2);
             ctx.fillStyle = "#00aaff";
+            ctx.globalAlpha = 0.3;
             ctx.fill();
         }
         ctx.restore();

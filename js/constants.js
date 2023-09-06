@@ -2,7 +2,7 @@
    Game related
  ****************************************************************/
 const NUMBER_OF_PLAYERS = 2;  // TODO: to Game
-const NUMBER_OF_ASTEROIDS = 5; // TODO: to Level
+const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level
 
 
 /****************************************************************
@@ -22,6 +22,26 @@ const PLAYER_ACTION = Object.freeze({
  const CANVAS_MARGIN = 100;
  const DEBUG_INFO_SIZE = 100;
  
+
+ /******************************************
+   Game States                           
+ *****************************************/
+const GAME_STATE = Object.freeze({
+  TITLESCREEN: 1,
+  LEVEL: 2,
+  LEVEL_COMPLETED: 3,
+  GAME_OVER: 4,
+  GAME_COMPLETED: 5,
+  ENTER_HIGHSCORE: 6  
+});
+
+const LEVEL_STATE = Object.freeze({
+  START: 1,
+  PLAY: 2,
+  STAGE_COMPLETED: 3,
+  GAME_OVER: 4
+});
+
 
  /******************************************
    Game Object related                           
