@@ -7,7 +7,7 @@
     
     constructor(){
         // Game State
-        this._gameState = GAME_STATE.LEVEL;
+        this._gameState = GAME_STATE.TITLESCREEN;
 
         // Player input handler
         this.#inputHandler = new InputHandler();
@@ -48,11 +48,8 @@
         switch(this._gameState) {
 
             case GAME_STATE.TITLESCREEN:
-                // handle player input // debug
-                this.#inputHandler.handleInputDuringPlay(this._currentLevel);
-
-                // clear the canvas // debug
-                uiCtx.clearRect(0,0, canvas.width, canvas.height);
+                // handle player input
+                this.#inputHandler.handleInputDuringTitleScreen();
 
                 // update introscreen: switch between controls / enemies / highscore
                 
@@ -61,9 +58,9 @@
 
                 break;
             
-            case GAME_STATE.LEVEL:
+            case GAME_STATE.LEVEL_RUN:
                 // handle player input 
-                this.#inputHandler.handleInputDuringPlay(this._currentLevel);
+                this.#inputHandler.handleInputDuringLevel(this._currentLevel);
 
                 // update 
                 this._currentLevel.update(milliSecondsPassed);

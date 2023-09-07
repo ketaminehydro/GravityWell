@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Star Wars Lightspeed Effect</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: black;
+        }
+        canvas {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="lightspeedCanvas"></canvas>
+    <script>
+        const canvas = document.getElementById("lightspeedCanvas");
+        const ctx = canvas.getContext("2d");
+        
+        // Set canvas size to fill the entire viewport
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const stars = [];
+        const numStars = 100;
+        const speed = 5;
+
+        // Create random star positions
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 3 + 1,
+            });
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            for (const star of stars) {
+                ctx.fillStyle = "white";
+                ctx.fillRect(star.x, star.y, star.size, star.size);
+
+                star.x += speed;
+
+                // Reset star position if it goes off the canvas
+                if (star.x > canvas.width) {
+                    star.x = 0;
+                    star.y = Math.random() * canvas.height;
+                }
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

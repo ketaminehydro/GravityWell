@@ -24,7 +24,7 @@ class InputHandler{
         this._keyPressed[event.key] = false;
     }
 
-    handleInputDuringPlay(context) {   // TODO: context for input handling needs to be standard interface
+    handleInputDuringLevel(context) {   
 
         // player 1
         if (this._keyPressed['w']) {
@@ -103,7 +103,7 @@ class InputHandler{
 
         // Special triggers // debug
         if (this._keyPressed['g']){
-           context._levelState = LEVEL_STATE.STAGE_COMPLETED;  
+           context._levelState = LEVEL_STATE.COMPLETED;  
         }
         if (this._keyPressed['f']){
             context._levelState = LEVEL_STATE.PLAY;  
@@ -112,7 +112,18 @@ class InputHandler{
             game._gameState = GAME_STATE.TITLESCREEN;  
         }
         if (this._keyPressed['v']){
-            game._gameState = GAME_STATE.LEVEL; 
+            game._gameState = GAME_STATE.LEVEL_RUN; 
+        }
+    }
+
+    handleInputDuringTitleScreen() {   
+
+        // player 1 fire button
+        if (this._keyPressed[' ']) {
+            game._gameState = GAME_STATE.LEVEL_RUN;
+
+            // don't drag over any fire keypress to the level
+            delete this._keyPressed[' '];
         }
     }
 }

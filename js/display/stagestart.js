@@ -1,43 +1,35 @@
 /****************************************************************
- CLASS: IntroScreen
+ CLASS: StageStart
  ****************************************************************/
-class IntroScreen {
-    constructor (){
+class StageStart {
+    constructor (displayTime){
         // draw on the foreground (ui) canvas
-        this._ctx = uiCtx;
+        this._ctx = ctx;
+
+        // timer
+        this._lifeTime = 2000;
+        this._displayTimeIsOver = false;
     }  
 
+    update(milliSecondsPassed){
+        this._lifeTime -= milliSecondsPassed;
+        this._displayTimeIsOver = (this._lifeTime < 0);
+        return this._displayTimeIsOver;
+    }
+
     draw(){
-        // clear the canvas  // TODO: only update if there is something new to draw!!!
-        uiCtx.clearRect(0,0, canvas.width, canvas.height);
-
-
-        this.#drawTitle();
-        this.#drawPressFire();
-        this.#drawControls();
-    }
-    
-    #drawTitle(){
-        // title
-        let title = "GRAVITYWELL";
-
-        // position
-        let x = canvas.width/2;
-        let y = canvas.height/2-200;   //200
-
-        // draw 3 texts on top of each other, slighty offset each time
-        this.#drawText(title, x, y, "15em Fugaz One", "center", "#ffffff", "#0033ff");
-        this.#drawText(title, x-4, y-4, "15em Fugaz One", "center", "#0080EC", "#0033ff");
-        this.#drawText(title, x-8, y-8, "15em Fugaz One", "center", "#032974", "#0033ff");
+        uiCtx.clearRect(0,0, canvas.width, canvas.height);    // TODO: only draw if changed
+        this.#drawMessage();
+        //this.#drawControls();
     }
 
-    #drawPressFire(){
+    #drawMessage(){
         // Push fire to play              
-        let text = "PRESS <FIRE> TO PLAY";
+        let text = "STAGE 1";
 
         // position
         let x = canvas.width/2;
-        let y = canvas.height/2+30;
+        let y = canvas.height/2;
 
         // draw
         this.#drawText(text, x, y, "4em Share Tech Mono", "center", "#ffffff", "#0033ff");

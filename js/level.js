@@ -15,6 +15,7 @@
 
         // States
         this._levelState = LEVEL_STATE.START;
+        this._stageStart = new StageStart();
         this._stageCompleted = new StageCompleted();
 
         // information for the debugger
@@ -164,7 +165,7 @@
 
         // right now there is only one winning condition: all asteroids are destroyed        
         if(this._asteroids.getLength() <= 0){
-            this._levelState = LEVEL_STATE.STAGE_COMPLETED;
+            this._levelState = LEVEL_STATE.COMPLETED;
         }
         
         // Game over
@@ -174,9 +175,17 @@
         // ************* 4. EXECUTE LEVEL STATE ELEMENTS *******************
         
         // TODO: Level start
-        // message + immunity during level start
-        // timer
-        // set level state to play
+
+        if (this._levelState === LEVEL_STATE.START){
+            
+            let hasEnded = this._stageStart.update(milliSecondsPassed);
+                    // message + immunity during level start
+                    // timer
+                    // set level state to play
+            if(hasEnded){
+                this._levelState = LEVEL_STATE.PLAY;                   
+            }
+        }
 
         // TODO: Stage completed
         // message
@@ -200,10 +209,9 @@
         this._players.draw();
         this._particleEffects.draw();
 
-        // debug
-        if(this._levelState === LEVEL_STATE.STAGE_COMPLETED){
-            uiCtx.clearRect(0,0, canvas.width, canvas.height);    
-            this._stageCompleted.draw();
+        // draw level state
+        if(this._levelState === LEVEL_STATE.START){
+            this._stageStart.draw();
         }
     }
     
