@@ -28,18 +28,20 @@ const PLAYER_ACTION = Object.freeze({
  *****************************************/
 const GAME_STATE = Object.freeze({
   TITLESCREEN: 1,
-  LEVEL_RUN: 2,
-  LEVEL_COMPLETED: 3,
+  LEVEL_RUNNING: 2,
+  LEVEL_ENDED: 3,
   GAME_OVER: 4,
   GAME_COMPLETED: 5,
   ENTER_HIGHSCORE: 6  
 });
 
 const LEVEL_STATE = Object.freeze({
-  START: 1,
-  PLAY: 2,
-  COMPLETED: 3,
-  GAME_OVER: 4
+  STARTED: 1,
+  RUNNING: 2,
+  COMPLETED_BEGIN: 3,
+  COMPLETED_END: 4,
+  GAME_OVER_BEGIN: 5,
+  GAME_OVER_END: 6
 });
 
 

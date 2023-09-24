@@ -103,16 +103,18 @@ class InputHandler{
 
         // Special triggers // debug
         if (this._keyPressed['g']){
-           context._levelState = LEVEL_STATE.COMPLETED;  
+           context._levelState = LEVEL_STATE.COMPLETED_BEGIN;  
+           console.log("LEVEL_STATE.COMPLETED_BEGIN");
         }
         if (this._keyPressed['f']){
-            context._levelState = LEVEL_STATE.PLAY;  
+            context._levelState = LEVEL_STATE.GAME_OVER_BEGIN;
+            console.log("LEVEL_STATE.GAME_OVER_BEGIN");
         }
         if (this._keyPressed['b']){
             game._gameState = GAME_STATE.TITLESCREEN;  
         }
         if (this._keyPressed['v']){
-            game._gameState = GAME_STATE.LEVEL_RUN; 
+            game._gameState = GAME_STATE.LEVEL_RUNNING; 
         }
     }
 
@@ -120,7 +122,7 @@ class InputHandler{
 
         // player 1 fire button
         if (this._keyPressed[' ']) {
-            game._gameState = GAME_STATE.LEVEL_RUN;
+            game._gameState = GAME_STATE.LEVEL_RUNNING;
 
             // don't drag over any fire keypress to the level
             delete this._keyPressed[' '];

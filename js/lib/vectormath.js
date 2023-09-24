@@ -1,7 +1,7 @@
 /****************************************************************
  CLASS: VectorMath
  ****************************************************************/
- class VectorMath{
+ class VectorMath {
     static calculateMagnitude(x, y){
         return Math.sqrt(x*x+y*y);
     }

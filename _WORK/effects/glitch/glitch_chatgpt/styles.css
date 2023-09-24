@@ -1,0 +1,15 @@
+body {
+    background: black;
+    font-family: 'Varela', sans-serif;
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    margin: 0 auto;
+}
+
+#glitchCanvas {
+    width: 400px;
+    height: 100px;
+}

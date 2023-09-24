@@ -11,6 +11,8 @@ class InGameUI{
         this._numberOfGameObjects = 0;
         this._numberOfCollisionChecks = 0;
         this._numberOfCollisions = 0;
+        this._gameState;
+        this._levelState;
 
         // Debug information is not shown by default 
         this._isShowDebugStats = true;      // FIXME: set to false in final game.
@@ -19,15 +21,19 @@ class InGameUI{
         this._isDrawRefreshNeeded = true;
     }
 
-    update(milliSecondsPassed, context){
+    update(milliSecondsPassed){
         // update debug information only if needed
         if(this._isShowDebugStats){
             this._fps = Math.round(1 / milliSecondsPassed*1000);
 
-            this._numberOfGameObjects = context.getNumberOfGameObjects();
-            this._numberOfCollisionChecks = context.getNumberOfCollisionChecks();
-            this._numberOfCollisions = context.getNumberOfCollisions();
+            this._numberOfGameObjects = game._currentLevel.getNumberOfGameObjects();
+            this._numberOfCollisionChecks = game._currentLevel.getNumberOfCollisionChecks();
+            this._numberOfCollisions = game._currentLevel.getNumberOfCollisions();
 
+            this._gameState = game._gameState;
+            this._levelState = game._currentLevel.getState();
+
+            // draw refresh
             this._isDrawRefreshNeeded = true;
         }
     }
@@ -44,11 +50,12 @@ class InGameUI{
         // display debug information
         if(this._isShowDebugStats){
             this._ctx.fillStyle = "white";
-            this._ctx.font = "1em Monospace";
+            this._ctx.font = "2em Monospace";
             this._ctx.fillText("FPS: "+this._fps,10,30);
             this._ctx.fillText("Game objects: "+this._numberOfGameObjects,10,50);
             this._ctx.fillText("Collision checks: "+this._numberOfCollisionChecks,10,70);
             this._ctx.fillText("Collisions: "+this._numberOfCollisions,10,90);
+            this._ctx.fillText("Game / Level states: "+this._gameState+", "+this._levelState,10,110);
         }
 
         // Reset refresh flag
