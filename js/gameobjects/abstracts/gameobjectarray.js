@@ -25,6 +25,10 @@ class GameObjectArray{
             }
         }
     }
+    clear(){
+        // deletes the array
+        this._array.splice(0, this._array.length);
+    }
 
     clearIsHit(){
         this._array.forEach(element =>{

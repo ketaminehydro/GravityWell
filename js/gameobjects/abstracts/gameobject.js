@@ -2,9 +2,9 @@
  CLASS: GameObject
  ****************************************************************/
 class GameObject{
-    constructor(x, y, orientation, objectFactory){
+    constructor(x, y, orientation){
 
-        // position in pixel        TODO: this should be % relative to canvas
+        // position in pixel      
         this.x = x;
         this.y = y;
 
@@ -18,17 +18,17 @@ class GameObject{
         // hitpoints
         this._hitPoints = 100;
 
-        // maximum angular speed in degrees / second
-        this._maxAngularSpeed = 360*1;
-
         // maximum velocity in pixels/second
-        this._maxSpeed = 100;        
+        this._maxSpeed = 100;   
+
+        // maximum angular speed in degrees / second
+        this._maxAngularSpeed = 360*1;       
 
         // type
         this._gameObjectType = undefined;
         
         // size in pixels
-        this._width = 100;      // TODO: % relative to canvas size
+        this._width = 100;      
         this._height = 100;
 
         // image
@@ -39,7 +39,7 @@ class GameObject{
         this._mass = 1;
 
         // orientation in degrees. O° is North. Clockwise is positive.
-        this._orientation = orientation;
+        this.orientation = orientation;
 
         // coefficient of resititution (aka. how "bouncy" the object is)
         this._cor = 0.8;
@@ -49,12 +49,9 @@ class GameObject{
         this._gracePeriod = 2000;   // invulnerability in ms after spawn
 
         // hitbox
-        this.hitBox = new HitBox(this.x, this.y, this._orientation, 0, 0, 100);
+        this.hitBox = new HitBox(this.x, this.y, this.orientation, 0, 0, 100);
 
-        // objectFactory
-        this._objectFactory = objectFactory;
-
-        // debug
+        // settings for debugger
         this._isShowDebugGfx = false;
         this._isShowDebugInfo = false;
         this._showDebugInfoSettings = {
@@ -104,7 +101,7 @@ class GameObject{
         this.y = y;
 
         // move hitbox
-        this.hitBox.setPosition(this.x, this.y, this._orientation);
+        this.hitBox.setPosition(this.x, this.y, this.orientation);
     }
 
     getVelocity(){
@@ -131,18 +128,18 @@ class GameObject{
     }
 
     getOrientation(){
-        return this._orientation * 180 / Math.PI;
+        return this.orientation * 180 / Math.PI;
     }
 
     setOrientation(orientation){
-        this._orientation = orientation;
+        this.orientation = orientation;
 
         // position the hitbox
-        this.hitBox.setPosition(this.x, this.y, this._orientation);
+        this.hitBox.setPosition(this.x, this.y, this.orientation);
     }
 
     getOrientationInRadians(){
-        return this._orientation;
+        return this.orientation;
     }
 
     getAngularSpeed(){
@@ -209,10 +206,10 @@ class GameObject{
 
         // update orientation
         let orientationIncrease = (this.angularSpeed * milliSecondsPassed / 1000)*Math.PI/180;
-        this._orientation = (this._orientation + orientationIncrease)% 6.28;
+        this.orientation = (this.orientation + orientationIncrease)% 6.28;
 
         // update hitbox position
-        this.hitBox.setPosition(this.x, this.y, this._orientation);
+        this.hitBox.setPosition(this.x, this.y, this.orientation);
 
         // handle boundaries
         // TODO: should depend on hitbox boundaries
@@ -275,7 +272,7 @@ class GameObject{
         // draw object
         ctx.save();
         ctx.translate(this.x, this.y);
-        ctx.rotate(this._orientation);
+        ctx.rotate(this.orientation);
         ctx.drawImage(this._sprite, -(this._width/2), -(this._height/2), this._width, this._height);
         ctx.restore();
 
@@ -350,8 +347,8 @@ class GameObject{
         ctx.beginPath();
         ctx.translate(this.x, this.y);
         ctx.moveTo(0,0);
-        let x = DEBUG_INFO_SIZE * Math.sin(this._orientation);
-        let y = -DEBUG_INFO_SIZE * Math.cos(this._orientation);
+        let x = DEBUG_INFO_SIZE * Math.sin(this.orientation);
+        let y = -DEBUG_INFO_SIZE * Math.cos(this.orientation);
         ctx.lineTo(x,y);
         ctx.lineWidth = 2;
         ctx.strokeStyle = "#ffffff";

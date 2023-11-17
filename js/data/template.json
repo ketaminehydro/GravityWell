@@ -1,0 +1,44 @@
+======================
+ ENEMY
+======================
+GameObject
+----------------
+ID
+x
+y
+orientation
+vx
+vy
+angularSpeed
+----------------
+hitPoints
+maxSpeed
+maxAngularSpeed
+gameObjectType
+width
+height
+sprite
+mass
+cor
+boundaryHandlingSetting
+hitBox_size
+hitBox_xOffset
+hitBox_yOffset
+SplitInto
+ParticleEffect_Hit
+ParticleEffect_Destroyed
+------------------
+Asteroid
+Split Into: []
+
+
+======================
+STAGE
+======================
+Number
+Background
+Music
+enemies
+    name
+    quantity
+    

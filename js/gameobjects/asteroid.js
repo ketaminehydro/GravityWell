@@ -2,13 +2,41 @@
  CLASS: Asteroid
  ****************************************************************/
 class Asteroid extends GameObject{
-    constructor(x, y, orientation, objectFactory){
-        super(x, y, orientation, objectFactory);
+    constructor(x, y, orientation){
+        super(x, y, orientation);
 
         this._asteroidSize;
         this.setAsteroidSize(ASTEROID_SIZE.LARGE);
         this.setBoundaryHandlingSetting(ON_BOUNDARY_HIT.TELEPORT);
-        this.setSpriteImage("img/astronaut.png");
+        
+        // FIXME: just now, just for fun
+        let min = 1;
+        let max = 7;
+        let r = Math.floor(Math.random()* (max-min+1))+1; 
+        switch(r){
+            case 1:
+                this.setSpriteImage("img/asteroid.png");
+                break;
+            case 2:
+                this.setSpriteImage("img/astronaut.png");
+                break;
+            case 3:
+                this.setSpriteImage("img/bee.png");
+                break;
+            case 4:
+                this.setSpriteImage("img/quadropus.png");
+                break;
+            case 5:
+                this.setSpriteImage("img/sleeper.png");
+                break;             
+            case 6:
+                this.setSpriteImage("img/placeholder.png");
+                break;     
+            case 7:
+                this.setSpriteImage("img/placeholder_explosion.png");
+                break;                                                 
+            }
+
         this._gameObjectType = GAMEOBJECT_TYPE.ASTEROID;
     }
 
@@ -16,7 +44,7 @@ class Asteroid extends GameObject{
         switch(size){
             case ASTEROID_SIZE.SMALL:
                 this._asteroidSize = ASTEROID_SIZE.SMALL;
-                this.setSize(50,50);   // todo: relative to canvas sizes
+                this.setSize(50,50);   
                 this.hitBox.setSize(20);
                 this._mass = 1;
                 this._hitPoints = 10;
@@ -45,13 +73,11 @@ class Asteroid extends GameObject{
     randomSpawn(){
         this.x = Math.floor(Math.random()*canvas.width);
         this.y = Math.floor(Math.random()*canvas.height);
-        this.vx = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
-        this.vy = Math.floor(Math.random()*(100+50+1))-50;    // TODO: speed relative to canvas size?
+        this.vx = Math.floor(Math.random()*(100+50+1))-50;    
+        this.vy = Math.floor(Math.random()*(100+50+1))-50;    
         this._orientation = Math.floor(Math.random()*360);
         this.angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
         this.setAsteroidSize(ASTEROID_SIZE.LARGE);
-        // uncomment for random size:
-        // this.setAsteroidSize(Math.floor(Math.random()*(3-1+1))+1);
         this.hitBox.x = this.x;
         this.hitBox.y = this.y;
     }
@@ -60,6 +86,7 @@ class Asteroid extends GameObject{
     update(milliSecondsPassed){
         super.update(milliSecondsPassed);
         
+        // asteroid destroyed
         if(this._hitPoints <= 0){
 
             // if this is not a small Asteroid, split into 3
@@ -86,7 +113,7 @@ class Asteroid extends GameObject{
                     let orientation = Math.floor(Math.random()*360);
 
                     // create asteroid            
-                    let asteroid = this._objectFactory.generateAsteroid(x, y, orientation);
+                    let asteroid = objectFactory.generateAsteroid(x, y, orientation);
                     asteroid.setAsteroidSize(newSize);
                     asteroid.vx = vx;
                     asteroid.vy = vy;
@@ -96,7 +123,7 @@ class Asteroid extends GameObject{
             }
 
             // generate particle effect
-            this._objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG);
+            objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG);
 
             // delete the asteroid
             this._isDeleted = true;

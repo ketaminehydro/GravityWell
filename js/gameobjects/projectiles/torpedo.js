@@ -2,8 +2,8 @@
  CLASS: Torpedo
  ****************************************************************/
 class Torpedo extends GameObject {
-    constructor(x, y, orientation, objectFactory) {
-        super(x, y, orientation, objectFactory);
+    constructor(x, y, orientation) {
+        super(x, y, orientation);
 
         // stats
         this.speed = 300;       // in px/s
@@ -23,8 +23,5 @@ class Torpedo extends GameObject {
 
         // type
         this._gameObjectType = GAMEOBJECT_TYPE.PROJECTILE;
-
-        // debug
-        this._isShowDebugStats = false;
     }
 }

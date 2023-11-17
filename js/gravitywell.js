@@ -1,6 +1,10 @@
 /****************************************************************
  GLOBAL VARIABLES
  ****************************************************************/
+
+ // Canvases
+const canvasContainer = document.getElementById("canvascontainer");
+
 const canvas = document.getElementById("gamecanvas");
 const ctx = gamecanvas.getContext("2d");
 
@@ -10,11 +14,23 @@ const backgroundCtx = backgroundCanvas.getContext("2d");
 const uiCanvas = document.getElementById("uicanvas");
 const uiCtx = uiCanvas.getContext("2d");
 
+// Global objects
+const inputHandler = new InputHandler();
+const stage = new Stage();
+const objectFactory = new ObjectFactory();
+const game = new Game();
+
+// JSON loader
+const gameData = new GameData();
+
+
 /****************************************************************
  SCRIPT
 ****************************************************************/
 
-// load google fonts
+//--------------------------------------------------------------
+//  load google fonts
+//--------------------------------------------------------------
 WebFont.load({
     google: {
         families: ['Share Tech Mono: 400',
@@ -24,30 +40,37 @@ WebFont.load({
 });
 
 
-function setCanvasSize(canvas){
+//--------------------------------------------------------------
+//  set the right screensize
+//--------------------------------------------------------------
+function setCanvasSize(){
     // scale the canvas (up or down) to window size 
     // by using CSS transforms which should (hopfully) use GPU
-    canvas.width = 1920;
-    canvas.height = 1080;
-
-    const scaleX = window.innerWidth / canvas.width;
-    const scaleY = window.innerHeight / canvas.height;
-
+    
+    // get the scaling factor
+    const scaleX = window.innerWidth / 1920;
+    const scaleY = window.innerHeight / 1080;
     const scaleToFit = Math.min(scaleX, scaleY);
-
-    stage.style.transformOrigin = "0 0"; //scale from top left
-    stage.style.transform = `scale(${scaleToFit})`;
- 
+    
+    
+    // adjust the canvases 
+    canvas.style.transformOrigin = "0 0"; //scale from top left
+    canvas.style.transform = `scale(${scaleToFit})`;
+    backgroundCanvas.style.transformOrigin = "0 0"; //scale from top left
+    backgroundCanvas.style.transform = `scale(${scaleToFit})`;
+    uiCanvas.style.transformOrigin = "0 0"; //scale from top left
+    uiCanvas.style.transform = `scale(${scaleToFit})`;
 }
 
 // add listener to react when user resizes the screen
 window.addEventListener("resize",setCanvasSize);
 
 // make the canvases fit the available window
-setCanvasSize(canvas);
-setCanvasSize(uiCanvas);
-setCanvasSize(backgroundCanvas);
+setCanvasSize();
 
-// start the game and the gameloop
-let game = new Game();
+
+
+//--------------------------------------------------------------
+//  start the game and the gameloop
+//--------------------------------------------------------------
 game.gameLoop(0);

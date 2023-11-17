@@ -26,6 +26,11 @@ class ParticleEffectArray{
         }
     }
 
+    clear(){
+        // deletes the array
+        this._array.splice(0, this._array.length);
+    }
+
     update(milliSecondsPassed){
         this._array.forEach(element => {
             element.update(milliSecondsPassed);

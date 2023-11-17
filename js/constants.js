@@ -2,7 +2,7 @@
    Game related
  ****************************************************************/
 const NUMBER_OF_PLAYERS = 2;  // TODO: to Game
-const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level
+const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level, no longer needed
 
 
 /****************************************************************
@@ -28,20 +28,21 @@ const PLAYER_ACTION = Object.freeze({
  *****************************************/
 const GAME_STATE = Object.freeze({
   TITLESCREEN: 1,
-  LEVEL_RUNNING: 2,
-  LEVEL_ENDED: 3,
-  GAME_OVER: 4,
-  GAME_COMPLETED: 5,
-  ENTER_HIGHSCORE: 6  
+  STAGE_LOADING: 2,
+  STAGE_RUNNING: 3,
+  STAGE_ENDED: 4,
+  GAME_OVER: 5,
+  GAME_COMPLETED: 6,
+  ENTER_HIGHSCORE: 7  
 });
 
-const LEVEL_STATE = Object.freeze({
-  STARTED: 1,
+const STAGE_STATE = Object.freeze({
+  TITLE: 1,
   RUNNING: 2,
-  COMPLETED_BEGIN: 3,
-  COMPLETED_END: 4,
-  GAME_OVER_BEGIN: 5,
-  GAME_OVER_END: 6
+  COMPLETED_ONGOING: 3,
+  COMPLETED_ENDED: 4,
+  GAME_OVER_ONGOING: 5,
+  GAME_OVER_ENDED: 6
 });
 
 
@@ -127,4 +128,21 @@ const COLLISION_TYPE = Object.freeze({
    const PARTICLE_EFFECT = Object.freeze({
     CIRCULAR_EXPLOSION: 1,
     CIRCULAR_EXPLOSION_BIG: 2
+});
+
+
+ /******************************************
+   Controls                           
+ *****************************************/
+   const CONTROLS = Object.freeze({
+    PLAYER1_UP: 'w',
+    PLAYER1_LEFT: 'a',
+    PLAYER1_DOWN: 's',
+    PLAYER1_RIGHT: 'd',
+    PLAYER1_FIRE: ' ',
+    PLAYER2_UP: 'ArrowUp',
+    PLAYER2_LEFT: 'ArrowLeft',
+    PLAYER2_DOWN: 'ArrowDown',
+    PLAYER2_RIGHT: 'ArrowRight',
+    PLAYER2_FIRE: 'Shift'
 });

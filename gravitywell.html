@@ -7,10 +7,10 @@
 
 </head>
 <body>
-    <div id="stage">     
-        <canvas id="gamecanvas"></canvas>
-        <canvas id="uicanvas"></canvas>    
-        <canvas id="backgroundcanvas"></canvas>       
+    <div id="canvascontainer">     
+        <canvas id="gamecanvas" width="1920" height="1080"></canvas>
+        <canvas id="uicanvas" width="1920" height="1080"></canvas>    
+        <canvas id="backgroundcanvas" width="1920" height="1080"></canvas>       
     </div>
     
     <!-- SCRIPTS -->
@@ -18,13 +18,16 @@
     <script src="js/constants.js"></script>
     <script src="js/lib/vectormath.js"></script>
     <script src="js/lib/colormath.js"></script>
+    <script src="js/data/gamedata.js"></script>
+    <!--<script type="module" src="js/data/gamedata.js"></script>-->
+    <!--<script id="gamedata" type="application/json" src="js/data/stages.json"></script>-->
     <script src="js/backgrounds/starfield.js"></script>
-    <script src="js/display/introscreen.js"></script>
-    <script src="js/display/ingameui.js"></script>
-    <script src="js/display/titles/ititle.js"></script>
-    <script src="js/display/titles/stagestart.js"></script>
-    <script src="js/display/titles/stagecompleted.js"></script>
-    <script src="js/display/titles/stagegameover.js"></script>
+    <script src="js/screens/titlescreen.js"></script>
+    <script src="js/stage/titlecards/ititle.js"></script>
+    <script src="js/stage/titlecards/stagestart.js"></script>
+    <script src="js/stage/titlecards/stagecompleted.js"></script>
+    <script src="js/stage/titlecards/stagegameover.js"></script>
+    <script src="js/stage/titlecards/gfxImplosion.js"></script>
     <script src="js/gameobjects/abstracts/hitbox.js"></script>
     <script src="js/gameobjects/abstracts/gameobjectarray.js"></script>
     <script src="js/gameobjects/abstracts/gameobject.js"></script>
@@ -32,13 +35,16 @@
     <script src="js/gameobjects/projectiles/torpedo.js"></script>
     <script src="js/gameobjects/asteroid.js"></script>
     <script src="js/gameobjects/explosion.js"></script>
-    <script src="js/collisions/collisionChecker.js"></script>
-    <script src="js/collisions/collisionResolver.js"></script>
+    <script src="js/collisionhandling/collisionChecker.js"></script>
+    <script src="js/collisionhandling/collisionResolver.js"></script>
     <script src="js/particles/particle.js"></script>
     <script src="js/particles/particleeffect.js"></script>
     <script src="js/particles/particleeffectarray.js"></script>
     <script src="js/game.js"></script>
-    <script src="js/level.js"></script>
+    <script src="js/stage/stage.js"></script>
+    <script src="js/stage/objectfactory.js"></script>
+    <script src="js/ingameui.js"></script>
+    <script src="js/debugger.js"></script>
     <script src="js/inputhandler.js"></script>
     <script src="js/gravitywell.js"></script>
 </body>

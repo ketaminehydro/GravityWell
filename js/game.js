@@ -2,40 +2,39 @@
  CLASS: Game
  ****************************************************************/
  class Game{
-    #inputHandler;
     #previousTimeStamp;
+    #gameState;
     
     constructor(){
-        // Game State
-        this._gameState = GAME_STATE.TITLESCREEN;
-
-        // Player input handler
-        this.#inputHandler = new InputHandler();
+        // game state
+        this.#gameState = GAME_STATE.TITLESCREEN;
         
         // timestamp for gameloop
         this.#previousTimeStamp = 0;
 
-        // Elements
-        this._display = new InGameUI();
-        this._introScreen = new IntroScreen();
+        // elements
+        this._inGameUI = new InGameUI();
+        this._titleScreen = new TitleScreen();
         this._background = new Starfield();
-        this._currentLevel = null;
-        this._currentLevelNumber = 1;
+        this._currentStageNumber = 0;
 
-
-        // ************* INITIALIZE ***************************
-        
-        // Background
+        // background
         this._background.fillStarfield();
         this._background.draw();
 
-        // generate first level
-        this.generateLevel(1);
+        // generate title screen stage
+        stage.loadStage(0);
     }
 
-    generateLevel(levelNumber){
-        // TODO: level construction logic goes here
-        this._currentLevel = new Level(levelNumber);
+    getGameState(){
+        return this.#gameState;
+    }
+
+    setGameState(gameState){
+        if(gameState > Object.keys(GAME_STATE).length || gameState < 0){
+            return;
+        }
+        this.#gameState = gameState;
     }
 
     gameLoop(timeStamp){
@@ -48,51 +47,54 @@
         milliSecondsPassed = Math.min(milliSecondsPassed, 100);
         this.#previousTimeStamp = timeStamp;  
         
-     
-        // Do different things according to the game state
-        switch(this._gameState) {
+        inputHandler.handleInput(this.#gameState);
+
+        switch(this.#gameState) {
 
             case GAME_STATE.TITLESCREEN:
-                // handle player input
-                this.#inputHandler.handleInputDuringTitleScreen();
-
                 // update introscreen: switch between controls / enemies / highscore
+                stage.update(milliSecondsPassed);
                 
                 // draw // TODO: draw only when needed
-                this._introScreen.draw();  
+                this._titleScreen.draw();
+                stage.draw();  
+
                 break;
             
-            case GAME_STATE.LEVEL_RUNNING:
-                // handle player input 
-                this.#inputHandler.handleInputDuringLevel(this._currentLevel);
-
+            case GAME_STATE.STAGE_LOADING:
+                this._currentStageNumber++;
+                stage.loadStage(this._currentStageNumber);
+                this.#gameState = GAME_STATE.STAGE_RUNNING;
+                break;
+            
+            case GAME_STATE.STAGE_RUNNING:
                 // update 
-                this._currentLevel.update(milliSecondsPassed);
-                this._display.update(milliSecondsPassed);
+                stage.update(milliSecondsPassed);
+                this._inGameUI.update(milliSecondsPassed);
                 
                 // draw
-                this._currentLevel.draw();
-                this._display.draw();
+                stage.draw();
+                this._inGameUI.draw();
 
-                // check if game state needs to be changed 
-                switch(this._currentLevel.getState()){
-                    case LEVEL_STATE.COMPLETED_END:
-                        this._gameState = GAME_STATE.LEVEL_ENDED;
+                // game state check
+                switch(stage.getStageState()){
+                    case STAGE_STATE.COMPLETED_ENDED:
+                        this.#gameState = GAME_STATE.STAGE_ENDED;
                         break;
-                    case LEVEL_STATE.GAME_OVER_END:
-                        this._gameState = GAME_STATE.GAME_OVER;
+                    case STAGE_STATE.GAME_OVER_ENDED:
+                        this.#gameState = GAME_STATE.GAME_OVER;
                         break;
                 }
                 break;
             
-            case GAME_STATE.LEVEL_ENDED:
+            case GAME_STATE.STAGE_ENDED:
                 // TODO:
                 // is there a next level?
                 // if yes, 
-                //      generate next level 
-                        this._currentLevelNumber++;
-                        this.generateLevel(this._currentLevelNumber);
-                        this._gameState = GAME_STATE.LEVEL_RUNNING;
+                //      generate next level  
+                        this._currentStageNumber++;
+                        stage.loadStage(this._currentStageNumber);
+                        this.#gameState = GAME_STATE.STAGE_RUNNING;
                 // if no: 
                         //this._gameState = GAME_STATE.GAME_COMPLETED;
 

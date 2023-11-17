@@ -2,8 +2,8 @@
  CLASS: Explosion
  ****************************************************************/
 class Explosion extends GameObject {
-    constructor(x, y, orientation, objectFactory, force) {
-        super(x, y, orientation, objectFactory);
+    constructor(x, y, orientation, force) {
+        super(x, y, orientation);
 
         // stats
         this._maxExplosionSize = 100;

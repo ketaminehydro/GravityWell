@@ -12,6 +12,9 @@ class Starfield{
 
     // fill the array with pixels in three different colors
     fillStarfield(){
+        // debug
+        // console.log(canvas.width+"x"+canvas.height+" (canvas)");
+        
         for (let y=0; y < canvas.height; y++) {
             for (let x=0; x < canvas.width; x++){
                 this.fillMethod2(x, y);
@@ -20,9 +23,10 @@ class Starfield{
     }
 
     // Obsolete method. // FIXME: if not used in the final version of the game, delete this method
-    // go through each pixel of the canvas. Randomly decide whether the pixel is a star or not 
-    // and at the same time decide upon its color.
-    // a second random number decides the size of the star.  
+    // go through each pixel of the canvas. 
+    // randomly decide whether the pixel is a star or not 
+    // at the same time determine which color to use.
+    // randomly determine the size of the star.  
     fillMethod1(x, y){
         let color = Math.floor(Math.random()*(50000-0+1))+0;
         let size = Math.floor(Math.random()*(3-0+1))+0;
@@ -51,9 +55,10 @@ class Starfield{
     }
 
     // better method: 
-    // go through each pixel of the canvas. Randomly decide whether the pixel is a star or not.
-    // select a random color for the star: distribution of the 5 possible colors is not equal
-    // select a random size for the star: distribution of the 3 possible sizes is not equal
+    // go through each pixel of the canvas. 
+    // randomly decide whether the pixel is a star or not.
+    // select a random color for the star: different likelihoods for each of the 5 possible colors
+    // select a random size for the star: different likelihoods for each of the 3 possible sizes 
     fillMethod2(x, y){
         let star = Math.random();
         if(star < 0.0002){
