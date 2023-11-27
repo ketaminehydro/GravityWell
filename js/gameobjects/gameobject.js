@@ -16,6 +16,7 @@ class GameObject{
         this.angularSpeed = 0;
 
         // hitpoints
+        this._fullHitPoints = 100;
         this._hitPoints = 100;
 
         // maximum velocity in pixels/second
@@ -97,6 +98,8 @@ class GameObject{
     }
 
     setPosition(x, y){
+        // prefer this to the standard setter, due to the dependent hitbox
+
         this.x = x;
         this.y = y;
 

@@ -37,6 +37,10 @@
         this.#gameState = gameState;
     }
 
+    setCurrentStageNumber(stageNumber){
+        this._currentStageNumber = stageNumber;
+    }
+
     gameLoop(timeStamp){
         // Elapsed time:
         // calculate the number of seconds passed since the last frame
@@ -58,12 +62,11 @@
                 // draw // TODO: draw only when needed
                 this._titleScreen.draw();
                 stage.draw();  
-
                 break;
             
             case GAME_STATE.STAGE_LOADING:
-                this._currentStageNumber++;
                 stage.loadStage(this._currentStageNumber);
+                stage.startStage();
                 this.#gameState = GAME_STATE.STAGE_RUNNING;
                 break;
             
@@ -76,7 +79,7 @@
                 stage.draw();
                 this._inGameUI.draw();
 
-                // game state check
+                // stage state check
                 switch(stage.getStageState()){
                     case STAGE_STATE.COMPLETED_ENDED:
                         this.#gameState = GAME_STATE.STAGE_ENDED;
@@ -93,8 +96,7 @@
                 // if yes, 
                 //      generate next level  
                         this._currentStageNumber++;
-                        stage.loadStage(this._currentStageNumber);
-                        this.#gameState = GAME_STATE.STAGE_RUNNING;
+                        this.#gameState = GAME_STATE.STAGE_LOADING;
                 // if no: 
                         //this._gameState = GAME_STATE.GAME_COMPLETED;
 
@@ -103,8 +105,13 @@
                 
             case GAME_STATE.GAME_OVER:
                     // TODO:
-                    // special gameover screen    
+                    // special gameover screen
+                    console.log("Game Over");    
                     // follow up with highscore
+                    // for now: back to title screen
+                    this.#gameState = GAME_STATE.TITLESCREEN;
+                    this._currentStageNumber = 0;
+                    stage.loadStage(this._currentStageNumber);                 
                     break;    
 
 
@@ -112,6 +119,7 @@
 
                 // TODO:
                 // congratulations screen
+                console.log("Game completed");
                 // follow up with highscore
 
                 break;

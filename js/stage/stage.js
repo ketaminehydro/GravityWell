@@ -8,9 +8,11 @@
     constructor(){
         // state
         this.#stageState = STAGE_STATE.RUNNING;
+        this._stageNumber = 0;
 
         // game objects
-        this.players = new GameObjectArray();
+        this.allPlayers = new GameObjectArray();
+        this.playingPlayers = new GameObjectArray();
         this.enemies = new GameObjectArray();
         this.projectiles = new GameObjectArray();
         this.explosions = new GameObjectArray();
@@ -29,13 +31,10 @@
         this._debugCollisionChecksCounter;
         this._debugCollisionPairsCounter;
 
-
-        // debug: Players need extra treatment
-        // players     
+        // create the persistent player objects    
         for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
-            let player = new Player(canvas.width/2 -(NUMBER_OF_PLAYERS-1)/2*100 + (i-1)*100, canvas.height/2+100, 0);
-            // TODO: change player color or better: within player select player number
-            this.players.push(player);
+            let player = new Player(-1000, -1000, 0, i);
+            this.allPlayers.push(player);
         }
     }
 
@@ -50,13 +49,18 @@
         }
         this.#stageState = stageState;
     }
-    getPlayers(){
+    getAllPlayers(){
         // returns the players object for player input handling
-        return this.players;
+        return this.allPlayers;
+    }
+
+    getPlayingPlayers(){
+        // returns the players object for player input handling
+        return this.playingPlayers;
     }
 
     getEnemies(){
-        // returns the asteroids object for player input handling
+        // returns the enemies object for player input handling
         return this.enemies;
     }
 
@@ -73,17 +77,17 @@
     /************************ STAGE LOADING ******************************************/
     loadStage(stageNumber){
 
-        // TODO: gets level number as parameter -> loads JSON File with information about gameobjects / players
-
         // clear the stage
         this.enemies.clear(); 
+        this.playingPlayers.clear();
         this.projectiles.clear();
         this.explosions.clear(); 
         this.particleEffects.clear();   
 
-        // set up a new stage
+        // ******************* SET UP A NEW STAGE ******************
+        this._stageNumber = stageNumber;
 
-        // level 0 (title screen)
+        // level 0 case (title screen)
         if (stageNumber === 0){ 
             for(let i=1; i<=7; i++){
                 let asteroid = objectFactory.generateAsteroid(0,0,0);
@@ -93,26 +97,29 @@
             return;
         }
 
+        // TODO: gets level number as parameter -> loads JSON File with information about gameobjects / players
+
         // asteroids
         for(let i=1; i<=stageNumber; i++){
             let asteroid = objectFactory.generateAsteroid(0,0,0);
             asteroid.randomSpawn();
         }
 
-        // players     
-        for(let i=0; i<this.players.getLength(); i++){
-            this.players.getElement(i).x = canvas.width/2 -(NUMBER_OF_PLAYERS-1)/2*100 + (i-1)*100; 
-            this.players.getElement(i).y = canvas.height/2+100;
-            this.players.getElement(i).vx = 0;
-            this.players.getElement(i).vy = 0;
-            this.players.getElement(i).angularSpeed = 0;
-            this.players.getElement(i).orientation = 0;
+        // place playing players     
+        for(let i=0; i<this.allPlayers.getLength(); i++){
+            if(this.allPlayers.getElement(i).isPlaying){               
+                this.allPlayers.getElement(i).resetPosition();                
+                this.playingPlayers.push(this.allPlayers.getElement(i));
+            }
         }
+        // adjust the titlecard
+        this._titleCard_StageStart.setStageNumber(this._stageNumber);
 
+        // run the stage
+        this.setStageState(STAGE_STATE.RUNNING);
+    }
 
-        
-        // start the stage
-        this._titleCard_StageStart.setStageNumber(stageNumber);
+    startStage(){        
         this.#stageState = STAGE_STATE.TITLE;
     }
 
@@ -135,14 +142,14 @@
         this.enemies.update(milliSecondsPassed);
         this.projectiles.update(milliSecondsPassed);
         this.explosions.update(milliSecondsPassed);
-        this.players.update(milliSecondsPassed);
+        this.allPlayers.update(milliSecondsPassed);
         this.particleEffects.update(milliSecondsPassed);
 
         // remove deleted objects
         this.enemies.removeDeleted();
         this.projectiles.removeDeleted();
         this.explosions.removeDeleted();
-        this.players.removeDeleted();
+        this.allPlayers.removeDeleted();
         this.particleEffects.removeDeleted();      
 
 
@@ -161,14 +168,14 @@
         this.enemies.clearIsHit();
         this.projectiles.clearIsHit();    
         this.explosions.clearIsHit();
-        this.players.clearIsHit();
+        this.allPlayers.clearIsHit();
         
         // initialize collision checker
         this._collisionChecker.clear();
         this._collisionChecker.fill(this.enemies);
         this._collisionChecker.fill(this.projectiles);
         this._collisionChecker.fill(this.explosions);
-        this._collisionChecker.fill(this.players);
+        this._collisionChecker.fill(this.allPlayers);
 
         // check for collisions
         let collisionPairs;
@@ -204,9 +211,19 @@
                     this.#stageState = STAGE_STATE.COMPLETED_ONGOING;
                 }
                 
-                // Game over
-                // TODO: if sum of all player hitpoints + lives = 0 then level state = game over
-                // maybe implement an indicator
+                // Game over:
+                // if no player is playing and credits = 0 and level != 0 then  lvel state = game over
+                if(this._stageNumber === 0){
+                    break;
+                }
+
+                let isGameStillOn = false;
+                for(let i=0; i<this.allPlayers.getLength(); i++){
+                    isGameStillOn = isGameStillOn || this.allPlayers.getElement(i).isPlaying;
+                }
+                if(!isGameStillOn){                
+                    this.#stageState = STAGE_STATE.GAME_OVER_ONGOING;
+                }
                 break;
 
             case STAGE_STATE.COMPLETED_ONGOING: 
@@ -244,7 +261,7 @@
                 this.enemies.draw();
                 this.projectiles.draw();
                 this.explosions.draw();
-                this.players.draw();
+                this.allPlayers.draw();
                 this.particleEffects.draw();                
                 break; 
             
@@ -263,7 +280,7 @@
         let counter = 0;
         counter = this.enemies.getLength()
                     + this.projectiles.getLength() 
-                    + this.players.getLength()
+                    + this.allPlayers.getLength()
                     + this.explosions.getLength();
         return counter; 
     }

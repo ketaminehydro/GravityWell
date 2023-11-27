@@ -31,7 +31,14 @@ class InputHandler{
             case GAME_STATE.TITLESCREEN:
                 // player 1 fire button
                 if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
+
+                    // ready the player
+                    stage.getAllPlayers().getElement(0).reset();
+                    stage.getAllPlayers().getElement(0).isPlaying = true;
+
+                    // start stage 1
                     game.setGameState(GAME_STATE.STAGE_LOADING);
+                    game.setCurrentStageNumber(1);
 
                     // don't drag over any fire keypress to the level
                     delete this._keyPressed[' '];
@@ -40,46 +47,50 @@ class InputHandler{
 
             case GAME_STATE.STAGE_RUNNING:
                 // player 1
-                if (this._keyPressed[CONTROLS.PLAYER1_UP]) {
-                    stage.getPlayers().getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
-                }
+                if(stage.getAllPlayers().getElement(0).isPlaying === true){
+                    if (this._keyPressed[CONTROLS.PLAYER1_UP]) {
+                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER1_LEFT]) {
-                    stage.getPlayers().getElement(0).move(PLAYER_ACTION.YAW_LEFT);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER1_LEFT]) {
+                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.YAW_LEFT);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER1_DOWN]) {
-                    stage.getPlayers().getElement(0).move(PLAYER_ACTION.REDUCE_SPEED);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER1_DOWN]) {
+                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.REDUCE_SPEED);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER1_RIGHT]) {
-                    stage.getPlayers().getElement(0).move(PLAYER_ACTION.YAW_RIGHT);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER1_RIGHT]) {
+                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.YAW_RIGHT);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
-                    stage.getPlayers().getElement(0).fire();
+                    if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
+                        stage.getPlayingPlayers().getElement(0).fire();
+                    }
                 }
 
 
                 // player 2
-                if (this._keyPressed[CONTROLS.PLAYER2_UP]) {
-                    stage.getPlayers().getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
-                }
+                if(stage.getAllPlayers().getElement(1).isPlaying === true){
+                    if (this._keyPressed[CONTROLS.PLAYER2_UP]) {
+                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER2_LEFT]) {
-                    stage.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_LEFT);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER2_LEFT]) {
+                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.YAW_LEFT);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER2_DOWN]) {
-                    stage.getPlayers().getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER2_DOWN]) {
+                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER2_RIGHT]) {
-                    stage.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
-                }
+                    if (this._keyPressed[CONTROLS.PLAYER2_RIGHT]) {
+                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
+                    }
 
-                if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
-                    stage.getPlayers().getElement(1).fire();
+                    if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
+                        stage.getPlayingPlayers().getElement(1).fire();
+                    }
                 }
 
                 /*********************** DEBUG CONTROLS **************************************/
@@ -89,8 +100,8 @@ class InputHandler{
                     // this action a toggle switch, i.e. a one-time execution
                     this._keyPressed['h'] = false;
 
-                    stage.getPlayers().toggleShowDebugInfo();
-                    stage.getPlayers().toggleShowDebugGfx();            
+                    stage.getPlayingPlayers().toggleShowDebugInfo();
+                    stage.getPlayingPlayers().toggleShowDebugGfx();            
                 }
 
                 // Objects: Hitbox
@@ -122,7 +133,7 @@ class InputHandler{
                     console.log("LEVEL_STATE.GAME_OVER_BEGIN");
                 }*/
                 if (this._keyPressed['b']){
-                    stage.getPlayers().getElement(1).takeDamage(1);
+                    stage.getPlayingPlayers().getElement(0).takeDamage(1);
                     this._keyPressed['b'] = false;
                 }
                 if (this._keyPressed['v']){
