@@ -19,12 +19,16 @@ canvas {
     position: absolute;
 }
 
+#debuggercanvas {
+    z-index: 4; 
+}
+
 #uicanvas {
     z-index: 3; 
 }
 
 #gamecanvas {
-    z-index: 3;    
+    z-index: 2;    
 }
 
 #backgroundcanvas {

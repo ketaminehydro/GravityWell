@@ -36,6 +36,18 @@ const GAME_STATE = Object.freeze({
   ENTER_HIGHSCORE: 7  
 });
 
+const DEBUG_GAME_STATE = Object.freeze({
+  // this is the easiest way to track the states,
+  // however this list needs to be manually synched
+  1: "TITLESCREEN",
+  2: "STAGE_LOADING",
+  3: "STAGE_RUNNING",
+  4: "STAGE_ENDED",
+  5: "GAME_OVER",
+  6: "GAME_COMPLETED",
+  7: "ENTER_HIGHSCORE"  
+});
+
 const STAGE_STATE = Object.freeze({
   TITLE: 1,
   RUNNING: 2,
@@ -43,6 +55,17 @@ const STAGE_STATE = Object.freeze({
   COMPLETED_ENDED: 4,
   GAME_OVER_ONGOING: 5,
   GAME_OVER_ENDED: 6
+});
+
+const DEBUG_STAGE_STATE = Object.freeze({
+  // this is the easiest way to track the states,
+  // however this list needs to be manually synched
+  1: "TITLE",
+  2: "RUNNING",
+  3: "COMPLETED_ONGOING",
+  4: "COMPLETED_ENDED",
+  5: "GAME_OVER_ONGOING",
+  6: "GAME_OVER_ENDED"
 });
 
 

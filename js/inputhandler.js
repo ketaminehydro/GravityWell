@@ -32,12 +32,16 @@ class InputHandler{
                 // player 1 fire button
                 if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
 
+                    // FIXME: this logic should go to game
+
                     // ready the player
                     stage.getAllPlayers().getElement(0).reset();
                     stage.getAllPlayers().getElement(0).isPlaying = true;
 
-                    // start stage 1
+                    // change game state
                     game.setGameState(GAME_STATE.STAGE_LOADING);
+
+                    // start stage 1
                     game.setCurrentStageNumber(1);
 
                     // don't drag over any fire keypress to the level
@@ -128,10 +132,9 @@ class InputHandler{
                 if (this._keyPressed['g']){
                     stage.setStageState(STAGE_STATE.COMPLETED_ONGOING);  
                 }
-                /*if (this._keyPressed['f']){
-                    stage._levelState = LEVEL_STATE.GAME_OVER_BEGIN;
-                    console.log("LEVEL_STATE.GAME_OVER_BEGIN");
-                }*/
+                if (this._keyPressed['f']){
+                    stage.setStageState(STAGE_STATE.GAME_OVER_ONGOING);
+                }
                 if (this._keyPressed['b']){
                     stage.getPlayingPlayers().getElement(0).takeDamage(1);
                     this._keyPressed['b'] = false;

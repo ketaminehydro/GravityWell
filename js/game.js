@@ -13,7 +13,8 @@
         this.#previousTimeStamp = 0;
 
         // elements
-        this._inGameUI = new InGameUI();
+        this._inGameUI = new inGameUI();
+        this._debugger = new Debugger();
         this._titleScreen = new TitleScreen();
         this._background = new Starfield();
         this._currentStageNumber = 0;
@@ -41,6 +42,7 @@
         this._currentStageNumber = stageNumber;
     }
 
+
     gameLoop(timeStamp){
         // Elapsed time:
         // calculate the number of seconds passed since the last frame
@@ -56,28 +58,42 @@
         switch(this.#gameState) {
 
             case GAME_STATE.TITLESCREEN:
-                // update introscreen: switch between controls / enemies / highscore
+                // logic: update introscreen: switch between different screens: controls / enemies / highscore
                 stage.update(milliSecondsPassed);
+                this._debugger.update(milliSecondsPassed);
                 
-                // draw // TODO: draw only when needed
+                // draw 
                 this._titleScreen.draw();
+                this._debugger.draw();
                 stage.draw();  
+
+                // change state
+                // FIXME: logic currently within InputHandler
+
                 break;
             
             case GAME_STATE.STAGE_LOADING:
+                // logic
                 stage.loadStage(this._currentStageNumber);
                 stage.startStage();
+                this._inGameUI.update();
+                this._debugger.update(milliSecondsPassed);
+
+                // draw
+                this._inGameUI.draw();
+                this._debugger.draw();
+
+                // change state
                 this.#gameState = GAME_STATE.STAGE_RUNNING;
                 break;
             
             case GAME_STATE.STAGE_RUNNING:
-                // update 
                 stage.update(milliSecondsPassed);
-                this._inGameUI.update(milliSecondsPassed);
-                
-                // draw
+                //this._inGameUI.update(milliSecondsPassed);
+                this._debugger.update(milliSecondsPassed);
                 stage.draw();
-                this._inGameUI.draw();
+                //this._inGameUI.draw();
+                this._debugger.draw();
 
                 // stage state check
                 switch(stage.getStageState()){
@@ -91,6 +107,9 @@
                 break;
             
             case GAME_STATE.STAGE_ENDED:
+                this._debugger.update(milliSecondsPassed);
+                this._debugger.draw();
+
                 // TODO:
                 // is there a next level?
                 // if yes, 
@@ -104,7 +123,9 @@
 
                 
             case GAME_STATE.GAME_OVER:
-                    // TODO:
+                this._debugger.update(milliSecondsPassed);
+                this._debugger.draw();
+                // TODO:
                     // special gameover screen
                     console.log("Game Over");    
                     // follow up with highscore
@@ -116,7 +137,8 @@
 
 
             case GAME_STATE.GAME_COMPLETED:
-
+                this._debugger.update(milliSecondsPassed);
+                this._debugger.draw();
                 // TODO:
                 // congratulations screen
                 console.log("Game completed");

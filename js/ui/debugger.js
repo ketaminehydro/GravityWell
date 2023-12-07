@@ -3,8 +3,8 @@
  ****************************************************************/
 class Debugger{
     constructor(){
-        // draw on the foreground (ui) canvas
-        this._ctx = uiCtx;
+        // draw on its own canvas
+        this._ctx = debuggerCtx;
 
         // Debug stats
         this._fps = 0;
@@ -12,13 +12,21 @@ class Debugger{
         this._numberOfCollisionChecks = 0;
         this._numberOfCollisions = 0;
         this._gameState;
-        this._levelState;
+        this._stageState;
 
         // Debug information is not shown by default 
         this._isShowDebugStats = true;      // FIXME: set to false in final game.
 
         // Refresh flag
         this._isDrawRefreshNeeded = true;
+    }
+
+    translateGameState(state){
+        return DEBUG_GAME_STATE[state];
+    }
+
+    translateLevelState(state){
+        return DEBUG_STAGE_STATE[state];
     }
 
     update(milliSecondsPassed){
@@ -31,7 +39,7 @@ class Debugger{
             this._numberOfCollisions = stage.getNumberOfCollisions();
 
             this._gameState = game.getGameState();
-            this._levelState = stage.getStageState();
+            this._stageState = stage.getStageState();
 
             // draw refresh needed
             this._isDrawRefreshNeeded = true;
@@ -55,7 +63,8 @@ class Debugger{
             this._ctx.fillText("Game objects: "+this._numberOfGameObjects,10,50);
             this._ctx.fillText("Collision checks: "+this._numberOfCollisionChecks,10,70);
             this._ctx.fillText("Collisions: "+this._numberOfCollisions,10,90);
-            this._ctx.fillText("Game / Level states: "+this._gameState+", "+this._levelState,10,110);
+            this._ctx.fillText("Game state: "+this.translateGameState(this._gameState),10,110);
+            this._ctx.fillText("Level state: "+this.translateLevelState(this._stageState),10,130);
         }
 
         // Reset refresh flag

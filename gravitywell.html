@@ -8,8 +8,9 @@
 </head>
 <body>
     <div id="canvascontainer">     
-        <canvas id="gamecanvas" width="1920" height="1080"></canvas>
+        <canvas id="debuggercanvas" width="1920" height="1080"></canvas>    
         <canvas id="uicanvas" width="1920" height="1080"></canvas>    
+        <canvas id="gamecanvas" width="1920" height="1080"></canvas>
         <canvas id="backgroundcanvas" width="1920" height="1080"></canvas>       
     </div>
     
@@ -19,11 +20,7 @@
     <script src="js/lib/vectormath.js"></script>
     <script src="js/lib/colormath.js"></script>
     <script src="js/data/gamedata.js"></script>
-    <!-- FIXME: these lines should be deleted? -->
-    <!--<script type="module" src="js/data/gamedata.js"></script>-->
-    <!--<script id="gamedata" type="application/json" src="js/data/stages.json"></script>-->
     <script src="js/backgrounds/starfield.js"></script>
-    <script src="js/screens/titlescreen.js"></script>
     <script src="js/stage/titlecards/ititle.js"></script>
     <script src="js/stage/titlecards/stagestart.js"></script>
     <script src="js/stage/titlecards/stagecompleted.js"></script>
@@ -44,8 +41,9 @@
     <script src="js/game.js"></script>
     <script src="js/stage/stage.js"></script>
     <script src="js/stage/objectfactory.js"></script>
-    <script src="js/ingameui.js"></script>
-    <script src="js/debugger.js"></script>
+    <script src="js/ui/screens/titlescreen.js"></script>
+    <script src="js/ui/ingameui.js"></script>
+    <script src="js/ui/debugger.js"></script>
     <script src="js/inputhandler.js"></script>
     <script src="js/gravitywell.js"></script>
 </body>

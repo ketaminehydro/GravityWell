@@ -114,9 +114,6 @@
         }
         // adjust the titlecard
         this._titleCard_StageStart.setStageNumber(this._stageNumber);
-
-        // run the stage
-        this.setStageState(STAGE_STATE.RUNNING);
     }
 
     startStage(){        

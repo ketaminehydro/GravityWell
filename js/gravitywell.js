@@ -14,6 +14,9 @@ const backgroundCtx = backgroundCanvas.getContext("2d");
 const uiCanvas = document.getElementById("uicanvas");
 const uiCtx = uiCanvas.getContext("2d");
 
+const debuggerCanvas = document.getElementById("debuggercanvas");
+const debuggerCtx = debuggerCanvas.getContext("2d");
+
 // Global objects
 const inputHandler = new InputHandler();
 const stage = new Stage();
@@ -60,6 +63,8 @@ function setCanvasSize(){
     backgroundCanvas.style.transform = `scale(${scaleToFit})`;
     uiCanvas.style.transformOrigin = "0 0"; //scale from top left
     uiCanvas.style.transform = `scale(${scaleToFit})`;
+    debuggerCanvas.style.transformOrigin = "0 0"; //scale from top left
+    debuggerCanvas.style.transform = `scale(${scaleToFit})`;
 }
 
 // add listener to react when user resizes the screen
