@@ -7,7 +7,7 @@
     
     constructor(){
         // game state
-        this.#gameState = GAME_STATE.TITLESCREEN;
+        this.#gameState = GAME_STATE.LOADING;
         
         // timestamp for gameloop
         this.#previousTimeStamp = 0;
@@ -23,6 +23,10 @@
         this._background.fillStarfield();
         this._background.draw();
 
+        // game data
+        this._credits = 3;
+        this._initialCredits = -1;
+
         // generate title screen stage
         stage.loadStage(0);
     }
@@ -32,15 +36,31 @@
     }
 
     setGameState(gameState){
+        // failsafe for invalid entries
         if(gameState > Object.keys(GAME_STATE).length || gameState < 0){
             return;
         }
         this.#gameState = gameState;
     }
 
+    getCredits(){
+        return this._credits;
+    }
+
     setCurrentStageNumber(stageNumber){
         this._currentStageNumber = stageNumber;
     }
+
+    /**************** INGAME STUFF ******************************************/
+    joinPlayer(playerNumber){
+        if(this._credits > 0){
+            this._credits--;
+            stage.getPlayers().getElement(playerNumber-1).activate();
+            stage.getPlayers().getElement(playerNumber-1).resetPosition();
+        }
+    }
+      
+    
 
 
     gameLoop(timeStamp){
@@ -57,8 +77,23 @@
 
         switch(this.#gameState) {
 
+            case GAME_STATE.LOADING:
+                    // TODO: to be replaced with a loading screen
+                    console.log("loading");
+
+                    if(gameData.isAllFilesLoaded() ){
+                        game.setGameState(GAME_STATE.TITLESCREEN);
+                    }
+                    
+                    if (gameData.isLoadingError){
+                        console.log("Loading error. Execution halted.");
+                        debugger;
+                    }
+                break;
+
             case GAME_STATE.TITLESCREEN:
-                // logic: update introscreen: switch between different screens: controls / enemies / highscore
+                // logic: update introscreen: 
+                // TODO: switch between different screens: controls / enemies / highscore
                 stage.update(milliSecondsPassed);
                 this._debugger.update(milliSecondsPassed);
                 
@@ -68,12 +103,45 @@
                 stage.draw();  
 
                 // change state
-                // FIXME: logic currently within InputHandler
+                /*
+                if(this._startingPlayerNumber > 0){
+                    // activate the starting player
+                    stage.getAllPlayers().getElement(this._startingPlayerNumber-1).activate();
+
+                    // reset the flag
+                    this._startingPlayerNumber = 0;
+
+                    // start the stage
+                    game.setCurrentStageNumber(1);
+                    game.setGameState(GAME_STATE.STAGE_LOADING);
+                }*/
+                /*
+                console.log("game: length = "+stage.getPlayingPlayers().getLength());
+                if(stage.getPlayingPlayers().getLength() > 0){
+                    // start the stage
+                    game.setCurrentStageNumber(1);
+                    game.setGameState(GAME_STATE.STAGE_LOADING);
+                }
+
+                // if JSON files are not yet loaded, execute the loop again to give it more time
+                if (!gameData.isAllFilesLoaded){
+                    break;
+                }
+                */
+
+                // if a player is active, start the stage
+                for(let i=0; i<stage.players.getLength(); i++){
+                    if(stage.players.getElement(i).isActive()){
+                        game.setCurrentStageNumber(1);
+                        game.setGameState(GAME_STATE.STAGE_LOADING);
+                    }
+                }
+     
 
                 break;
             
             case GAME_STATE.STAGE_LOADING:
-                // logic
+                // update
                 stage.loadStage(this._currentStageNumber);
                 stage.startStage();
                 this._inGameUI.update();
@@ -95,6 +163,17 @@
                 //this._inGameUI.draw();
                 this._debugger.draw();
 
+                // player joins check
+                /*
+                if(this._startingPlayerNumber > 0){
+                    // activate the joining player
+                    stage.getAllPlayers().getElement(this._startingPlayerNumber-1).activate();
+
+                    // reset the flag
+                    this._startingPlayerNumber = 0;
+                }
+                */
+ 
                 // stage state check
                 switch(stage.getStageState()){
                     case STAGE_STATE.COMPLETED_ENDED:
@@ -104,6 +183,7 @@
                         this.#gameState = GAME_STATE.GAME_OVER;
                         break;
                 }
+
                 break;
             
             case GAME_STATE.STAGE_ENDED:
@@ -132,13 +212,17 @@
                     // for now: back to title screen
                     this.#gameState = GAME_STATE.TITLESCREEN;
                     this._currentStageNumber = 0;
-                    stage.loadStage(this._currentStageNumber);                 
+                    //this._startingPlayerNumber = -1;
+                    stage.loadStage(this._currentStageNumber);             
+                    this._credits = this._initialCredits;    
                     break;    
 
 
             case GAME_STATE.GAME_COMPLETED:
                 this._debugger.update(milliSecondsPassed);
                 this._debugger.draw();
+                // this._startingPlayerNumber = -1;
+                this._credits = this._initialCredits;    
                 // TODO:
                 // congratulations screen
                 console.log("Game completed");

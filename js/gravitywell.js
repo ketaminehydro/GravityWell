@@ -17,15 +17,14 @@ const uiCtx = uiCanvas.getContext("2d");
 const debuggerCanvas = document.getElementById("debuggercanvas");
 const debuggerCtx = debuggerCanvas.getContext("2d");
 
+// JSON loader
+const gameData = new GameData();
+
 // Global objects
 const inputHandler = new InputHandler();
 const stage = new Stage();
 const objectFactory = new ObjectFactory();
 const game = new Game();
-
-// JSON loader
-const gameData = new GameData();
-
 
 /****************************************************************
  SCRIPT
@@ -76,6 +75,11 @@ setCanvasSize();
 
 
 //--------------------------------------------------------------
-//  start the game and the gameloop
+//  load and start the game/gameloop
 //--------------------------------------------------------------
+gameData.loadGeneral("./js/data/general.json");
+gameData.loadEnemies("./js/data/enemies.json");
+gameData.loadPlayerShips("./js/data/playerships.json");
+gameData.loadStages("./js/data/stages.json");
+
 game.gameLoop(0);

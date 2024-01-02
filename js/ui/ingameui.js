@@ -21,7 +21,6 @@
 
         // clear the canvas
         this._ctx.clearRect(0,0, canvas.width, canvas.height); 
-        console.log("HELLO");
 
         // Reset refresh flag
         this._isDrawRefreshNeeded = false;

@@ -31,70 +31,81 @@ class InputHandler{
             case GAME_STATE.TITLESCREEN:
                 // player 1 fire button
                 if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
-
-                    // FIXME: this logic should go to game
-
-                    // ready the player
-                    stage.getAllPlayers().getElement(0).reset();
-                    stage.getAllPlayers().getElement(0).isPlaying = true;
-
-                    // change game state
-                    game.setGameState(GAME_STATE.STAGE_LOADING);
-
-                    // start stage 1
-                    game.setCurrentStageNumber(1);
-
+                    stage.getPlayers().getElement(0).activate();
                     // don't drag over any fire keypress to the level
-                    delete this._keyPressed[' '];
+                    delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
                 }
-            break;
+                
+                // player 2 fire button
+                if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
+                    stage.getPlayers().getElement(1).activate();
+                    // don't drag over any fire keypress to the level
+                    delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
+                }
+
+                break;
 
             case GAME_STATE.STAGE_RUNNING:
+
                 // player 1
-                if(stage.getAllPlayers().getElement(0).isPlaying === true){
+                if(stage.getPlayers().getElement(0).isActive()){
                     if (this._keyPressed[CONTROLS.PLAYER1_UP]) {
-                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
+                        stage.getPlayers().getElement(0).move(PLAYER_ACTION.THRUST_FORWARD);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER1_LEFT]) {
-                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.YAW_LEFT);
+                        stage.getPlayers().getElement(0).move(PLAYER_ACTION.YAW_LEFT);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER1_DOWN]) {
-                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.REDUCE_SPEED);
+                        stage.getPlayers().getElement(0).move(PLAYER_ACTION.REDUCE_SPEED);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER1_RIGHT]) {
-                        stage.getPlayingPlayers().getElement(0).move(PLAYER_ACTION.YAW_RIGHT);
+                        stage.getPlayers().getElement(0).move(PLAYER_ACTION.YAW_RIGHT);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
-                        stage.getPlayingPlayers().getElement(0).fire();
+                        stage.getPlayers().getElement(0).fire();
+                        delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
                     }
+                }
+                else{
+                    if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
+                        game.joinPlayer(PLAYER1);
+                        delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
+                    }                 
                 }
 
 
                 // player 2
-                if(stage.getAllPlayers().getElement(1).isPlaying === true){
+                if(stage.getPlayers().getElement(1).isActive()){
                     if (this._keyPressed[CONTROLS.PLAYER2_UP]) {
-                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
+                        stage.getPlayers().getElement(1).move(PLAYER_ACTION.THRUST_FORWARD);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER2_LEFT]) {
-                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.YAW_LEFT);
+                        stage.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_LEFT);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER2_DOWN]) {
-                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
+                        stage.getPlayers().getElement(1).move(PLAYER_ACTION.REDUCE_SPEED);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER2_RIGHT]) {
-                        stage.getPlayingPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
+                        stage.getPlayers().getElement(1).move(PLAYER_ACTION.YAW_RIGHT);
                     }
 
                     if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
-                        stage.getPlayingPlayers().getElement(1).fire();
+                        stage.getPlayers().getElement(1).fire();
+                        delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
                     }
+                }
+                else{
+                    if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
+                        game.joinPlayer(PLAYER2);
+                        delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
+                    }                 
                 }
 
                 /*********************** DEBUG CONTROLS **************************************/
@@ -113,7 +124,7 @@ class InputHandler{
                     // this action a toggle switch, i.e. a one-time execution
                     this._keyPressed['j'] = false;
 
-                    stage.getAsteroids().toggleShowDebugGfx();
+                    stage.getEnemies().toggleShowDebugGfx();
                     stage.getProjectiles().toggleShowDebugGfx();      // FIXME: this only works on EXISTING objects
                     stage.getExplosions().toggleShowDebugGfx();
                 }
@@ -123,7 +134,7 @@ class InputHandler{
                     // this action a toggle switch, i.e. a one-time execution
                     this._keyPressed['k'] = false;
 
-                    stage.getAsteroids().toggleShowDebugInfo();
+                    stage.getEnemies().toggleShowDebugInfo();
                     stage.getProjectiles().toggleShowDebugInfo();
                     stage.getExplosions().toggleShowDebugInfo();
                 }    

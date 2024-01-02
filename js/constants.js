@@ -4,6 +4,14 @@
 const NUMBER_OF_PLAYERS = 2;  // TODO: to Game
 const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level, no longer needed
 
+const PLAYER1 = 1;
+const PLAYER2 = 2;
+const PLAYER3 = 3;
+const PLAYER4 = 4;
+
+const PLAYER_SHIP = Object.freeze({
+    DEFAULT: 1
+});
 
 /****************************************************************
    Controls related
@@ -27,25 +35,27 @@ const PLAYER_ACTION = Object.freeze({
    Game States                           
  *****************************************/
 const GAME_STATE = Object.freeze({
-  TITLESCREEN: 1,
-  STAGE_LOADING: 2,
-  STAGE_RUNNING: 3,
-  STAGE_ENDED: 4,
-  GAME_OVER: 5,
-  GAME_COMPLETED: 6,
-  ENTER_HIGHSCORE: 7  
+  LOADING: 1,
+  TITLESCREEN: 2,
+  STAGE_LOADING: 3,
+  STAGE_RUNNING: 4,
+  STAGE_ENDED: 5,
+  GAME_OVER: 6,
+  GAME_COMPLETED: 7,
+  ENTER_HIGHSCORE: 8  
 });
 
 const DEBUG_GAME_STATE = Object.freeze({
   // this is the easiest way to track the states,
   // however this list needs to be manually synched
-  1: "TITLESCREEN",
-  2: "STAGE_LOADING",
-  3: "STAGE_RUNNING",
-  4: "STAGE_ENDED",
-  5: "GAME_OVER",
-  6: "GAME_COMPLETED",
-  7: "ENTER_HIGHSCORE"  
+  1: "LOADING",
+  2: "TITLESCREEN",
+  3: "STAGE_LOADING",
+  4: "STAGE_RUNNING",
+  5: "STAGE_ENDED",
+  6: "GAME_OVER",
+  7: "GAME_COMPLETED",
+  8: "ENTER_HIGHSCORE"  
 });
 
 const STAGE_STATE = Object.freeze({

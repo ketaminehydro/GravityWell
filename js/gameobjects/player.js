@@ -5,6 +5,9 @@ class Player extends GameObject {
     constructor(x, y, orientation, playerNumber) {
         super(x, y, orientation);
 
+        // gameobject type
+        this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
+
         // img
         this.setSpriteImage("img/rocket_idle.png");
 
@@ -27,31 +30,31 @@ class Player extends GameObject {
 
         // player number
         this._playerNumber = playerNumber;
-        // TODO: players need to have different sprites
 
         // hitpoints
         this._fullHitPoints = 3;
-        this._hitPoints = 3;
+        this._hitPoints = -1;
 
         // score
-        this._score = 0;
+        this._score = -1;
 
         // lives
-        this._lives = 3;
+        this._lives = -1;
 
         // player is in game
-        this.isPlaying = false;
+        this._isPlaying = false;
 
-        // set all the values
-        this.reset();
+        //
+        this.selectShip(PLAYER_SHIP.DEFAULT);
+        this.deactivate();
 
         // weapon
         this.weaponCoolDown = 500;                          // in milliseconds
         this.weaponCoolDownTimer = this.weaponCoolDown;     // in milliseconds
         this.isWeaponCoolDown = false;
 
-        // gameobject type
-        this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
+        // TODO: players need to have different sprites
+
     }
 
     move(input){
@@ -110,18 +113,39 @@ class Player extends GameObject {
        }
     }
 
+    selectShip(shipType){
+        // TODO: read stats from GameData via switch (type)    
+    }
+
+    activate(){
+        this._isPlaying = true;
+        //stage.getPlayingPlayers().push(stage.getAllPlayers().getElement(0));
+        //console.log(stage.getPlayingPlayers());
+        this._hitPoints = this._fullHitPoints;
+        this._score = 0;
+        this._lives = 3;
+    }
+
+    deactivate(){
+        this._isPlaying = false;
+        this.setPosition(-1000, -1000);
+        this.setVelocity(0,0);
+        this.setAngularSpeed(0);
+    }
+
+    isActive(){
+        return this._isPlaying;
+    }
     resetPosition(){
         this.setPosition(   canvas.width/2 -(NUMBER_OF_PLAYERS-1)/2*100 + (this._playerNumber-1)*100, 
                             this.y = canvas.height/2+100);
         this.setVelocity(0,0);
-        this.angularSpeed = 0;
+        this.setAngularSpeed(0);
         this.setOrientation(0);
     }
 
-    reset(){
+    resetHitPoints(){
         this._hitPoints = this._fullHitPoints;
-        this._score = 0;
-        this._lives = 3;
     }
 
     destroyShip(){
@@ -132,20 +156,18 @@ class Player extends GameObject {
 
         // if no more lives: make player inactive
         if(this._lives < 0){
-            this.isPlaying = false;
-            this.setPosition(-1000, -1000);
-            this.setVelocity(0,0);
+            this.deactivate();
         }
         // else: reset the player
         else {
-            this._hitPoints = this._fullHitPoints;
-            // TODO: explosion animation, wait, appear animatino, grace period
+            this.resetHitPoints();
             this.resetPosition();
+            // TODO: explosion animation, wait, appear animatino, grace period
         }
     }
 
     update(milliSecondsPassed){
-        if(!this.isPlaying){
+        if(!this._isPlaying){
             return;
         }
 
@@ -178,7 +200,7 @@ class Player extends GameObject {
     }
 
     draw(){
-        if(!this.isPlaying){
+        if(!this._isPlaying){
             return;
         }
  

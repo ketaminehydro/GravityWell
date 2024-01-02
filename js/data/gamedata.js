@@ -3,29 +3,52 @@
  ****************************************************************/
 class GameData{
   constructor(){
-    this.stages = null;
-    this.stagesLoaded = false;
-    this.enemies = null;
-    this.enemiesLoaded = false;
-    this.dataError = false;
-    
-    this.loadJSON("./js/data/stages.json", this.stage);
+    // data
+    this.general = {};
+    this.stages = {};
+    this.enemies = {};
+    this.playerShips = {};
+
+    this.isLoadingError = false;
+    this.numberOfFiles = 4;   // note: adjust this if new files are added
+    this.numberOfFilesLoaded = 0;
   }
 
-  loadJSON(file, attribute){
+  isAllFilesLoaded(){
+    return (this.numberOfFiles === this.numberOfFilesLoaded);
+  }
+
+  loadGeneral(file){
+    this.loadJSON(file, this.general);
+  }
+  
+  loadStages(file){
+    this.loadJSON(file, this.stages);
+  }
+
+  loadEnemies(file){
+    this.loadJSON(file, this.enemies);
+  }
+
+  loadPlayerShips(file){
+    this.loadJSON(file, this.playerShips);
+  }
+
+  loadJSON(file, element){
       fetch(file)
       .then(response => {
           if (!response.ok) {
-              throw new Error("HTTP error " + response.status);
+              throw new Error("HTTP error: " + response.status);
           }
           return response.json();
       })
       .then(json => {       
-          this.stagesData = json;
-          this.stagesLoaded = true;
+        // Modify the properties of the passed "element" object
+        Object.assign(element, json);
+        gameData.numberOfFilesLoaded++;
       })
       .catch(function () {
-          this.dataError = true;
+          gameData.isLoadingError = true;
       })
   }
 }

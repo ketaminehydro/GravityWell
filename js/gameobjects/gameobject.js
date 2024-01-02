@@ -145,6 +145,9 @@ class GameObject{
         return this.orientation;
     }
 
+    setAngularSpeed(angularSpeed){
+        this.angularSpeed = angularSpeed;
+    }
     getAngularSpeed(){
         return this.angularSpeed;
     }
