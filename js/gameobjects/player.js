@@ -26,7 +26,8 @@ class Player extends GameObject {
 
         // ship handling
         this.yawSpeed = 5;     // in degrees / sec
-        this.thrust = 5;        // in pixel / sec
+        this.thrust = 10;        // in pixel / sec
+        this._maxSpeed = 200;    // in pixel / sec
 
         // player number
         this._playerNumber = playerNumber;
@@ -45,7 +46,7 @@ class Player extends GameObject {
         this._isPlaying = false;
 
         //
-        this.selectShip(PLAYER_SHIP.DEFAULT);
+        this.selectShip(PLAYER_SHIP_TYPE.DEFAULT);
         this.deactivate();
 
         // weapon
@@ -54,6 +55,18 @@ class Player extends GameObject {
         this.isWeaponCoolDown = false;
 
         // TODO: players need to have different sprites
+        this.sprite.initialise(
+            {
+                "file" : "img/rocket_idle.png",
+                "spriteWidth" : 600,
+                "spriteHeight" : 600,
+                "states" : {
+                    "default" : {
+                        "frame1" : 1000,
+                    }                                         
+                }
+            }
+        );    
 
     }
 
@@ -97,7 +110,7 @@ class Player extends GameObject {
         }
     }
     fire(){
-        if(this.isWeaponCoolDown){
+        if(this.isWeaponCoolDown || (stage.getStageState() !== STAGE_STATE.RUNNING) ){
             return null;
         }
         else {
@@ -150,12 +163,12 @@ class Player extends GameObject {
 
     destroyShip(){
         // generate explosion particle effect
-        objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG);
+        objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.PURPLE_EXPLOSION);
 
         this._lives--;
 
         // if no more lives: make player inactive
-        if(this._lives < 0){
+        if(this._lives <= 0){
             this.deactivate();
         }
         // else: reset the player

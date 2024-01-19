@@ -16,16 +16,13 @@ class Debugger{
 
         // Debug information is not shown by default 
         this._isShowDebugStats = true;      // FIXME: set to false in final game.
-
-        // Refresh flag
-        this._isDrawRefreshNeeded = true;
     }
 
     translateGameState(state){
         return DEBUG_GAME_STATE[state];
     }
 
-    translateLevelState(state){
+    translateStageState(state){
         return DEBUG_STAGE_STATE[state];
     }
 
@@ -40,18 +37,10 @@ class Debugger{
 
             this._gameState = game.getGameState();
             this._stageState = stage.getStageState();
-
-            // draw refresh needed
-            this._isDrawRefreshNeeded = true;
         }
     }
 
     draw(){
-        // only draw on the canvas when needed
-        if(!this._isDrawRefreshNeeded){
-            return;
-        }
-
         // clear the canvas
         this._ctx.clearRect(0,0, canvas.width, canvas.height);
 
@@ -64,10 +53,8 @@ class Debugger{
             this._ctx.fillText("Collision checks: "+this._numberOfCollisionChecks,10,70);
             this._ctx.fillText("Collisions: "+this._numberOfCollisions,10,90);
             this._ctx.fillText("Game state: "+this.translateGameState(this._gameState),10,110);
-            this._ctx.fillText("Level state: "+this.translateLevelState(this._stageState),10,130);
+            this._ctx.fillText("Stage state: "+this.translateStageState(this._stageState),10,130);
+            this._ctx.fillText("Credits: "+game.getCredits(), 10, 150);
         }
-
-        // Reset refresh flag
-        this._isDrawRefreshNeeded = false;
     }
 }

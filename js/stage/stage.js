@@ -12,7 +12,6 @@
 
         // game objects
         this.players = new GameObjectArray();
-        //this.playingPlayers = new GameObjectArray();
         this.enemies = new GameObjectArray();
         this.projectiles = new GameObjectArray();
         this.explosions = new GameObjectArray();
@@ -53,13 +52,6 @@
         // returns the players object for player input handling
         return this.players;
     }
-
-    /*
-    getPlayingPlayers(){
-        // returns the players object for player input handling
-        return this.playingPlayers;
-    }*/
-
     getEnemies(){
         // returns the enemies object for player input handling
         return this.enemies;
@@ -90,11 +82,13 @@
 
         // level 0 case (title screen)
         if (stageNumber === 0){ 
+/*
             for(let i=1; i<=7; i++){  
                 // TODO: could be defined in gameData as well
                 let asteroid = objectFactory.generateAsteroid(0,0,0);
                 asteroid.randomSpawn();
             }
+            */
             this.setStageState(STAGE_STATE.RUNNING);
             return;
         }
@@ -107,18 +101,14 @@
 
             // asteroids
             for(let i=1; i<=stageNumber; i++){
+                /* replacing this now by new enemy class
                 let asteroid = objectFactory.generateAsteroid(0,0,0);
                 asteroid.randomSpawn();
+                */
+
+                let enemy = objectFactory.generateEnemy(0,0,0,"largeAsteroid");
+                enemy.randomSpawn();
             }
-
-            // place playing players     
-            /*for(let i=0; i<this.allPlayers.getLength(); i++){
-                if(this.allPlayers.getElement(i).isPlaying){               
-                    this.allPlayers.getElement(i).resetPosition();                
-                    this.playingPlayers.push(this.allPlayers.getElement(i));
-                }
-            }*/
-
             
             // place the playing player
             for(let i=0; i<this.players.getLength(); i++){
@@ -217,26 +207,34 @@
             case STAGE_STATE.RUNNING:                
                 this.updateGameObjects(milliSecondsPassed);
 
+                
+                // if in Game titlescreen, exit case
+                if(this._stageNumber === 0){
+                    break;
+                }
+
                 // Completed:
                 // right now there is only one winning condition: all asteroids are destroyed        
                 if(this.enemies.getLength() <= 0){
                     this.#stageState = STAGE_STATE.COMPLETED_ONGOING;
                 }
-                
-                // if in titlescreen, exit case
-                if(this._stageNumber === 0){
-                    break;
-                }
 
                 // Game over:
                 // if no player is playing and credits = 0 and level != 0 then  lvel state = game over
-                let isGameStillOn = false;
+
+                // is a player active?
+                let isActivePlayers = false;
                 for(let i=0; i<this.players.getLength(); i++){
-                    isGameStillOn = isGameStillOn || this.players.getElement(i).isActive();
+                    isActivePlayers = isActivePlayers || this.players.getElement(i).isActive();
                 }
-                isGameStillOn = isGameStillOn || (game.getCredits()>0);
-                if(!isGameStillOn){                
-                    this.#stageState = STAGE_STATE.GAME_OVER_ONGOING;
+                // if no players active, are there still credits?
+                if (!isActivePlayers){
+                    if (game.getCredits()>0){
+                        // continue countdown timer
+                    }
+                    else {
+                        this.#stageState = STAGE_STATE.GAME_OVER_ONGOING;
+                    }
                 }
                 break;
 

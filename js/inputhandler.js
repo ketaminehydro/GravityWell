@@ -11,17 +11,17 @@ class InputHandler{
 
     #handleKeyDown(event) {
         // Set the corresponding key to true when pressed
-        this._keyPressed[event.key] = true;    
+        this._keyPressed[event.code] = true;    
 
         // prevent standard browser behaviour of scrolling the page when pressing the space bar
-        if(event.keyCode == 32 && event.target == document.body) {
+        if(event.code == "Space" && event.target == document.body) {
             event.preventDefault();
           }    
     }
 
     #handleKeyUp(event) { 
         // Set the corresponding key to false when released
-        this._keyPressed[event.key] = false;
+        this._keyPressed[event.code] = false;
     }
 
    /************************ INPUT HANDLING ******************************************/
@@ -32,15 +32,15 @@ class InputHandler{
                 // player 1 fire button
                 if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
                     stage.getPlayers().getElement(0).activate();
-                    // don't drag over any fire keypress to the level
-                    delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
+                    // don't drag over any fire keypress to the next state
+                    this._keyPressed[CONTROLS.PLAYER1_FIRE] = false;
                 }
                 
                 // player 2 fire button
                 if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
                     stage.getPlayers().getElement(1).activate();
-                    // don't drag over any fire keypress to the level
-                    delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
+                    // don't drag over any fire keypress to the next state
+                    this._keyPressed[CONTROLS.PLAYER2_FIRE] = false;
                 }
 
                 break;
@@ -67,13 +67,13 @@ class InputHandler{
 
                     if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
                         stage.getPlayers().getElement(0).fire();
-                        delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
+                        //this._keyPressed[CONTROLS.PLAYER1_FIRE] = false;
                     }
                 }
                 else{
                     if (this._keyPressed[CONTROLS.PLAYER1_FIRE]) {
                         game.joinPlayer(PLAYER1);
-                        delete this._keyPressed[CONTROLS.PLAYER1_FIRE];
+                        this._keyPressed[CONTROLS.PLAYER1_FIRE] = false;
                     }                 
                 }
 
@@ -98,41 +98,41 @@ class InputHandler{
 
                     if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
                         stage.getPlayers().getElement(1).fire();
-                        delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
+                        //this._keyPressed[CONTROLS.PLAYER2_FIRE] = false;
                     }
                 }
                 else{
                     if (this._keyPressed[CONTROLS.PLAYER2_FIRE]) {
                         game.joinPlayer(PLAYER2);
-                        delete this._keyPressed[CONTROLS.PLAYER2_FIRE];
+                        this._keyPressed[CONTROLS.PLAYER2_FIRE] = false;
                     }                 
                 }
 
                 /*********************** DEBUG CONTROLS **************************************/
         
                 // Player: Hitbox + Stats 
-                if (this._keyPressed['h']) {
+                if (this._keyPressed['KeyH']) {
                     // this action a toggle switch, i.e. a one-time execution
-                    this._keyPressed['h'] = false;
+                    this._keyPressed['KeyH'] = false;
 
-                    stage.getPlayingPlayers().toggleShowDebugInfo();
-                    stage.getPlayingPlayers().toggleShowDebugGfx();            
+                    stage.getPlayers().toggleShowDebugInfo();
+                    stage.getPlayers().toggleShowDebugGfx();            
                 }
 
                 // Objects: Hitbox
-                if (this._keyPressed['j']) {
+                if (this._keyPressed['KeyJ']) {
                     // this action a toggle switch, i.e. a one-time execution
-                    this._keyPressed['j'] = false;
+                    this._keyPressed['KeyJ'] = false;
 
                     stage.getEnemies().toggleShowDebugGfx();
-                    stage.getProjectiles().toggleShowDebugGfx();      // FIXME: this only works on EXISTING objects
+                    stage.getProjectiles().toggleShowDebugGfx();      
                     stage.getExplosions().toggleShowDebugGfx();
                 }
 
                 // Objects: Stats
-                if (this._keyPressed['k']) {
+                if (this._keyPressed['KeyK']) {
                     // this action a toggle switch, i.e. a one-time execution
-                    this._keyPressed['k'] = false;
+                    this._keyPressed['KeyK'] = false;
 
                     stage.getEnemies().toggleShowDebugInfo();
                     stage.getProjectiles().toggleShowDebugInfo();
@@ -140,14 +140,14 @@ class InputHandler{
                 }    
 
                 // Special triggers // debug
-                if (this._keyPressed['g']){
+                if (this._keyPressed['KeyG']){
                     stage.setStageState(STAGE_STATE.COMPLETED_ONGOING);  
                 }
                 if (this._keyPressed['f']){
                     stage.setStageState(STAGE_STATE.GAME_OVER_ONGOING);
                 }
                 if (this._keyPressed['b']){
-                    stage.getPlayingPlayers().getElement(0).takeDamage(1);
+                    stage.getPlayers().getElement(0).takeDamage(1);
                     this._keyPressed['b'] = false;
                 }
                 if (this._keyPressed['v']){

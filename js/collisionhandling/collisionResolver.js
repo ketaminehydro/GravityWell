@@ -17,7 +17,7 @@ class CollisionResolver{
         // resolve the collision
         switch(collisionType){
             case COLLISION_BETWEEN.ASTEROID_AND_ASTEROID:
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
+                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
                 this.#resolvePhysics(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_PROJECTILE:
@@ -25,7 +25,7 @@ class CollisionResolver{
                 this.#resolveProjectile(obj1, obj2, coords);
                 break;
             case COLLISION_BETWEEN.ASTEROID_AND_PLAYER:
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
+                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
                 break;
@@ -73,7 +73,7 @@ class CollisionResolver{
             case COLLISION_BETWEEN.PLAYER_AND_PLAYER:
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION);
+                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
                 break;
             case COLLISION_BETWEEN.PLAYER_AND_POWERUP:
                 this.#resolvePowerUp(obj1, obj2);

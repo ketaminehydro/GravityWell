@@ -9,7 +9,7 @@ const PLAYER2 = 2;
 const PLAYER3 = 3;
 const PLAYER4 = 4;
 
-const PLAYER_SHIP = Object.freeze({
+const PLAYER_SHIP_TYPE = Object.freeze({
     DEFAULT: 1
 });
 
@@ -82,7 +82,7 @@ const DEBUG_STAGE_STATE = Object.freeze({
  /******************************************
    Game Object related                           
  *****************************************/
-   const ASTEROID_SIZE = Object.freeze({
+const ASTEROID_SIZE = Object.freeze({
     SMALL: 1,
     MEDIUM: 2,
     LARGE: 3
@@ -91,6 +91,7 @@ const DEBUG_STAGE_STATE = Object.freeze({
 
 const GAMEOBJECT_TYPE = Object.freeze({
   // binary enumeration makes collisions easier
+  // see COLLISION_BETWEEN
   ASTEROID: 1,
   PROJECTILE: 2,
   PLAYER: 4,
@@ -99,6 +100,11 @@ const GAMEOBJECT_TYPE = Object.freeze({
   EXPLOSION: 32,
   SATELLITE: 64,
   FIXED: 128
+});
+
+
+const ENEMY_BEHAVIOUR = Object.freeze({
+  DRIFT: 1
 });
 
 /******************************************
@@ -112,7 +118,8 @@ const ON_BOUNDARY_HIT = Object.freeze({
  });
 
 const COLLISION_BETWEEN = Object.freeze({
-  // see also GAMEOBJECT_TYPE
+  // number = GAMEOBJECT_TYPE1 + GAMEOBJECT_TYPE2
+  // (binary)
   ASTEROID_AND_ASTEROID: 2,
   ASTEROID_AND_PROJECTILE: 3, 
   ASTEROID_AND_PLAYER: 5,
@@ -159,8 +166,8 @@ const COLLISION_TYPE = Object.freeze({
    Particle effect related                           
  *****************************************/
    const PARTICLE_EFFECT = Object.freeze({
-    CIRCULAR_EXPLOSION: 1,
-    CIRCULAR_EXPLOSION_BIG: 2
+    SPARKS: 1,
+    PURPLE_EXPLOSION: 2
 });
 
 
@@ -168,14 +175,14 @@ const COLLISION_TYPE = Object.freeze({
    Controls                           
  *****************************************/
    const CONTROLS = Object.freeze({
-    PLAYER1_UP: 'w',
-    PLAYER1_LEFT: 'a',
-    PLAYER1_DOWN: 's',
-    PLAYER1_RIGHT: 'd',
-    PLAYER1_FIRE: ' ',
+    PLAYER1_UP: 'KeyW',
+    PLAYER1_LEFT: 'KeyA',
+    PLAYER1_DOWN: 'KeyS',
+    PLAYER1_RIGHT: 'KeyD',
+    PLAYER1_FIRE: 'Space',
     PLAYER2_UP: 'ArrowUp',
     PLAYER2_LEFT: 'ArrowLeft',
     PLAYER2_DOWN: 'ArrowDown',
     PLAYER2_RIGHT: 'ArrowRight',
-    PLAYER2_FIRE: 'Shift'
+    PLAYER2_FIRE: 'ShiftRight'
 });

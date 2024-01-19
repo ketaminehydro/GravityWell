@@ -47,6 +47,7 @@ class HitBox{
 
     }
 
+    //TODO: public attributes should not have method getters and setters
     getPositionOffset(){
         let x = this.xOffset;
         let y = this.yOffset;

@@ -7,7 +7,7 @@
     }  
 
     draw(){
-        uiCtx.clearRect(0,0, canvas.width, canvas.height);    
+        this._ctx.clearRect(0,0, canvas.width, canvas.height);    
         this.#drawMessage();
     }
 

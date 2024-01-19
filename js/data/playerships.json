@@ -1,3 +1,37 @@
 {
-    "default": 0
+    "default" : {
+         "fullHitPoints" : 88,
+         "hitPoints": 5, 
+         "maxSpeed": 100,
+         "maxAngularSpeed": 360,
+         "width" : 50,
+         "height": 50,
+         "mass": 1,
+         "cor" : 0.8,
+         "boundaryHandlingSetting" : "TELEPORT",
+         "behaviour" : "DRIFT",
+         "hitBox" : {
+             "size" : 20,
+             "xOffset" : 0,
+             "yOffset" : 0
+         },
+         "splitsInto" : {
+         },
+         "particleEffects" : {
+             "hit" : "SPARKS",
+             "destroyed" : "PURPLE_EXPLOSION"
+         },
+         "sprites" : {
+             "default": {
+                         "frame1" : {
+                             "file": "img/asteroid.png",
+                             "duration": "500"
+                         },
+                         "frame2" : {
+                             "file": "img/sleeper.png",
+                             "duration": "500"
+                         }                        
+             }
+         }    
+     }
 }

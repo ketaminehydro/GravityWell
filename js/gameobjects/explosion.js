@@ -14,7 +14,8 @@ class Explosion extends GameObject {
         // img
         // debug
         //this.setSpriteImage("img/placeholder_explosion.png");
-        this.setSpriteImage("");
+        //this.setSpriteImage("");
+        //this.sprite.initialiseEmpty();
 
         // type
         this._gameObjectType = GAMEOBJECT_TYPE.EXPLOSION;

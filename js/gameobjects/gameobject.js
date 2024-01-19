@@ -8,12 +8,21 @@ class GameObject{
         this.x = x;
         this.y = y;
 
+        // orientation in degrees. O° is North. Clockwise is positive.
+        this.orientation = orientation;
+
         // velocity in pixels/second
         this.vx = 0;
         this.vy = 0;
 
         // angular speed in degrees/seconds. Clockwise is positive.
         this.angularSpeed = 0;
+
+        // hitbox
+        this.hitBox = new HitBox(this.x, this.y, this.orientation, 0, 0, 100);
+
+        // sprite 
+        this.sprite = new Sprite();
 
         // hitpoints
         this._fullHitPoints = 100;
@@ -31,36 +40,39 @@ class GameObject{
         // size in pixels
         this._width = 100;      
         this._height = 100;
+        
+        // FIXME: only here because of player class
+        ///////////// delete: 
+        this._spriteOld = new Image;
+        this._spriteOld.src = "img/placeholder.png";
+        /////////////////
 
-        // image
-        this._sprite = new Image;
-        this._sprite.src = "img/placeholder.png";
 
         // mass in kg
         this._mass = 1;
-
-        // orientation in degrees. O° is North. Clockwise is positive.
-        this.orientation = orientation;
 
         // coefficient of resititution (aka. how "bouncy" the object is)
         this._cor = 0.8;
 
         this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
-        this._isDeleted = false;
-        this._gracePeriod = 2000;   // invulnerability in ms after spawn
 
-        // hitbox
-        this.hitBox = new HitBox(this.x, this.y, this.orientation, 0, 0, 100);
+        // invulnerability in ms after spawn
+        this._gracePeriod = 2000;  
+
+        // state
+        this._state = "default";
+
+        this._isDeleted = false;
 
         // settings for debugger
         this._isShowDebugGfx = false;
         this._isShowDebugInfo = false;
         this._showDebugInfoSettings = {
-            position:       false,
-            velocity:       false,
-            speed:          false,
-            orientation:    false,
-            angularSpeed:   false,
+            position:       true,
+            velocity:       true,
+            speed:          true,
+            orientation:    true,
+            angularSpeed:   true,
             hitPoints:      true
         }
 
@@ -87,8 +99,14 @@ class GameObject{
         this._height = height;
     }
 
+    // FIXME: obsolete /////////////////
     setSpriteImage(src){
-        this._sprite.src = src;
+        this._spriteOld.src = src;
+    }
+    ///////////////////////////////
+
+    setState(state){
+        this._state = state;
     }
 
     getPosition(){
@@ -218,7 +236,6 @@ class GameObject{
         this.hitBox.setPosition(this.x, this.y, this.orientation);
 
         // handle boundaries
-        // TODO: should depend on hitbox boundaries
         switch (this._boundaryHandlingSetting){
             case ON_BOUNDARY_HIT.STOP:
                 if(this.x < 0 || this.x >= canvas.width){
@@ -272,6 +289,11 @@ class GameObject{
                     this._isDeleted = true;
                 }
         }
+
+        //TODO: if enemies are outside bounds, put them back in
+
+        // update sprite
+        this.sprite.update(milliSecondsPassed);
     }
 
     draw(){
@@ -279,7 +301,7 @@ class GameObject{
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.orientation);
-        ctx.drawImage(this._sprite, -(this._width/2), -(this._height/2), this._width, this._height);
+        this.sprite.draw(this._width, this._height);
         ctx.restore();
 
         // display debug info
@@ -313,6 +335,7 @@ class GameObject{
         ctx.translate(this.x, this.y);
         ctx.fillStyle = "white";
         ctx.font = "1em Monospace";
+        ctx.textAlign = "left";
         if(this._showDebugInfoSettings.position){
             y += 20;
             ctx.fillText("x: "+this.x.toFixed(1), 10, y);

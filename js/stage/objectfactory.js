@@ -11,6 +11,14 @@
         // return to allow further modification by requestor
         return asteroid;
     }
+
+    generateEnemy(x, y, orientation, type){
+        let enemy = new Enemy(x, y, orientation, type);
+        stage.enemies.push(enemy);
+
+        // return to allow further modification by requestor
+        return enemy;
+    }
     generateTorpedo(x, y, orientation){
         let torpedo = new Torpedo(x, y, orientation);
         stage.projectiles.push(torpedo);

@@ -17,6 +17,19 @@ class Torpedo extends GameObject {
         // img
         this.setSpriteImage("img/torpedo.png");
 
+        this.sprite.initialise(
+            {
+                "file" : "img/torpedo.png",
+                "spriteWidth" : 220,
+                "spriteHeight" : 219,
+                "states" : {
+                    "default" : {
+                        "frame1" : 1000,
+                    }                                         
+                }
+            }
+        );    
+
         // set velocity
         this.vx = Math.sin(orientation) * this.speed;
         this.vy = -Math.cos(orientation) * this.speed;

@@ -75,7 +75,7 @@ class Asteroid extends GameObject{
         this.y = Math.floor(Math.random()*canvas.height);
         this.vx = Math.floor(Math.random()*(100+50+1))-50;    
         this.vy = Math.floor(Math.random()*(100+50+1))-50;    
-        this._orientation = Math.floor(Math.random()*360);
+        this.orientation = Math.floor(Math.random()*360);
         this.angularSpeed = Math.floor(Math.random()*(30+30+1))-30;
         this.setAsteroidSize(ASTEROID_SIZE.LARGE);
         this.hitBox.x = this.x;
@@ -123,7 +123,7 @@ class Asteroid extends GameObject{
             }
 
             // generate particle effect
-            objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG);
+            objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.PURPLE_EXPLOSION);
 
             // delete the asteroid
             this._isDeleted = true;

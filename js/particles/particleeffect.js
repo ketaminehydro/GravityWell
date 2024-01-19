@@ -25,12 +25,12 @@ class ParticleEffect{
 
     #generateEffect(x, y, effectType){
         switch(effectType){
-            case PARTICLE_EFFECT.CIRCULAR_EXPLOSION:
-                this.#generateCircularExplosion(x, y);
+            case PARTICLE_EFFECT.SPARKS:
+                this.#generateSparks(x, y);
                 break;
-            case PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG:
-                this.#generateCircularExplosionBig(x, y);
-                break;    
+            case PARTICLE_EFFECT.PURPLE_EXPLOSION:
+                this.#generatePurpleExplosion(x, y);
+                break;                    
             }
     }
 
@@ -38,12 +38,12 @@ class ParticleEffect{
     update(milliSecondsPassed){
         // every effect Type has its own update method
         switch(this._effectType){
-            case PARTICLE_EFFECT.CIRCULAR_EXPLOSION:
-                this.#updateCircularExplosion(milliSecondsPassed);
-                break;
-            case PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG:
-                this.#updateCircularExplosionBig(milliSecondsPassed);
+            case PARTICLE_EFFECT.SPARKS:
+                this.#updateSparks(milliSecondsPassed);
                 break;    
+            case PARTICLE_EFFECT.PURPLE_EXPLOSION:
+                this.#updatePurpleExplosion(milliSecondsPassed);
+                break;
             }
 
         // delete the effect if it contains no particles anymore
@@ -60,8 +60,9 @@ class ParticleEffect{
 
     /********************** EFFECTS *******************************/
 
-    // PARTICLE_EFFECT.CIRCULAR_EXPLOSION
-    #generateCircularExplosion(x, y){
+    // ==========================================================
+    // PARTICLE_EFFECT.SPARKS 
+    #generateSparks(x, y){
         let angle = 0;
 
         for(let i=1; i<= 20; i++){
@@ -77,7 +78,7 @@ class ParticleEffect{
         }
     }
 
-    #updateCircularExplosion(milliSecondsPassed){
+    #updateSparks(milliSecondsPassed){
 
         for(let i=0; i<this._particles.length; i++){
 
@@ -100,8 +101,9 @@ class ParticleEffect{
         }
     }
 
-        // PARTICLE_EFFECT.CIRCULAR_EXPLOSION_BIG
-        #generateCircularExplosionBig(x, y){
+        // ==========================================================
+        // PARTICLE_EFFECT.PURPLE_EXPLOSION ------------------------------
+        #generatePurpleExplosion(x, y){
             let angle = 0;
     
             for(let i=1; i<= 30; i++){
@@ -117,7 +119,7 @@ class ParticleEffect{
             }
         }
     
-        #updateCircularExplosionBig(milliSecondsPassed){
+        #updatePurpleExplosion(milliSecondsPassed){
             for(let i=0; i<this._particles.length; i++){
     
                 // slow down velocity
