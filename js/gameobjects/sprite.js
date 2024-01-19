@@ -4,20 +4,7 @@
  class Sprite{
  
     constructor(){
-
-        // as a failsafe, let's give an default object        
-        this._sprites = {
-            "file" : "img/placeholder.png",
-            "spriteWidth" : 225,
-            "spriteHeight" : 225,
-            "states" : {
-                "default" : {
-                    "frame1" : 1000,
-                },                                         
-            }
-        }    
-        
-       
+        this._sprites = {};
         this._timecounter = 0;     // in ms
         this._currentState = "default";   
         this._currentStateNumber = 0;
@@ -25,9 +12,7 @@
         this._hasImage = false;
         this._image = new Image();
         this._image.src = "img/placeholder.png";     // placeholder image
-        
     }
-
 
     initialise(sprites){    
         this._sprites = { ...sprites };

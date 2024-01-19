@@ -26,14 +26,12 @@
         // game data
         this._credits = -1;
         this._initialCredits = -1;
-
-        // generate title screen stage
-        stage.loadStage(0);
     }
 
     initialise(){
         this._initialCredits = gameData.general.initialCredits;
         this.setCredits(this._initialCredits);
+        stage.loadStage(0);
     }
 
     getGameState(){

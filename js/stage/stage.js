@@ -81,14 +81,19 @@
         this._stageNumber = stageNumber;
 
         // level 0 case (title screen)
+        // TODO: could be defined in gameData as well
         if (stageNumber === 0){ 
-/*
+
+            let enemyTypes = ["smallAsteroid", "mediumAsteroid", "largeAsteroid"];
             for(let i=1; i<=7; i++){  
-                // TODO: could be defined in gameData as well
-                let asteroid = objectFactory.generateAsteroid(0,0,0);
-                asteroid.randomSpawn();
+                let enemyType = Math.floor(Math.random()*(2+0+1))-0;
+                let enemy = objectFactory.generateEnemy(0,0,0, enemyTypes[enemyType]);
+                let enemyStates = ["default", "red", "pink"]
+                let enemyState = Math.floor(Math.random()*(2+0+1))-0;
+                enemy.sprite.setState(enemyStates[enemyState]);
+                enemy.randomSpawn();
             }
-            */
+        
             this.setStageState(STAGE_STATE.RUNNING);
             return;
         }
@@ -99,13 +104,8 @@
         /****************************************************************** */
         // Placeholder
 
-            // asteroids
+            // enemies
             for(let i=1; i<=stageNumber; i++){
-                /* replacing this now by new enemy class
-                let asteroid = objectFactory.generateAsteroid(0,0,0);
-                asteroid.randomSpawn();
-                */
-
                 let enemy = objectFactory.generateEnemy(0,0,0,"largeAsteroid");
                 enemy.randomSpawn();
             }
