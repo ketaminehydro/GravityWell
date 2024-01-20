@@ -8,16 +8,9 @@ class Player extends GameObject {
         // gameobject type
         this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
 
-        // img
-        this.setSpriteImage("img/rocket_idle.png");
-
         // hitbox
         this.hitBox.setSize(40);
         this.hitBox.setPositionOffset(0, -15);
-
-        // animation images
-        this.playerShipImageForwardThrust = new Image;
-        this.playerShipImageForwardThrust.src ="img/rocket_forwardthrust.png";
 
         // animation transitions and timers
         this.animationDuration = 500;                          // in milliseconds
@@ -45,8 +38,10 @@ class Player extends GameObject {
         // player is in game
         this._isPlaying = false;
 
-        //
+        // player ship
         this.selectShip(PLAYER_SHIP_TYPE.DEFAULT);
+        
+        // deactivate the player
         this.deactivate();
 
         // weapon
@@ -54,19 +49,69 @@ class Player extends GameObject {
         this.weaponCoolDownTimer = this.weaponCoolDown;     // in milliseconds
         this.isWeaponCoolDown = false;
 
-        // TODO: players need to have different sprites
-        this.sprite.initialise(
-            {
-                "file" : "img/rocket_idle.png",
-                "spriteWidth" : 600,
-                "spriteHeight" : 600,
-                "states" : {
-                    "default" : {
-                        "frame1" : 1000,
-                    }                                         
+        // TODO: this should be loaded. Quick fix for now. 
+
+        if (playerNumber === 1){
+            this.sprites.initialise(
+                {
+                    "idle" : {
+                        "file" : "img/rocket_body.png",
+                        "spriteWidth" : 600,
+                        "spriteHeight" : 600,
+                        "states" : {
+                            "defaultState" : {
+                                "frame1" : 1000
+                            }     
+                        }                                    
+                    },
+                    "engine" : {
+                        "file" : "img/rocket_engine.png",
+                        "spriteWidth" : 600,
+                        "spriteHeight" : 600,
+                        "states" : {
+                            "noThrust" : {
+                                "frame1" : 400
+                            },     
+                            "thrust" : {
+                                "frame1" : 400
+                            }     
+
+                        }                                    
+                    }
                 }
-            }
-        );    
+            );
+        }    
+        else if (playerNumber === 2){
+            this.sprites.initialise(
+                {
+                    "idle" : {
+                        "file" : "img/rocket_body_green.png",
+                        "spriteWidth" : 600,
+                        "spriteHeight" : 600,
+                        "states" : {
+                            "defaultState" : {
+                                "frame1" : 1000
+                            }     
+                        }                                    
+                    },
+                    "engine" : {
+                        "file" : "img/rocket_engine.png",
+                        "spriteWidth" : 600,
+                        "spriteHeight" : 600,
+                        "states" : {
+                            "noThrust" : {
+                                "frame1" : 400
+                            },     
+                            "thrust" : {
+                                "frame1" : 400
+                            }     
+
+                        }                                    
+                    }
+                }
+            );
+        }    
+
 
     }
 
@@ -81,6 +126,7 @@ class Player extends GameObject {
 
                 // set state
                 this.isForwardThrust = true;
+                this.sprites.setState("engine", "thrust");
 
                 break;
 
@@ -132,8 +178,6 @@ class Player extends GameObject {
 
     activate(){
         this._isPlaying = true;
-        //stage.getPlayingPlayers().push(stage.getAllPlayers().getElement(0));
-        //console.log(stage.getPlayingPlayers());
         this._hitPoints = this._fullHitPoints;
         this._score = 0;
         this._lives = 3;
@@ -175,7 +219,7 @@ class Player extends GameObject {
         else {
             this.resetHitPoints();
             this.resetPosition();
-            // TODO: explosion animation, wait, appear animatino, grace period
+            // TODO: explosion animation, wait, appear animation, grace period
         }
     }
 
@@ -191,8 +235,8 @@ class Player extends GameObject {
             this.forwardThrustTimer -= milliSecondsPassed;
             if(this.forwardThrustTimer <= 0) {
                 this.isForwardThrust = false;
-                this.setSpriteImage("img/rocket_idle.png");
                 this.forwardThrustTimer = this.animationDuration;
+                this.sprites.setState("engine", "noThrust");
             }
         }
 
@@ -215,11 +259,6 @@ class Player extends GameObject {
     draw(){
         if(!this._isPlaying){
             return;
-        }
- 
-        // draw states
-        if(this.isForwardThrust){
-            this.setSpriteImage("img/rocket_forwardthrust.png");
         }
         super.draw();
     }

@@ -85,12 +85,12 @@
         if (stageNumber === 0){ 
 
             let enemyTypes = ["smallAsteroid", "mediumAsteroid", "largeAsteroid"];
-            for(let i=1; i<=7; i++){  
+            for(let i=1; i<=15; i++){  
                 let enemyType = Math.floor(Math.random()*(2+0+1))-0;
                 let enemy = objectFactory.generateEnemy(0,0,0, enemyTypes[enemyType]);
-                let enemyStates = ["default", "red", "pink"]
+                let enemyStates = ["defaultState", "red", "pink"]
                 let enemyState = Math.floor(Math.random()*(2+0+1))-0;
-                enemy.sprite.setState(enemyStates[enemyState]);
+                enemy.sprites.setState("defaultSprite", enemyStates[enemyState]);
                 enemy.randomSpawn();
             }
         

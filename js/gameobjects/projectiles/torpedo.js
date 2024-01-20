@@ -15,17 +15,19 @@ class Torpedo extends GameObject {
         this.setBoundaryHandlingSetting(ON_BOUNDARY_HIT.DELETE);
 
         // img
-        this.setSpriteImage("img/torpedo.png");
+        //this.setSpriteImage("img/torpedo.png");
 
-        this.sprite.initialise(
+        this.sprites.initialise(
             {
-                "file" : "img/torpedo.png",
-                "spriteWidth" : 220,
-                "spriteHeight" : 219,
-                "states" : {
-                    "default" : {
-                        "frame1" : 1000,
-                    }                                         
+                "defaultSprite" : {
+                    "file" : "img/torpedo.png",
+                    "spriteWidth" : 220,
+                    "spriteHeight" : 219,
+                    "states" : {
+                        "defaultState" : {
+                            "frame1" : 1000,
+                        }                                         
+                    }
                 }
             }
         );    

@@ -33,7 +33,7 @@ class Enemy extends GameObject{
         this._particleEffects = {};
         Object.assign(this._particleEffects, gameData.enemies[type].particleEffects);        
 
-        this.sprite.initialise(gameData.enemies[type].sprites);
+        this.sprites.initialise(gameData.enemies[type].sprites);
     }
 
     getType(){

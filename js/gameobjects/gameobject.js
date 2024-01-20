@@ -21,8 +21,8 @@ class GameObject{
         // hitbox
         this.hitBox = new HitBox(this.x, this.y, this.orientation, 0, 0, 100);
 
-        // sprite 
-        this.sprite = new Sprite();
+        // sprites 
+        this.sprites = new Sprites();
 
         // hitpoints
         this._fullHitPoints = 100;
@@ -43,8 +43,8 @@ class GameObject{
         
         // FIXME: only here because of player class
         ///////////// delete: 
-        this._spriteOld = new Image;
-        this._spriteOld.src = "img/placeholder.png";
+        //this._spriteOld = new Image;
+        //this._spriteOld.src = "img/placeholder.png";
         /////////////////
 
 
@@ -100,9 +100,10 @@ class GameObject{
     }
 
     // FIXME: obsolete /////////////////
+    /*
     setSpriteImage(src){
         this._spriteOld.src = src;
-    }
+    }*/
     ///////////////////////////////
 
     setState(state){
@@ -292,8 +293,8 @@ class GameObject{
 
         //TODO: if enemies are outside bounds, put them back in
 
-        // update sprite
-        this.sprite.update(milliSecondsPassed);
+        // update sprites
+        this.sprites.update(milliSecondsPassed);
     }
 
     draw(){
@@ -301,7 +302,7 @@ class GameObject{
         ctx.save();
         ctx.translate(this.x, this.y);
         ctx.rotate(this.orientation);
-        this.sprite.draw(this._width, this._height);
+        this.sprites.draw(this._width, this._height);
         ctx.restore();
 
         // display debug info
