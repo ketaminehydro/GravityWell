@@ -9,10 +9,6 @@ const PLAYER2 = 2;
 const PLAYER3 = 3;
 const PLAYER4 = 4;
 
-const PLAYER_SHIP_TYPE = Object.freeze({
-    DEFAULT: 1
-});
-
 /****************************************************************
    Controls related
  ****************************************************************/
@@ -42,7 +38,8 @@ const GAME_STATE = Object.freeze({
   STAGE_ENDED: 5,
   GAME_OVER: 6,
   GAME_COMPLETED: 7,
-  ENTER_HIGHSCORE: 8  
+  ENTER_HIGHSCORE: 8,
+  PAUSE_MENU : 9  
 });
 
 const DEBUG_GAME_STATE = Object.freeze({
@@ -55,7 +52,8 @@ const DEBUG_GAME_STATE = Object.freeze({
   5: "STAGE_ENDED",
   6: "GAME_OVER",
   7: "GAME_COMPLETED",
-  8: "ENTER_HIGHSCORE"  
+  8: "ENTER_HIGHSCORE",
+  9: "PAUSE_MENU" 
 });
 
 const STAGE_STATE = Object.freeze({
@@ -184,5 +182,6 @@ const COLLISION_TYPE = Object.freeze({
     PLAYER2_LEFT: 'ArrowLeft',
     PLAYER2_DOWN: 'ArrowDown',
     PLAYER2_RIGHT: 'ArrowRight',
-    PLAYER2_FIRE: 'ShiftRight'
+    PLAYER2_FIRE: 'ShiftRight',
+    PAUSE: 'Escape'
 });

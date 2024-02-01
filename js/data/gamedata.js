@@ -7,10 +7,11 @@ class GameData{
     this.general = {};
     this.stages = {};
     this.enemies = {};
+    this.player = {};
     this.playerShips = {};
 
     this.isLoadingError = false;
-    this.numberOfFiles = 4;   // note: adjust this if new files are added
+    this.numberOfFiles = 5;   // note: adjust this if new files are added
     this.numberOfFilesLoaded = 0;
   }
 
@@ -29,6 +30,9 @@ class GameData{
   loadEnemies(file){
     this.loadJSON(file, this.enemies);
   }
+  loadPlayer(file){
+    this.loadJSON(file, this.player);
+  }
 
   loadPlayerShips(file){
     this.loadJSON(file, this.playerShips);
@@ -46,6 +50,7 @@ class GameData{
         // Modify the properties of the passed "element" object
         Object.assign(element, json);
         gameData.numberOfFilesLoaded++;
+        console.log(file+" loaded ("+this.numberOfFilesLoaded+"/"+this.numberOfFiles+")");
       })
       .catch(function () {
           gameData.isLoadingError = true;

@@ -41,13 +41,6 @@ class GameObject{
         this._width = 100;      
         this._height = 100;
         
-        // FIXME: only here because of player class
-        ///////////// delete: 
-        //this._spriteOld = new Image;
-        //this._spriteOld.src = "img/placeholder.png";
-        /////////////////
-
-
         // mass in kg
         this._mass = 1;
 
@@ -98,13 +91,6 @@ class GameObject{
         this._width = width;
         this._height = height;
     }
-
-    // FIXME: obsolete /////////////////
-    /*
-    setSpriteImage(src){
-        this._spriteOld.src = src;
-    }*/
-    ///////////////////////////////
 
     setState(state){
         this._state = state;

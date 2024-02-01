@@ -81,9 +81,14 @@
         this._stageNumber = stageNumber;
 
         // level 0 case (title screen)
-        // TODO: could be defined in gameData as well
         if (stageNumber === 0){ 
 
+            // reset/initialize the players
+            for(let i=0; i<this.players.getLength(); i++){
+                this.players.getElement(i).initialize();
+            }           
+
+            // TODO: enemies could be defined in gameData as well
             let enemyTypes = ["smallAsteroid", "mediumAsteroid", "largeAsteroid"];
             for(let i=1; i<=15; i++){  
                 let enemyType = Math.floor(Math.random()*(2+0+1))-0;

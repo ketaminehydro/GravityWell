@@ -156,9 +156,16 @@ class InputHandler{
                     // this action a toggle switch, i.e. a one-time execution
                     this._keyPressed['v'] = false;
                 }
+                break;
         
             default:
+
                 break;
+        }
+        if (this._keyPressed[CONTROLS.PAUSE]){
+            game.togglePause();
+            // this action a toggle switch, i.e. a one-time execution
+            this._keyPressed[CONTROLS.PAUSE] = false;
         }
     }
 }

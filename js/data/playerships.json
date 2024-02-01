@@ -1,37 +1,73 @@
 {
     "default" : {
-         "fullHitPoints" : 88,
-         "hitPoints": 5, 
-         "maxSpeed": 100,
+         "hitPoints" : 3,
+         "maxSpeed": 200,
+         "thrust": 10,
          "maxAngularSpeed": 360,
-         "width" : 50,
-         "height": 50,
+         "yawSpeed" : 5,
+         "width" : 100,
+         "height": 100,
          "mass": 1,
          "cor" : 0.8,
-         "boundaryHandlingSetting" : "TELEPORT",
-         "behaviour" : "DRIFT",
          "hitBox" : {
-             "size" : 20,
+             "size" : 40,
              "xOffset" : 0,
-             "yOffset" : 0
-         },
-         "splitsInto" : {
+             "yOffset" : -15
          },
          "particleEffects" : {
              "hit" : "SPARKS",
              "destroyed" : "PURPLE_EXPLOSION"
          },
-         "sprites" : {
-             "default": {
-                         "frame1" : {
-                             "file": "img/asteroid.png",
-                             "duration": "500"
-                         },
-                         "frame2" : {
-                             "file": "img/sleeper.png",
-                             "duration": "500"
-                         }                        
-             }
+         "spritesPlayer1" : {
+            "idle" : {
+                "file" : "img/rocket_body.png",
+                "spriteWidth" : 600,
+                "spriteHeight" : 600,
+                "states" : {
+                    "defaultState" : {
+                        "frame1" : 1000
+                    }     
+                }                                    
+            },         
+            "engine" : {
+                "file" : "img/rocket_engine.png",
+                "spriteWidth" : 600,
+                "spriteHeight" : 600,
+                "states" : {
+                    "noThrust" : {
+                        "frame1" : 400
+                    },     
+                    "thrust" : {
+                        "frame1" : 400
+                    }     
+
+                }                                    
+            }
+         },
+         "spritesPlayer2" : {
+            "idle" : {
+                "file" : "img/rocket_body_green.png",
+                "spriteWidth" : 600,
+                "spriteHeight" : 600,
+                "states" : {
+                    "defaultState" : {
+                        "frame1" : 1000
+                    }     
+                }                                    
+            },            
+            "engine" : {
+                "file" : "img/rocket_engine.png",
+                "spriteWidth" : 600,
+                "spriteHeight" : 600,
+                "states" : {
+                    "noThrust" : {
+                        "frame1" : 400
+                    },     
+                    "thrust" : {
+                        "frame1" : 400
+                    }     
+                }                                    
+            }
          }    
-     }
+    }
 }

@@ -4,16 +4,20 @@
  class Game{
     #previousTimeStamp;
     #gameState;
+    #previousGameState;
+    #isPause;
     
     constructor(){
         // game state
         this.#gameState = GAME_STATE.LOADING;
+        this.#previousGameState = GAME_STATE.LOADING;
+        this.#isPause = false;
         
         // timestamp for gameloop
         this.#previousTimeStamp = 0;
 
         // elements
-        this._inGameUI = new inGameUI();
+        this.inGameUI = new InGameUI();
         this._debugger = new Debugger();
         this._titleScreen = new TitleScreen();
         this._background = new Starfield();
@@ -26,6 +30,7 @@
         // game data
         this._credits = -1;
         this._initialCredits = -1;
+
     }
 
     initialise(){
@@ -43,6 +48,7 @@
         if(gameState > Object.keys(GAME_STATE).length || gameState < 0){
             return;
         }
+        this.#previousGameState = this.#gameState;
         this.#gameState = gameState;
     }
 
@@ -52,11 +58,24 @@
 
     setCredits(value){
         this._credits = value;
-        this._inGameUI.updateInformation("credits", this._credits);
+        this.inGameUI.updateInformation("credits", this._credits);
     }
 
     setCurrentStageNumber(stageNumber){
         this._currentStageNumber = stageNumber;
+    }
+    
+    togglePause(){
+        this.#isPause = !this.#isPause;
+
+        if(this.#isPause){
+            this.setGameState(GAME_STATE.PAUSE_MENU);
+            document.getElementById("menu").style.display = "inline";
+        }
+        else{
+            this.setGameState(this.#previousGameState);
+            document.getElementById("menu").style.display = "none";
+        }
     }
 
     /**************** INGAME STUFF ******************************************/
@@ -87,9 +106,9 @@
 
             case GAME_STATE.LOADING:
                     // TODO: to be replaced with a loading screen
-                    console.log("loading");
 
                     if(gameData.isAllFilesLoaded() ){
+                        console.log("Loading complete. Starting game.");
                         game.initialise();
                         game.setGameState(GAME_STATE.TITLESCREEN);
                     }
@@ -124,11 +143,11 @@
                 // update
                 stage.loadStage(this._currentStageNumber);
                 stage.startStage();
-                this._inGameUI.update(milliSecondsPassed);
+                this.inGameUI.update(milliSecondsPassed);
                 this._debugger.update(milliSecondsPassed);
 
                 // draw
-                this._inGameUI.draw();
+                this.inGameUI.draw();
                 this._debugger.draw();
 
                 // change state
@@ -137,10 +156,10 @@
             
             case GAME_STATE.STAGE_RUNNING:
                 stage.update(milliSecondsPassed);
-                this._inGameUI.update(milliSecondsPassed);
+                this.inGameUI.update(milliSecondsPassed);
                 this._debugger.update(milliSecondsPassed);
                 stage.draw();
-                this._inGameUI.draw();
+                this.inGameUI.draw();
                 this._debugger.draw();
  
                 // stage state check
@@ -205,6 +224,13 @@
                 // follow up with titlescreen
 
                 break;
+
+            case GAME_STATE.PAUSE_MENU:
+
+                // TODO:
+                // show options menu
+
+                break;    
         }
      
         // loop

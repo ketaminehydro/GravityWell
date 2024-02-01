@@ -1,10 +1,8 @@
 /****************************************************************
- GLOBAL VARIABLES
+ GLOBAL VARIABLES & SETUP
  ****************************************************************/
 
- // Canvases
-const canvasContainer = document.getElementById("canvascontainer");
-
+ // canvases
 const canvas = document.getElementById("gamecanvas");
 const ctx = gamecanvas.getContext("2d");
 
@@ -17,22 +15,26 @@ const uiCtx = uiCanvas.getContext("2d");
 const debuggerCanvas = document.getElementById("debuggercanvas");
 const debuggerCtx = debuggerCanvas.getContext("2d");
 
+const menu = document.getElementById("menu");
+
+
 // JSON loader
 const gameData = new GameData();
+gameData.loadGeneral("./js/data/general.json");
+gameData.loadEnemies("./js/data/enemies.json");
+gameData.loadPlayer("./js/data/player.json");
+gameData.loadPlayerShips("./js/data/playerships.json");
+gameData.loadStages("./js/data/stages.json");
 
-// Global objects
+
+// global objects
 const inputHandler = new InputHandler();
 const stage = new Stage();
 const objectFactory = new ObjectFactory();
 const game = new Game();
 
-/****************************************************************
- SCRIPT
-****************************************************************/
 
-//--------------------------------------------------------------
-//  load google fonts
-//--------------------------------------------------------------
+// load google fonts
 WebFont.load({
     google: {
         families: ['Share Tech Mono: 400',
@@ -43,7 +45,7 @@ WebFont.load({
 
 
 //--------------------------------------------------------------
-//  set the right screensize
+//  SET DYNAMIC SCREEN(RE)SIZE
 //--------------------------------------------------------------
 function setCanvasSize(){
     // scale the canvas (up or down) to window size 
@@ -64,6 +66,8 @@ function setCanvasSize(){
     uiCanvas.style.transform = `scale(${scaleToFit})`;
     debuggerCanvas.style.transformOrigin = "0 0"; //scale from top left
     debuggerCanvas.style.transform = `scale(${scaleToFit})`;
+    menu.style.transformOrigin = "0 0"; //scale from top left
+    menu.style.transform = `scale(${scaleToFit})`;
 }
 
 // add listener to react when user resizes the screen
@@ -75,11 +79,6 @@ setCanvasSize();
 
 
 //--------------------------------------------------------------
-//  load and start the game/gameloop
+//  START GAMELOOP
 //--------------------------------------------------------------
-gameData.loadGeneral("./js/data/general.json");
-gameData.loadEnemies("./js/data/enemies.json");
-gameData.loadPlayerShips("./js/data/playerships.json");
-gameData.loadStages("./js/data/stages.json");
-
 game.gameLoop(0);
