@@ -19,15 +19,24 @@
              "destroyed" : "PURPLE_EXPLOSION"
          },
          "spritesPlayer1" : {
-            "idle" : {
+            "rocketBody" : {
                 "file" : "img/rocket_body.png",
                 "spriteWidth" : 600,
                 "spriteHeight" : 600,
                 "states" : {
-                    "defaultState" : {
-                        "frame1" : 1000
-                    }     
-                }                                    
+                    "idle" : {
+                        "frame1" : 500,
+                        "frame2" : 1000
+                    },     
+                    "gracePeriod" : {
+                        "frame1" : 500,
+                        "frame2": 1000
+                    },
+                    "explosion" : {
+                        "frame1" : 330,
+                        "frame2": 660
+                    }
+                }                                     
             },         
             "engine" : {
                 "file" : "img/rocket_engine.png",
@@ -45,14 +54,23 @@
             }
          },
          "spritesPlayer2" : {
-            "idle" : {
+            "rocketBody" : {
                 "file" : "img/rocket_body_green.png",
                 "spriteWidth" : 600,
                 "spriteHeight" : 600,
                 "states" : {
-                    "defaultState" : {
-                        "frame1" : 1000
-                    }     
+                    "idle" : {
+                        "frame1" : 500,
+                        "frame2" : 1000
+                    },     
+                    "gracePeriod" : {
+                        "frame1" : 500,
+                        "frame2": 1000
+                    },
+                    "explosion" : {
+                        "frame1" : 330,
+                        "frame2": 660
+                    }
                 }                                    
             },            
             "engine" : {

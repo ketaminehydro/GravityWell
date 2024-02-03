@@ -21,11 +21,6 @@
 
     setState(sprite, state){
         this._sprites[sprite].setState(state);
-
-        
-
-        if (sprite === "forwardthrust") console.log("forward");
-        if (sprite === "idle") console.log("idle");
     }
 
     update(milliSecondsPassed) {

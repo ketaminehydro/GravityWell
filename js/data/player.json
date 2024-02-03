@@ -1,4 +1,6 @@
 {
     "boundaryHandlingSetting" : "BOUNCE",
-    "startingShip" : "default"
+    "startingShip" : "default",
+    "gracePeriodDuration" : 3000,
+    "isBeingDestroyedDuration" : 1000
 }

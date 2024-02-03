@@ -4,6 +4,9 @@
 class GameObject{
     constructor(x, y, orientation){
 
+        // type
+        this._gameObjectType = undefined;
+
         // position in pixel      
         this.x = x;
         this.y = y;
@@ -24,6 +27,9 @@ class GameObject{
         // sprites 
         this.sprites = new Sprites();
 
+        // particle effect
+        this._particleEffects = {};
+
         // hitpoints
         this._fullHitPoints = 100;
         this._hitPoints = 100;
@@ -33,9 +39,6 @@ class GameObject{
 
         // maximum angular speed in degrees / second
         this._maxAngularSpeed = 360*1;       
-
-        // type
-        this._gameObjectType = undefined;
         
         // size in pixels
         this._width = 100;      
@@ -47,14 +50,13 @@ class GameObject{
         // coefficient of resititution (aka. how "bouncy" the object is)
         this._cor = 0.8;
 
+        // behaviour at the screen edges
         this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
 
-        // invulnerability in ms after spawn
+        // invulnerability in ms after spawn //TODO:
         this._gracePeriod = 2000;  
 
         // state
-        this._state = "default";
-
         this._isDeleted = false;
 
         // settings for debugger
@@ -68,9 +70,6 @@ class GameObject{
             angularSpeed:   true,
             hitPoints:      true
         }
-
-
-
     }
 
     getHitPoints(){
@@ -92,10 +91,6 @@ class GameObject{
         this._height = height;
     }
 
-    setState(state){
-        this._state = state;
-    }
-
     getPosition(){
         let x = this.x;
         let y = this.y;
@@ -104,7 +99,6 @@ class GameObject{
 
     setPosition(x, y){
         // prefer this to the standard setter, due to the dependent hitbox
-
         this.x = x;
         this.y = y;
 
@@ -179,6 +173,14 @@ class GameObject{
 
     setMass(mass){
         this._mass = mass;
+    }
+
+    getParticleEffect(event){
+        let type = this._particleEffects[event];
+        if (typeof type === "undefined"){
+            return PARTICLE_EFFECT.NONE;
+        }
+        return PARTICLE_EFFECT[type];
     }
 
     setBoundaryHandlingSetting(setting){

@@ -29,8 +29,6 @@ class Particle{
     }
 
     advanceLifeCycle(milliSecondsPassed){
-        // only lifetime. Everything else is handled by ParticleEffect
-
         // diminish lifetime
          this._lifetime += milliSecondsPassed;     
 

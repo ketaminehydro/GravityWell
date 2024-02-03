@@ -16,33 +16,35 @@ class CollisionResolver{
         
         // resolve the collision
         switch(collisionType){
-            case COLLISION_BETWEEN.ASTEROID_AND_ASTEROID:
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
+            case COLLISION_BETWEEN.ENEMY_AND_ENEMY:
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj1.getParticleEffect("hit"));
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj2.getParticleEffect("hit"));
                 this.#resolvePhysics(obj1, obj2);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_PROJECTILE:
+            case COLLISION_BETWEEN.ENEMY_AND_PROJECTILE:
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveProjectile(obj1, obj2, coords);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_PLAYER:
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
+            case COLLISION_BETWEEN.ENEMY_AND_PLAYER:
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj1.getParticleEffect("hit"));
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj2.getParticleEffect("hit"));
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_POWERUP:
+            case COLLISION_BETWEEN.ENEMY_AND_POWERUP:
                 this.#resolvePhysics(obj1, obj2);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_GRAVITYWELL: 
+            case COLLISION_BETWEEN.ENEMY_AND_GRAVITYWELL: 
                 this.#resolveGravity(obj1, obj2);            
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_EXPLOSION:
+            case COLLISION_BETWEEN.ENEMY_AND_EXPLOSION:
                 this.#resolveExplosion(obj1, obj2, coords);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_SATELLITE: 
+            case COLLISION_BETWEEN.ENEMY_AND_SATELLITE: 
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
                 break;
-            case COLLISION_BETWEEN.ASTEROID_AND_FIXED:
+            case COLLISION_BETWEEN.ENEMY_AND_FIXED:
                 this.#resolvePhysics(obj1, obj2);
                 break;
             case COLLISION_BETWEEN.PROJECTILE_AND_PROECTILE:
@@ -73,7 +75,8 @@ class CollisionResolver{
             case COLLISION_BETWEEN.PLAYER_AND_PLAYER:
                 this.#resolvePhysics(obj1, obj2);
                 this.#resolveSimple(obj1, obj2);
-                objectFactory.generateParticleEffect(coords.x, coords.y, PARTICLE_EFFECT.SPARKS);
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj1.getParticleEffect("hit"));
+                objectFactory.generateParticleEffect(coords.x, coords.y, obj2.getParticleEffect("hit"));
                 break;
             case COLLISION_BETWEEN.PLAYER_AND_POWERUP:
                 this.#resolvePowerUp(obj1, obj2);
@@ -158,9 +161,9 @@ class CollisionResolver{
             obj2.vy -= impulse.y * (obj2.getMass() / totalMass);
         }
 
-        // update angular speed 
+        // update angular speed //TODO: check this math again
         // in a (frictionless) circle vs circle collision there is no transmission of angular momentum
-        // hence we must imagine it. The factor "1000" has been randomly chosen.
+        // The factor "1000" has thus been randomly chosen.
         const collisionAngle = Math.atan2(collisionNormal.y, collisionNormal.x);
         const perpendicularDistance1 = (obj1.hitBox.getSize() + obj2.hitBox.getSize()) * Math.sin(collisionAngle);
         const perpendicularDistance2 = (obj2.hitBox.getSize() + obj1.hitBox.getSize()) * Math.sin(collisionAngle);

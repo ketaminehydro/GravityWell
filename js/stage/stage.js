@@ -26,15 +26,15 @@
         this._titleCard_StageCompleted = new StageCompleted();
         this._titleCard_StageGameOver = new StageGameOver();
 
-        // information for the debugger
-        this._debugCollisionChecksCounter;
-        this._debugCollisionPairsCounter;
-
         // create the persistent player objects    
-        for(let i=1; i<=NUMBER_OF_PLAYERS; i++){
+        for(let i=1; i<=MAX_NUMBER_OF_PLAYERS; i++){
             let player = new Player(-1000, -1000, 0, i);
             this.players.push(player);
         }
+
+        // information for the debugger
+        this._debugCollisionChecksCounter;
+        this._debugCollisionPairsCounter;
     }
 
     
@@ -125,7 +125,7 @@
 
         /****************************************************************** */
 
-            // adjust the titlecard
+        // adjust the titlecard
         this._titleCard_StageStart.setStageNumber(this._stageNumber);
     }
 
@@ -155,7 +155,6 @@
         this.enemies.removeDeleted();
         this.projectiles.removeDeleted();
         this.explosions.removeDeleted();
-        //this.allPlayers.removeDeleted();
         this.particleEffects.removeDeleted();      
 
 
@@ -181,8 +180,13 @@
         this._collisionChecker.fill(this.enemies);
         this._collisionChecker.fill(this.projectiles);
         this._collisionChecker.fill(this.explosions);
-        // TODO: add only the active players
-        this._collisionChecker.fill(this.players);
+
+        // add the active players that are not in their grace period
+        for(let i=0; i<this.players.getLength(); i++){
+            if(this.players.getElement(i).isActive() && !this.players.getElement(i).isGracePeriod()){
+                this._collisionChecker.push(this.players.getElement(i));
+            }
+        }
 
         // check for collisions
         let collisionPairs;

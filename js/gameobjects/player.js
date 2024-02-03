@@ -8,53 +8,49 @@ class Player extends GameObject {
         // gameobject type
         this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
 
-        // hitbox
-        this.hitBox.setSize(40);
-        this.hitBox.setPositionOffset(0, -15);
-
-        // animation transitions and timers
-        this.animationDuration = 500;                          // in milliseconds
-        this.forwardThrustTimer = this.animationDuration;       // in milliseconds
-        this.isForwardThrust = false;
-
         // player ship 
         this._yawSpeed = -1;     // in degrees / sec
         this._thrust = -1;        // in pixel / sec
         this._maxSpeed = -1;    // in pixel / sec
-
-        // player number
-        this._playerNumber = playerNumber;
-
-        // hitpoints
         this._fullHitPoints = -1;
+
+        // player stats
+        this._playerNumber = playerNumber;
+        this._score = -1;
+        this._lives = -1;
         this._hitPoints = -1;
 
-        // particle effect
-        this._particleEffects = {};
-
-        // score
-        this._score = -1;
-
-        // lives
-        this._lives = -1;
-
-        // player is in game
+        // player status
         this._isPlaying = false;
-        
-        // deactivate the player
         this.deactivate();
+
+        // grace Period
+        this._gracePeriodTimer = 0;
+        this._isGracePeriod = false;
 
         // weapon
         this.weaponCoolDown = 500;                          // in milliseconds
         this.weaponCoolDownTimer = this.weaponCoolDown;     // in milliseconds
         this.isWeaponCoolDown = false;
+
+        // movement (thrust)
+        this.animationDuration = 500;                          // in milliseconds
+        this.forwardThrustTimer = this.animationDuration;       // in milliseconds
+        this.isForwardThrust = false;
+
+        // destruction
+        this._isBeingDestroidTimer = 0;
+        this._isBeingDestroyed = false;
     }
 
 
 
     move(input){
-        let magnitude, newMagnitude;
+        if (this._isBeingDestroyed){
+            return;
+        }
 
+        let magnitude, newMagnitude;
         switch (input){
             case PLAYER_ACTION.THRUST_FORWARD:
                 // calculate new velocity
@@ -93,7 +89,7 @@ class Player extends GameObject {
         }
     }
     fire(){
-        if(this.isWeaponCoolDown || (stage.getStageState() !== STAGE_STATE.RUNNING) ){
+        if(this.isWeaponCoolDown || this._isBeingDestroyed || (stage.getStageState() !== STAGE_STATE.RUNNING) ){
             return null;
         }
         else {
@@ -124,11 +120,14 @@ class Player extends GameObject {
         this.hitBox.yOffset = gameData.playerShips[shipType].hitBox.yOffset;     
         Object.assign(this._particleEffects, gameData.playerShips[shipType].particleEffects);        
         this.sprites.initialise(gameData.playerShips[shipType]["sprites"+"Player"+this._playerNumber]);
+        this.sprites.setState("rocketBody", "idle");
+        this.sprites.setState("engine", "noThrust");
     }
 
     initialize(){
-        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];
+        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];        
         this.selectShip("default");
+        this.startGracePeriod();
         this._score = 0;
         this._lives = 3;      
     }
@@ -137,7 +136,6 @@ class Player extends GameObject {
         this._isPlaying = true;
         this.initialize();
         game.inGameUI.updateInformation("player"+this._playerNumber+".lives", this._lives);
-
     }
 
     deactivate(){
@@ -150,8 +148,44 @@ class Player extends GameObject {
     isActive(){
         return this._isPlaying;
     }
+
+    startGracePeriod(){
+        this._gracePeriodTimer = gameData.player.gracePeriodDuration;
+        this._isGracePeriod = true;
+        this.sprites.setState("rocketBody", "gracePeriod");
+    }
+
+    endGracePeriod(){
+        this._gracePeriodTimer = 0;
+        this._isGracePeriod = false;
+        this.sprites.setState("rocketBody", "idle");
+    }
+
+    isGracePeriod(){
+        return this._isGracePeriod;
+    }
+
+    startIsBeingDestroyed(){
+        objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.PURPLE_EXPLOSION);
+        this._isBeingDestroidTimer = gameData.player.isBeingDestroyedDuration;
+        this._isBeingDestroyed = true;
+        this.sprites.setState("rocketBody", "explosion");
+    }
+
+    endIsBeingDestroyed(){
+        this._isBeingDestroidTimer = 0;
+        this._isBeingDestroyed = false;
+        this.sprites.setState("rocketBody", "idle");
+        this.respawn();
+    }
+
+    isBeingDestroyed(){
+        return this._isBeingDestroyed;
+    }
+
+
     resetPosition(){
-        this.setPosition(   canvas.width/2 -(NUMBER_OF_PLAYERS-1)/2*100 + (this._playerNumber-1)*100, 
+        this.setPosition(   canvas.width/2 -(MAX_NUMBER_OF_PLAYERS-1)/2*100 + (this._playerNumber-1)*100, 
                             this.y = canvas.height/2+100);
         this.setVelocity(0,0);
         this.setAngularSpeed(0);
@@ -162,10 +196,8 @@ class Player extends GameObject {
         this._hitPoints = this._fullHitPoints;
     }
 
-    destroyShip(){
-        // generate explosion particle effect
-        objectFactory.generateParticleEffect(this.x, this.y, PARTICLE_EFFECT.PURPLE_EXPLOSION);
-
+    respawn(){
+        // reduce lives
         this._lives--;
         game.inGameUI.updateInformation("player"+this._playerNumber+".lives", this._lives);
 
@@ -177,12 +209,23 @@ class Player extends GameObject {
         else {
             this.resetHitPoints();
             this.resetPosition();
-            // TODO: explosion animation, wait, appear animation, grace period
+            // TODO: explosion animation, wait, appear animation, 
+            this.startGracePeriod();
         }
     }
 
     update(milliSecondsPassed){
         if(!this._isPlaying){
+            return;
+        }
+
+        // ship is being destroyed
+        if(this._isBeingDestroyed){
+            this._isBeingDestroidTimer -= milliSecondsPassed;
+            if(this._isBeingDestroidTimer <= 0){
+                this.endIsBeingDestroyed();
+            }
+
             return;
         }
 
@@ -207,9 +250,17 @@ class Player extends GameObject {
             }    
         }
 
+        // grace period 
+        if (this.isGracePeriod()){
+            this._gracePeriodTimer -= milliSecondsPassed;
+            if (this._gracePeriodTimer <= 0){
+                this.endGracePeriod();
+            }
+        }
+
         // ship destroyed
         if(this._hitPoints <= 0){
-            this.destroyShip();
+            this.startIsBeingDestroyed();
         }
 
     }

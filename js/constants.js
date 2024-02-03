@@ -1,8 +1,7 @@
 /****************************************************************
    Game related
  ****************************************************************/
-const NUMBER_OF_PLAYERS = 2;  // TODO: to Game
-const NUMBER_OF_ASTEROIDS = 1; // TODO: to Level, no longer needed
+const MAX_NUMBER_OF_PLAYERS = 2;  
 
 const PLAYER1 = 1;
 const PLAYER2 = 2;
@@ -19,6 +18,22 @@ const PLAYER_ACTION = Object.freeze({
     REDUCE_SPEED: 3
 });
 
+ /******************************************
+   Controls                           
+ *****************************************/
+   const CONTROLS = Object.freeze({
+    PLAYER1_UP: 'KeyW',
+    PLAYER1_LEFT: 'KeyA',
+    PLAYER1_DOWN: 'KeyS',
+    PLAYER1_RIGHT: 'KeyD',
+    PLAYER1_FIRE: 'Space',
+    PLAYER2_UP: 'ArrowUp',
+    PLAYER2_LEFT: 'ArrowLeft',
+    PLAYER2_DOWN: 'ArrowDown',
+    PLAYER2_RIGHT: 'ArrowRight',
+    PLAYER2_FIRE: 'ShiftRight',
+    PAUSE: 'Escape'
+});
 
 /******************************************
    Drawing related                           
@@ -28,7 +43,7 @@ const PLAYER_ACTION = Object.freeze({
  
 
  /******************************************
-   Game States                           
+   States                           
  *****************************************/
 const GAME_STATE = Object.freeze({
   LOADING: 1,
@@ -90,7 +105,7 @@ const ASTEROID_SIZE = Object.freeze({
 const GAMEOBJECT_TYPE = Object.freeze({
   // binary enumeration makes collisions easier
   // see COLLISION_BETWEEN
-  ASTEROID: 1,
+  ENEMY: 1,
   PROJECTILE: 2,
   PLAYER: 4,
   POWERUP: 8,
@@ -118,14 +133,14 @@ const ON_BOUNDARY_HIT = Object.freeze({
 const COLLISION_BETWEEN = Object.freeze({
   // number = GAMEOBJECT_TYPE1 + GAMEOBJECT_TYPE2
   // (binary)
-  ASTEROID_AND_ASTEROID: 2,
-  ASTEROID_AND_PROJECTILE: 3, 
-  ASTEROID_AND_PLAYER: 5,
-  ASTEROID_AND_POWERUP: 9,
-  ASTEROID_AND_GRAVITYWELL: 17,
-  ASTEROID_AND_EXPLOSION: 33,
-  ASTEROID_AND_SATELLITE: 65,
-  ASTEROID_AND_FIXED: 129,
+  ENEMY_AND_ENEMY: 2,
+  ENEMY_AND_PROJECTILE: 3, 
+  ENEMY_AND_PLAYER: 5,
+  ENEMY_AND_POWERUP: 9,
+  ENEMY_AND_GRAVITYWELL: 17,
+  ENEMY_AND_EXPLOSION: 33,
+  ENEMY_AND_SATELLITE: 65,
+  ENEMY_AND_FIXED: 129,
   PROJECTILE_AND_PROECTILE: 4,
   PROJECTILE_AND_PLAYER: 6, 
   PROJECTILE_AND_POWERUP: 10,
@@ -164,24 +179,9 @@ const COLLISION_TYPE = Object.freeze({
    Particle effect related                           
  *****************************************/
    const PARTICLE_EFFECT = Object.freeze({
+    NONE: 0,
     SPARKS: 1,
     PURPLE_EXPLOSION: 2
 });
 
 
- /******************************************
-   Controls                           
- *****************************************/
-   const CONTROLS = Object.freeze({
-    PLAYER1_UP: 'KeyW',
-    PLAYER1_LEFT: 'KeyA',
-    PLAYER1_DOWN: 'KeyS',
-    PLAYER1_RIGHT: 'KeyD',
-    PLAYER1_FIRE: 'Space',
-    PLAYER2_UP: 'ArrowUp',
-    PLAYER2_LEFT: 'ArrowLeft',
-    PLAYER2_DOWN: 'ArrowDown',
-    PLAYER2_RIGHT: 'ArrowRight',
-    PLAYER2_FIRE: 'ShiftRight',
-    PAUSE: 'Escape'
-});

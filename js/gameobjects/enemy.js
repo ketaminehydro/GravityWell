@@ -2,42 +2,41 @@
  CLASS: Enemy
  ****************************************************************/
 class Enemy extends GameObject{
-    constructor(x, y, orientation, type){
+    constructor(x, y, orientation, enemyType){
         super(x, y, orientation);
 
-        this._gameObjectType = GAMEOBJECT_TYPE.ASTEROID; //TODO: replace ASTEROID by ENEMY
+        // gameobject type
+        this._gameObjectType = GAMEOBJECT_TYPE.ENEMY; 
 
         // read and set inherited values
-        this._type = type;
-        this._fullHitPoints = gameData.enemies[type].fullHitPoints;
-        this._hitPoints = gameData.enemies[type].hitPoints;
-        this._maxSpeed = gameData.enemies[type].maxSpeed;
-        this._maxAngularSpeed = gameData.enemies[type].maxAngularSpeed;
-        this._width = gameData.enemies[type].width;
-        this._height = gameData.enemies[type].height;
-        this._mass = gameData.enemies[type].mass;
-        this._cor = gameData.enemies[type].cor;
-        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.enemies[type].boundaryHandlingSetting];
-        this.hitBox.size = gameData.enemies[type].hitBox.size;
-        this.hitBox.xOffset = gameData.enemies[type].hitBox.xOffset;
-        this.hitBox.yOffset = gameData.enemies[type].hitBox.yOffset;
+        this._enemyType = enemyType;
+        this._fullHitPoints = gameData.enemies[enemyType].fullHitPoints;
+        this._hitPoints = gameData.enemies[enemyType].hitPoints;
+        this._maxSpeed = gameData.enemies[enemyType].maxSpeed;
+        this._maxAngularSpeed = gameData.enemies[enemyType].maxAngularSpeed;
+        this._width = gameData.enemies[enemyType].width;
+        this._height = gameData.enemies[enemyType].height;
+        this._mass = gameData.enemies[enemyType].mass;
+        this._cor = gameData.enemies[enemyType].cor;
+        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.enemies[enemyType].boundaryHandlingSetting];
+        this.hitBox.size = gameData.enemies[enemyType].hitBox.size;
+        this.hitBox.xOffset = gameData.enemies[enemyType].hitBox.xOffset;
+        this.hitBox.yOffset = gameData.enemies[enemyType].hitBox.yOffset;
+        Object.assign(this._particleEffects, gameData.enemies[enemyType].particleEffects);        
+        this.sprites.initialise(gameData.enemies[enemyType].sprites);
+        this.sprites.setState("defaultSprite", "defaultState");
 
         // read and set class-specific values        
-        this._behaviour = ENEMY_BEHAVIOUR[gameData.enemies[type].behaviour];         //TODO: create a behaviour class
+        this._behaviour = ENEMY_BEHAVIOUR[gameData.enemies[enemyType].behaviour];         //TODO: create a behaviour class
 
         this._splitsInto = [];
-        for (let element in gameData.enemies[type].splitsInto){
-            this._splitsInto.push(gameData.enemies[type].splitsInto[element]);
+        for (let element in gameData.enemies[enemyType].splitsInto){
+            this._splitsInto.push(gameData.enemies[enemyType].splitsInto[element]);
         };
-
-        this._particleEffects = {};
-        Object.assign(this._particleEffects, gameData.enemies[type].particleEffects);        
-
-        this.sprites.initialise(gameData.enemies[type].sprites);
     }
 
-    getType(){
-        return this._type;
+    getEnemyType(){
+        return this._enemyType;
     }
 
     randomSpawn(){
@@ -64,20 +63,19 @@ class Enemy extends GameObject{
                 let angle = 0;            
                 angle += (Math.PI*2 / this._splitsInto.length) * i ;
 
-                // position 
+                // child position 
                 let x = (Math.sin(angle)) * (this._width-50 +3) + this.x;
                 let y = (-Math.cos(angle)) * (this._width-50 +3) + this.y;
 
-
-                // velocity
+                // child velocity
                 let speed = Math.floor(Math.random()*(100+50+1))-50;                   
                 let vx = (Math.sin(angle)) * speed + this.vx;
                 let vy = (-Math.cos(angle)) * speed + this.vy;
 
-                // orientation
+                // child orientation
                 let orientation = Math.floor(Math.random()*360);
 
-                // create asteroid            
+                // create child             
                 let childEnemy = objectFactory.generateEnemy(x, y, orientation, this._splitsInto[i]);
                 childEnemy.vx = vx;
                 childEnemy.vy = vy;

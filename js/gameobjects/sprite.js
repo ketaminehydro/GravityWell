@@ -7,7 +7,7 @@
         this._spriteData = {};
 
         this._timecounter = 0;     // in ms
-        this._currentState = "defaultState";   
+        this._currentState = "undefined";   
         this._currentStateNumber = 0;
         this._currentFrameNumber = 1;
         this._image = new Image();

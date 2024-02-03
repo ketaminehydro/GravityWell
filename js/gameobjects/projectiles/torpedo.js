@@ -5,17 +5,19 @@ class Torpedo extends GameObject {
     constructor(x, y, orientation) {
         super(x, y, orientation);
 
-        // stats
-        this.speed = 300;       // in px/s
-        this._maxSpeed = 300;   
-        this.yield = 5000;      // in Newton
+        // gameobject type
+        this._gameObjectType = GAMEOBJECT_TYPE.PROJECTILE;
+
+        // read and set inherited values 
         this.setSize(10,10);
         this.hitBox.setSize(10);
-        this._mass = 1;
         this.setBoundaryHandlingSetting(ON_BOUNDARY_HIT.DELETE);
-
-        // img
-        //this.setSpriteImage("img/torpedo.png");
+        this.speed = 300;               
+        this._maxSpeed = 300;   
+        this._mass = 1;
+        
+        // read and set class-specific values
+        this.yield = 5000;      // in Newton
 
         this.sprites.initialise(
             {
@@ -36,7 +38,6 @@ class Torpedo extends GameObject {
         this.vx = Math.sin(orientation) * this.speed;
         this.vy = -Math.cos(orientation) * this.speed;
 
-        // type
-        this._gameObjectType = GAMEOBJECT_TYPE.PROJECTILE;
+
     }
 }
