@@ -50,7 +50,6 @@ class Enemy extends GameObject{
         this.hitBox.y = this.y;
     }
 
-    // override
     update(milliSecondsPassed){
         super.update(milliSecondsPassed);
         

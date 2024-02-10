@@ -1,0 +1,13 @@
+{
+    "player1Up": "KeyW",
+    "player1Left": "KeyA",
+    "player1Down": "KeyS",
+    "player1Right": "KeyD",
+    "player1Fire": "Space",
+    "player2Up": "ArrowUp",
+    "player2Left": "ArrowLeft",
+    "player2Down": "ArrowDown",
+    "player2Right": "ArrowRight",
+    "player2Fire": "ShiftRight",
+    "pause": "Escape"
+}

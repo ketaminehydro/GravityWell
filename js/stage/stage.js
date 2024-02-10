@@ -15,6 +15,7 @@
         this.enemies = new GameObjectArray();
         this.projectiles = new GameObjectArray();
         this.explosions = new GameObjectArray();
+        this.gravityWells = new GameObjectArray();
         this.particleEffects = new ParticleEffectArray();
 
         // collision handling
@@ -49,22 +50,22 @@
         this.#stageState = stageState;
     }
     getPlayers(){
-        // returns the players object for player input handling
         return this.players;
     }
     getEnemies(){
-        // returns the enemies object for player input handling
         return this.enemies;
     }
 
     getProjectiles(){
-        // returns the projectiles object for player input handling
         return this.projectiles;
     }
 
     getExplosions(){
-        // returns the explosions object for player input handling
         return this.explosions;
+    }
+
+    getGravityWells(){
+        return this.gravityWells;
     }
 
     /************************ STAGE LOADING ******************************************/
@@ -72,20 +73,21 @@
 
         // empty the gameobject arrays
         this.enemies.clear(); 
-        //this.playingPlayers.clear();
         this.projectiles.clear();
         this.explosions.clear(); 
+        this.gravityWells.clear();
         this.particleEffects.clear();   
 
         // ******************* SET UP A NEW STAGE ******************
         this._stageNumber = stageNumber;
 
-        // level 0 case (title screen)
+        // stage 0 case (title screen)
         if (stageNumber === 0){ 
 
-            // reset/initialize the players
+            // reset or initialize the players, then deactivate them
             for(let i=0; i<this.players.getLength(); i++){
                 this.players.getElement(i).initialize();
+                this.players.getElement(i).deactivate();
             }           
 
             // TODO: enemies could be defined in gameData as well
@@ -103,29 +105,33 @@
             return;
         }
 
-        // TODO: gets level number as parameter -> extracts relevant data from the gameData object. console log is proof of concept.
-        // console.log(gameData.stages);
 
         /****************************************************************** */
         // Placeholder
+        // TODO: gets level number as parameter -> extracts relevant data from the gameData object. console log is proof of concept.
+        // console.log(gameData.stages);
+
 
             // enemies
             for(let i=1; i<=stageNumber; i++){
                 let enemy = objectFactory.generateEnemy(0,0,0,"largeAsteroid");
                 enemy.randomSpawn();
             }
-            
-            // place the playing player
-            for(let i=0; i<this.players.getLength(); i++){
-                if(this.players.getElement(i).isActive()){
-                    this.players.getElement(i).resetPosition();
-                }
-            }
-            
+
+
+            // gravitywell
+            objectFactory.generateGravityWell(600,500,500, 100);
 
         /****************************************************************** */
+        
+        // place the playing player
+        for(let i=0; i<this.players.getLength(); i++){
+            if(this.players.getElement(i).isActive()){
+                this.players.getElement(i).resetPosition();
+            }
+        }
 
-        // adjust the titlecard
+        // set stagenumber on the titlecard
         this._titleCard_StageStart.setStageNumber(this._stageNumber);
     }
 
@@ -148,6 +154,7 @@
         this.enemies.update(milliSecondsPassed);
         this.projectiles.update(milliSecondsPassed);
         this.explosions.update(milliSecondsPassed);
+        this.gravityWells.update(milliSecondsPassed);
         this.players.update(milliSecondsPassed);
         this.particleEffects.update(milliSecondsPassed);
 
@@ -155,6 +162,7 @@
         this.enemies.removeDeleted();
         this.projectiles.removeDeleted();
         this.explosions.removeDeleted();
+        this.gravityWells.removeDeleted();
         this.particleEffects.removeDeleted();      
 
 
@@ -173,6 +181,7 @@
         this.enemies.clearIsHit();
         this.projectiles.clearIsHit();    
         this.explosions.clearIsHit();
+        this.gravityWells.clearIsHit();
         this.players.clearIsHit();
         
         // initialize collision checker
@@ -180,6 +189,7 @@
         this._collisionChecker.fill(this.enemies);
         this._collisionChecker.fill(this.projectiles);
         this._collisionChecker.fill(this.explosions);
+        this._collisionChecker.fill(this.gravityWells);
 
         // add the active players that are not in their grace period
         for(let i=0; i<this.players.getLength(); i++){
@@ -282,6 +292,7 @@
                 this.enemies.draw();
                 this.projectiles.draw();
                 this.explosions.draw();
+                this.gravityWells.draw();
                 this.players.draw();
                 this.particleEffects.draw();                
                 break; 
@@ -301,8 +312,9 @@
         let counter = 0;
         counter = this.enemies.getLength()
                     + this.projectiles.getLength() 
-                    + this.players.getLength()
-                    + this.explosions.getLength();
+                    + this.explosions.getLength()
+                    + this.gravityWells.getLength()
+                    + this.players.getLength();
         return counter; 
     }
 

@@ -5,20 +5,14 @@ class Explosion extends GameObject {
     constructor(x, y, orientation, force) {
         super(x, y, orientation);
 
+        // gameobject type
+        this._gameObjectType = GAMEOBJECT_TYPE.EXPLOSION;
+
         // stats
         this._maxExplosionSize = 100;
         this._force = force;       // in Newton
         this.setSize(10,10);
         this.hitBox.setSize(10);
-
-        // img
-        // debug
-        //this.setSpriteImage("img/placeholder_explosion.png");
-        //this.setSpriteImage("");
-        //this.sprite.initialiseEmpty();
-
-        // type
-        this._gameObjectType = GAMEOBJECT_TYPE.EXPLOSION;
 
         // lifespan
         this._lifespan = 500 // in ms
@@ -26,9 +20,6 @@ class Explosion extends GameObject {
 
         // already collided with these objects
         this._collidedWith = [];
-
-        // debug
-        this._isShowDebugGfx = false;
     }
 
     getForce(){
@@ -58,7 +49,6 @@ class Explosion extends GameObject {
         return hasCollided;
     }
 
-    // override
     update(milliSecondsPassed){
         // diminish lifetime
         this._lifetime += milliSecondsPassed;
@@ -81,10 +71,8 @@ class Explosion extends GameObject {
 
     }
 
-    // override
+    //override
     draw(){           
-        super.draw();
-        
         // move origin
         ctx.save();
         ctx.translate(this.x, this.y);

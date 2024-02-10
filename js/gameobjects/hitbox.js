@@ -13,7 +13,7 @@ class HitBox{
         this.yOffset = yOffset;
 
         // stats
-        this.size = size;        // radius in pixels. TODO: % relative to canvas size
+        this.size = size;        // radius in pixels. 
 
         // states
         this.isHit = false;
@@ -47,8 +47,7 @@ class HitBox{
 
     }
 
-    //TODO: public attributes should not have method getters and setters
-    getPositionOffset(){
+   getPositionOffset(){
         let x = this.xOffset;
         let y = this.yOffset;
         return {x, y};
@@ -70,7 +69,7 @@ class HitBox{
         ctx.strokeStyle = "#00aaff";
         ctx.stroke();
 
-        // draw orientation (to prove that a circle doesn't move)
+        // draw orientation (to prove that the hitBox=circle doesn't rotate)
         ctx.beginPath();
         ctx.moveTo(0, -this.size);
         ctx.lineTo(0, -this.size+10);

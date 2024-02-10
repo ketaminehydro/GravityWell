@@ -53,9 +53,6 @@ class GameObject{
         // behaviour at the screen edges
         this._boundaryHandlingSetting = ON_BOUNDARY_HIT.BOUNCE;
 
-        // invulnerability in ms after spawn //TODO:
-        this._gracePeriod = 2000;  
-
         // state
         this._isDeleted = false;
 
@@ -119,14 +116,6 @@ class GameObject{
 
     getSpeed(){
         return Math.sqrt(this.vx * this.vx + this.vy * this.vy);
-    }
-
-    getMaximumSpeed(){
-        return this._maxSpeed;
-    }
-
-    setMaximumSpeed(speed){
-        this._maxSpeed = speed;
     }
 
     getOrientation(){
@@ -253,18 +242,18 @@ class GameObject{
             case ON_BOUNDARY_HIT.TELEPORT:
                 if (this.x < -CANVAS_MARGIN) {
                     this.x = canvas.width + CANVAS_MARGIN;
-                    this.y = canvas.height-this.y; // + CANVAS_MARGIN; FIXME: is it fixed now?
+                    this.y = canvas.height-this.y; 
                 }
                 else if (this.x > canvas.width + CANVAS_MARGIN) {
                     this.x = - CANVAS_MARGIN;
-                    this.y = canvas.height-this.y; // + CANVAS_MARGIN; FIXME: is it fixed now?
+                    this.y = canvas.height-this.y; 
                 }
                 if (this.y < -CANVAS_MARGIN) {
-                    this.x = canvas.width - this.x; // + CANVAS_MARGIN; FIXME: is it fixed now?
+                    this.x = canvas.width - this.x; 
                     this.y = canvas.height + CANVAS_MARGIN;
                 }
                 else if (this.y > canvas.height + CANVAS_MARGIN) {
-                    this.x = canvas.width - this.x; // + CANVAS_MARGIN; FIXME: is it fixed now?
+                    this.x = canvas.width - this.x; 
                     this.y = - CANVAS_MARGIN;
                 }
                 break;
@@ -279,7 +268,7 @@ class GameObject{
                 }
         }
 
-        //TODO: if enemies are outside bounds, put them back in
+        //TODO: failsafe: if enemies are outside bounds for any reason, put them back in
 
         // update sprites
         this.sprites.update(milliSecondsPassed);
@@ -320,7 +309,7 @@ class GameObject{
     displayDebugInfo(){
         let y = 30;     // in px
 
-        ctx.save();                                     // because we are changing the coordinate origins
+        ctx.save();                                    
         ctx.translate(this.x, this.y);
         ctx.fillStyle = "white";
         ctx.font = "1em Monospace";

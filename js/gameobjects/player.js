@@ -8,6 +8,9 @@ class Player extends GameObject {
         // gameobject type
         this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
 
+        // boundary handling setting
+        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];        
+
         // player ship 
         this._yawSpeed = -1;     // in degrees / sec
         this._thrust = -1;        // in pixel / sec
@@ -22,7 +25,6 @@ class Player extends GameObject {
 
         // player status
         this._isPlaying = false;
-        this.deactivate();
 
         // grace Period
         this._gracePeriodTimer = 0;
@@ -125,11 +127,11 @@ class Player extends GameObject {
     }
 
     initialize(){
-        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];        
         this.selectShip("default");
         this.startGracePeriod();
         this._score = 0;
-        this._lives = 3;      
+        this._lives = 3;    
+        game.inGameUI.updateInformation("player"+this._playerNumber+".lives", this._lives);
     }
 
     activate(){
@@ -143,6 +145,7 @@ class Player extends GameObject {
         this.setPosition(-1000, -1000);
         this.setVelocity(0,0);
         this.setAngularSpeed(0);
+        game.inGameUI.updateInformation("player"+this._playerNumber+".lives", "Game Over");
     }
 
     isActive(){
@@ -170,6 +173,7 @@ class Player extends GameObject {
         this._isBeingDestroidTimer = gameData.player.isBeingDestroyedDuration;
         this._isBeingDestroyed = true;
         this.sprites.setState("rocketBody", "explosion");
+        this.sprites.setState("engine", "noThrust");
     }
 
     endIsBeingDestroyed(){

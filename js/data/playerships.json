@@ -25,16 +25,16 @@
                 "spriteHeight" : 600,
                 "states" : {
                     "idle" : {
-                        "frame1" : 500,
-                        "frame2" : 1000
+                        "frame1end" : 500,
+                        "frame2end" : 1000
                     },     
                     "gracePeriod" : {
-                        "frame1" : 500,
-                        "frame2": 1000
+                        "frame1end" : 500,
+                        "frame2end": 1000
                     },
                     "explosion" : {
-                        "frame1" : 330,
-                        "frame2": 660
+                        "frame1end" : 330,
+                        "frame2end": 660
                     }
                 }                                     
             },         
@@ -44,10 +44,10 @@
                 "spriteHeight" : 600,
                 "states" : {
                     "noThrust" : {
-                        "frame1" : 400
+                        "frame1end" : 400
                     },     
                     "thrust" : {
-                        "frame1" : 400
+                        "frame1end" : 400
                     }     
 
                 }                                    
@@ -60,16 +60,16 @@
                 "spriteHeight" : 600,
                 "states" : {
                     "idle" : {
-                        "frame1" : 500,
-                        "frame2" : 1000
+                        "frame1end" : 500,
+                        "frame2end" : 1000
                     },     
                     "gracePeriod" : {
-                        "frame1" : 500,
-                        "frame2": 1000
+                        "frame1end" : 500,
+                        "frame2end": 1000
                     },
                     "explosion" : {
-                        "frame1" : 330,
-                        "frame2": 660
+                        "frame1end" : 330,
+                        "frame2end": 660
                     }
                 }                                    
             },            
@@ -79,10 +79,10 @@
                 "spriteHeight" : 600,
                 "states" : {
                     "noThrust" : {
-                        "frame1" : 400
+                        "frame1end" : 400
                     },     
                     "thrust" : {
-                        "frame1" : 400
+                        "frame1end" : 400
                     }     
                 }                                    
             }

@@ -38,7 +38,7 @@
             animationDuration = this._spriteData.states[this._currentState][frame];
         } 
 
-        // if timecounter is larger than the animatino duration, reset
+        // if timecounter is larger than the animation duration, reset
         if (this._timecounter > animationDuration){
             this._timecounter = 0;
             this._currentFrameNumber = 0;

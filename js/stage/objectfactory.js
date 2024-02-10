@@ -35,6 +35,11 @@
         return explosion;
     }
 
+    generateGravityWell(x, y, size, force){
+        let gravityWell = new GravityWell(x, y, size, force);
+        stage.gravityWells.push(gravityWell);
+    }
+
     generateParticleEffect(x, y, effectType){
         let particleEffect = new ParticleEffect(x, y, effectType);
         stage.particleEffects.push(particleEffect);

@@ -9,9 +9,10 @@ class GameData{
     this.enemies = {};
     this.player = {};
     this.playerShips = {};
+    this.inputControls = {};
 
     this.isLoadingError = false;
-    this.numberOfFiles = 5;   // note: adjust this if new files are added
+    this.numberOfFiles = 6;   // note: adjust this if new files are added
     this.numberOfFilesLoaded = 0;
   }
 
@@ -37,6 +38,11 @@ class GameData{
   loadPlayerShips(file){
     this.loadJSON(file, this.playerShips);
   }
+
+  loadInputControls(file){
+    this.loadJSON(file, this.inputControls);
+  }
+
 
   loadJSON(file, element){
       fetch(file)

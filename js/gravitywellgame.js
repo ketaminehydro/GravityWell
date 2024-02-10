@@ -18,13 +18,14 @@ const debuggerCtx = debuggerCanvas.getContext("2d");
 const menu = document.getElementById("menu");
 
 
-// JSON loader
+// JSON loader -> promise gets checked in gameloop
 const gameData = new GameData();
 gameData.loadGeneral("./js/data/general.json");
 gameData.loadEnemies("./js/data/enemies.json");
 gameData.loadPlayer("./js/data/player.json");
 gameData.loadPlayerShips("./js/data/playerships.json");
 gameData.loadStages("./js/data/stages.json");
+gameData.loadInputControls("./js/data/inputcontrols.json");
 
 
 // global objects

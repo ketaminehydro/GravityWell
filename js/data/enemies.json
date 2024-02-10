@@ -28,25 +28,25 @@
                 "spriteHeight" : 100,
                 "states" : {
                     "defaultState" : {
-                        "frame1" : 100,
-                        "frame2" : 200,
-                        "frame3" : 300,
-                        "frame4" : 400,
-                        "frame5" : 500
+                        "frame1end" : 100,
+                        "frame2end" : 200,
+                        "frame3end" : 300,
+                        "frame4end" : 400,
+                        "frame5end" : 500
                     }, 
                     "red" : {
-                        "frame1" : 100,
-                        "frame2" : 200,
-                        "frame3" : 300,
-                        "frame4" : 400,
-                        "frame5" : 500
+                        "frame1end" : 100,
+                        "frame2end" : 200,
+                        "frame3end" : 300,
+                        "frame4end" : 400,
+                        "frame5end" : 500
                     }, 
                     "pink" : {
-                        "frame1" : 100,
-                        "frame2" : 200,
-                        "frame3" : 300,
-                        "frame4" : 400,
-                        "frame5" : 500
+                        "frame1end" : 100,
+                        "frame2end" : 200,
+                        "frame3end" : 300,
+                        "frame4end" : 400,
+                        "frame5end" : 500
                     }                                          
                 }
             }
@@ -86,25 +86,25 @@
                 "spriteHeight" : 100,
                 "states" : {
                     "defaultState" : {
-                        "frame1" : 500,
-                        "frame2" : 1000,
-                        "frame3" : 1500,
-                        "frame4" : 2000,
-                        "frame5" : 2500
+                        "frame1end" : 500,
+                        "frame2end" : 1000,
+                        "frame3end" : 1500,
+                        "frame4end" : 2000,
+                        "frame5end" : 2500
                     }, 
                     "red" : {
-                        "frame1" : 500,
-                        "frame2" : 1000,
-                        "frame3" : 1500,
-                        "frame4" : 2000,
-                        "frame5" : 2500
+                        "frame1end" : 500,
+                        "frame2end" : 1000,
+                        "frame3end" : 1500,
+                        "frame4end" : 2000,
+                        "frame5end" : 2500
                     }, 
                     "pink" : {
-                        "frame1" : 500,
-                        "frame2" : 1000,
-                        "frame3" : 1500,
-                        "frame4" : 2000,
-                        "frame5" : 2500
+                        "frame1end" : 500,
+                        "frame2end" : 1000,
+                        "frame3end" : 1500,
+                        "frame4end" : 2000,
+                        "frame5end" : 2500
                     }                                          
                 }
             }
@@ -144,25 +144,25 @@
                 "spriteHeight" : 100,
                 "states" : {
                     "defaultState" : {
-                        "frame1" : 1000,
-                        "frame2" : 2000,
-                        "frame3" : 3000,
-                        "frame4" : 4000,
-                        "frame5" : 5000
+                        "frame1end" : 1000,
+                        "frame2end" : 2000,
+                        "frame3end" : 3000,
+                        "frame4end" : 4000,
+                        "frame5end" : 5000
                     }, 
                     "red" : {
-                        "frame1" : 1000,
-                        "frame2" : 2000,
-                        "frame3" : 3000,
-                        "frame4" : 4000,
-                        "frame5" : 5000
+                        "frame1end" : 1000,
+                        "frame2end" : 2000,
+                        "frame3end" : 3000,
+                        "frame4end" : 4000,
+                        "frame5end" : 5000
                     }, 
                     "pink" : {
-                        "frame1" : 1000,
-                        "frame2" : 2000,
-                        "frame3" : 3000,
-                        "frame4" : 4000,
-                        "frame5" : 5000
+                        "frame1end" : 1000,
+                        "frame2end" : 2000,
+                        "frame3end" : 3000,
+                        "frame4end" : 4000,
+                        "frame5end" : 5000
                     }                                          
                 }
             }

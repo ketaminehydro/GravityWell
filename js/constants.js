@@ -8,6 +8,11 @@ const PLAYER2 = 2;
 const PLAYER3 = 3;
 const PLAYER4 = 4;
 
+const GAME_MODE = Object.freeze({
+  CLASSIC: 1,
+  STORY: 2
+});
+
 /****************************************************************
    Controls related
  ****************************************************************/
@@ -16,23 +21,6 @@ const PLAYER_ACTION = Object.freeze({
     YAW_RIGHT: 1,
     THRUST_FORWARD: 2,
     REDUCE_SPEED: 3
-});
-
- /******************************************
-   Controls                           
- *****************************************/
-   const CONTROLS = Object.freeze({
-    PLAYER1_UP: 'KeyW',
-    PLAYER1_LEFT: 'KeyA',
-    PLAYER1_DOWN: 'KeyS',
-    PLAYER1_RIGHT: 'KeyD',
-    PLAYER1_FIRE: 'Space',
-    PLAYER2_UP: 'ArrowUp',
-    PLAYER2_LEFT: 'ArrowLeft',
-    PLAYER2_DOWN: 'ArrowDown',
-    PLAYER2_RIGHT: 'ArrowRight',
-    PLAYER2_FIRE: 'ShiftRight',
-    PAUSE: 'Escape'
 });
 
 /******************************************

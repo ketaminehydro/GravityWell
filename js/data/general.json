@@ -1,3 +1,4 @@
 {
+    "gameMode" : "GAME_MODE.CLASSIC",
     "initialCredits": 3
 }

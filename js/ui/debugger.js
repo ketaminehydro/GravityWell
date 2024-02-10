@@ -54,7 +54,6 @@ class Debugger{
             this._ctx.fillText("Collisions: "+this._numberOfCollisions,10,90);
             this._ctx.fillText("Game state: "+this.translateGameState(this._gameState),10,110);
             this._ctx.fillText("Stage state: "+this.translateStageState(this._stageState),10,130);
-            this._ctx.fillText("Credits: "+game.getCredits(), 10, 150);
         }
     }
 }
