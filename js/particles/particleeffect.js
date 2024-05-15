@@ -69,7 +69,11 @@ class ParticleEffect{
         let numberOfParticles = 10;
         for(let i=1; i<= numberOfParticles; i++){
             
-            angle += Math.PI*2/numberOfParticles;
+            // the particles should all be equally spread across the center
+            let magnitude = Math.PI*2/numberOfParticles * 0.5;   
+            let randomDeviation = Math.floor(Math.random()*(magnitude +1))-(magnitude/2);
+            angle += Math.PI*2/numberOfParticles + randomDeviation;
+
             let speed = Math.random()*300;
             let vx = Math.sin(angle) * speed;
             let vy = -Math.cos(angle) * speed;

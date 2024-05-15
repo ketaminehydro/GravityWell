@@ -8,6 +8,9 @@ class Starfield{
 
         // draw on the background canvas
         this._ctx = backgroundCtx;
+
+        // generate the stars
+        this.fillStarfield();
     }
 
     // fill the array with pixels in three different colors

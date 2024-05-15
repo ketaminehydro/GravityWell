@@ -115,7 +115,7 @@
     "largeAsteroid" : {
         "fullHitPoints" : 88,
         "hitPoints": 5, 
-        "maxSpeed": 100,
+        "maxSpeed": 400,
         "maxAngularSpeed": 360,
         "width" : 150,
         "height": 150,

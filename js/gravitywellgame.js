@@ -4,10 +4,10 @@
 
  // canvases
 const canvas = document.getElementById("gamecanvas");
-const ctx = gamecanvas.getContext("2d");
+const ctx = gamecanvas.getContext("2d",);
 
 const backgroundCanvas = document.getElementById("backgroundcanvas");
-const backgroundCtx = backgroundCanvas.getContext("2d");
+const backgroundCtx = backgroundCanvas.getContext("2d", { willReadFrequently: true });  // FIXME: flag seems to reduce performance, and not improve as designed!!
 
 const uiCanvas = document.getElementById("uicanvas");
 const uiCtx = uiCanvas.getContext("2d");

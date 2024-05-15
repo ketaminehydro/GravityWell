@@ -84,7 +84,7 @@
         // stage 0 case (title screen)
         if (stageNumber === 0){ 
 
-            // reset or initialize the players, then deactivate them
+            // initialize (or reset) the players, then deactivate them
             for(let i=0; i<this.players.getLength(); i++){
                 this.players.getElement(i).initialize();
                 this.players.getElement(i).deactivate();
@@ -111,16 +111,19 @@
         // TODO: gets level number as parameter -> extracts relevant data from the gameData object. console log is proof of concept.
         // console.log(gameData.stages);
 
-
+            // background
+            game._background.draw();
+            
             // enemies
             for(let i=1; i<=stageNumber; i++){
                 let enemy = objectFactory.generateEnemy(0,0,0,"largeAsteroid");
                 enemy.randomSpawn();
             }
 
-
             // gravitywell
-            objectFactory.generateGravityWell(600,500,500, 100);
+            objectFactory.generateGravityWell(600,500,500, 0.5);
+
+
 
         /****************************************************************** */
         
@@ -136,7 +139,12 @@
     }
 
     startStage(){        
-        this.#stageState = STAGE_STATE.TITLE;
+        if(game.debugger.isSkipToStage()){
+            this.#stageState = STAGE_STATE.RUNNING;
+        }
+        else {
+            this.#stageState = STAGE_STATE.TITLE;
+        }
     }
 
     /**************** UPDATE & DRAW *****************************************/
@@ -203,7 +211,7 @@
         collisionPairs = this._collisionChecker.markCollisions();
 
         // resolve collisions
-        this._collisionResolver.resolve(collisionPairs);
+        this._collisionResolver.resolve(collisionPairs, milliSecondsPassed);
 
         // update counters for debugger
         this._debugCollisionChecksCounter = this._collisionChecker.getNumberOfCollisionChecks();
@@ -289,10 +297,10 @@
                 break;
 
             case STAGE_STATE.RUNNING:
+                this.gravityWells.draw();
                 this.enemies.draw();
                 this.projectiles.draw();
                 this.explosions.draw();
-                this.gravityWells.draw();
                 this.players.draw();
                 this.particleEffects.draw();                
                 break; 

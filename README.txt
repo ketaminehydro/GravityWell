@@ -1,7 +1,6 @@
-/**************************
-   PROJECT PLAN
-***************************/
-https://www.notion.so/ketaminehydro/GravityWell-35267e0c3c6943a0b24dc5c7a7f6511b?pvs=4
+JUST TO GET YOU AN IDEA ON HOW STUFF IS GENERALLY STRUCTURED. 
+CERTAINLY NOT UP TO DATE.
+
 
 
 

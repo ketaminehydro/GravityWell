@@ -18,6 +18,16 @@
         return angle;
     }
 
+    static calculateVectorBetween(x1, y1, x2, y2){
+        let x = x2-x1;
+        let y = y2-y1;
+        
+        return {
+            x,
+            y
+        }
+    }
+
     static toDegrees(angleInRadians){
         return angleInRadians * 180 / Math.PI;
     }

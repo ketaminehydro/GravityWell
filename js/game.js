@@ -18,18 +18,23 @@
 
         // elements
         this.inGameUI = new InGameUI();
-        this._debugger = new Debugger();
+        this.debugger = new Debugger();
         this._titleScreen = new TitleScreen();
-        this._background = new Starfield();
-        this._currentStageNumber = 0;
+        this._background = new Background();
 
-        // background
-        this._background.fillStarfield();
+        // draw background
         this._background.draw();
 
-        // game data
+        // initialise game data
+        this._currentStageNumber = 0;
         this._credits = -1;
         this._initialCredits = -1;
+
+        // information for debugger
+        this.debuggerInfo = {
+            updateDuration : 0,
+            drawDuration : 0
+        };
 
     }
 
@@ -95,6 +100,8 @@
         // calculate the number of seconds passed since the last frame
         // limit this so that in case of lag we are doing 100ms steps
         // even though the time between updates might be longer
+        // (the game will simply slow down, instead of skipping)
+        // the "timeStamp" argument is provided by requestAnimationFrame()
         let milliSecondsPassed;
         milliSecondsPassed = (timeStamp - this.#previousTimeStamp);
         milliSecondsPassed = Math.min(milliSecondsPassed, 100);
@@ -123,11 +130,11 @@
                 // logic: update introscreen: 
                 // TODO: switch between different screens: controls / enemies / highscore
                 stage.update(milliSecondsPassed);
-                this._debugger.update(milliSecondsPassed);
+                this.debugger.update(milliSecondsPassed);
                 
                 // draw 
                 this._titleScreen.draw();
-                this._debugger.draw();
+                this.debugger.draw();
                 stage.draw();  
 
                 // if a player is active, start stage 1
@@ -137,6 +144,12 @@
                         game.setGameState(GAME_STATE.STAGE_LOADING);
                     }
                 }
+
+                // Debugger
+                if (this.debugger.isSkipToStage()){
+                    game.setCurrentStageNumber(1);
+                    game.setGameState(GAME_STATE.STAGE_LOADING);
+                }
                 break;
             
             case GAME_STATE.STAGE_LOADING:
@@ -144,24 +157,32 @@
                 stage.loadStage(this._currentStageNumber);
                 stage.startStage();
                 this.inGameUI.update(milliSecondsPassed);
-                this._debugger.update(milliSecondsPassed);
+                this.debugger.update(milliSecondsPassed);
 
                 // draw
                 this.inGameUI.draw();
-                this._debugger.draw();
+                this.debugger.draw();
 
                 // change state
                 this.#gameState = GAME_STATE.STAGE_RUNNING;
                 break;
             
             case GAME_STATE.STAGE_RUNNING:
+                let debuggerChrono = performance.now();
+
                 stage.update(milliSecondsPassed);
                 this.inGameUI.update(milliSecondsPassed);
-                this._debugger.update(milliSecondsPassed);
+                this.debugger.update(milliSecondsPassed);
+
+                this.debuggerInfo.updateDuration = performance.now() - debuggerChrono;
+                debuggerChrono = performance.now();
+
                 stage.draw();
                 this.inGameUI.draw();
-                this._debugger.draw();
- 
+                this.debugger.draw();
+
+                this.debuggerInfo.drawDuration = performance.now() - debuggerChrono;
+
                 // stage state check
                 switch(stage.getStageState()){
                     case STAGE_STATE.COMPLETED_ENDED:
@@ -175,8 +196,8 @@
                 break;
             
             case GAME_STATE.STAGE_ENDED:
-                this._debugger.update(milliSecondsPassed);
-                this._debugger.draw();
+                this.debugger.update(milliSecondsPassed);
+                this.debugger.draw();
 
                 // TODO:
                 // is there a next level?
@@ -191,8 +212,8 @@
 
                 
             case GAME_STATE.GAME_OVER:
-                this._debugger.update(milliSecondsPassed);
-                this._debugger.draw();
+                this.debugger.update(milliSecondsPassed);
+                this.debugger.draw();
                 // TODO:
                     // special gameover screen
                     console.log("Game Over");    
@@ -206,8 +227,8 @@
 
 
             case GAME_STATE.GAME_COMPLETED:
-                this._debugger.update(milliSecondsPassed);
-                this._debugger.draw();
+                this.debugger.update(milliSecondsPassed);
+                this.debugger.draw();
                 // this._startingPlayerNumber = -1;
                 this.setCredits(this._initialCredits);    
                 // TODO:

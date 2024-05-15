@@ -8,9 +8,6 @@ class Player extends GameObject {
         // gameobject type
         this._gameObjectType = GAMEOBJECT_TYPE.PLAYER;
 
-        // boundary handling setting
-        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];        
-
         // player ship 
         this._yawSpeed = -1;     // in degrees / sec
         this._thrust = -1;        // in pixel / sec
@@ -127,6 +124,7 @@ class Player extends GameObject {
     }
 
     initialize(){
+        this._boundaryHandlingSetting = ON_BOUNDARY_HIT[gameData.player.boundaryHandlingSetting];        
         this.selectShip("default");
         this.startGracePeriod();
         this._score = 0;

@@ -46,7 +46,7 @@ class CollisionChecker{
                     this._collisionPairs.push({
                         obj1: this._entities[i],
                         obj2: this._entities[j],
-                        coords: coords
+                        collisionCoords: coords
                     })
                 }
 
